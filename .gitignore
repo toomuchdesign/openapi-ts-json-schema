@@ -1,0 +1,19 @@
+# OS generated files
+.*
+*.db
+*.log
+node_modules
+dist
+coverage
+
+# Trailing dotted files
+!.all-contributorsrc
+!.editorconfig
+!.gitignore
+!.npmignore
+!.npmrc
+!.prettierignore
+!.prettierrc
+!.github
+!.nvmrc
+!.changeset
