@@ -1,0 +1,27 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  months:
+    January:
+      description: January description
+      type: object
+      required:
+        - isJanuary
+      properties:
+        isJanuary:
+          type: string
+          nullable: true
+          enum:
+            - yes
+            - no
+
+  schemas:
+    Answer:
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no

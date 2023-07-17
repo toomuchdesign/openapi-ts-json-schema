@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  months:
+    January:
+      description: January description
+      type: object
+      required:
+        - isJanuary
+      properties:
+        isJanuary:
+          type: string
+          nullable: true
+          enum:
+            - yes
+            - no
+    February:
+      description: February description
+      type: object
+      required:
+        - isFebruary
+      properties:
+        isFebruary:
+          $ref: '#/components/schemas/Answer'
+
+  schemas:
+    Answer:
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no
+
+paths:
+  /v1/path-1:
+    get:
+      responses:
+        '200':
+          description: A description
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/months/January'
+                  - $ref: '#/components/months/February'
+
+servers:
+  - url: url
