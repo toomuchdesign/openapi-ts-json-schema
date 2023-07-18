@@ -11,7 +11,12 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node-version: [18, 20]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
+          node-version: ${{ matrix.version }}
 
       - run: npm ci
       - run: npm run source:check
