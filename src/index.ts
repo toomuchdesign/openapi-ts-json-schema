@@ -1,3 +1,1 @@
-export function hello(hello: string): string {
-  return hello;
-}
+export { openapiToTsJsonSchema } from './openapiToTsJsonSchema';
