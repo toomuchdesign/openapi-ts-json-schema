@@ -23,7 +23,7 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toomuchdesign/project-name.git"
+    "url": "git+https://github.com/toomuchdesign/openapi-ts-json-schema.git"
   },
   "author": "Andrea Carraro <me@andreacarraro.it>",
   "license": "ISC",
