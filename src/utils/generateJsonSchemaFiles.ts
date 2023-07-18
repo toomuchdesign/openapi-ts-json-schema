@@ -15,10 +15,6 @@ export async function generateJsonSchemaFiles({
   for (const schemaName in schemas) {
     const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
     const schema = schemas[schemaName];
-    if (!schema) {
-      continue;
-    }
-
     const patchedSchema = patchJsonSchema(schema, schemaPatcher);
     const tsSchema = await jsonSchemaToTsConst(patchedSchema);
 

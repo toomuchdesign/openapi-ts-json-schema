@@ -47,7 +47,6 @@ export async function openapiToTsJsonSchema({
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
     const schemasOutputFolder = path.resolve(outputFolder, definitionPath);
-
     if (schemas) {
       await generateJsonSchemaFiles({
         schemas,

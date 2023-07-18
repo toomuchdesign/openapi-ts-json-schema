@@ -113,7 +113,7 @@ describe('openapiToTsJsonSchema', async () => {
     });
   });
 
-  describe('non existing openAPI definition', async () => {
+  describe('non existing openAPI definition file', async () => {
     it('throws expected error', async () => {
       await expect(() =>
         openapiToTsJsonSchema({
