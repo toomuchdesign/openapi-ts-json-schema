@@ -47,7 +47,7 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^10.1.0",
     "@openapi-contrib/openapi-schema-to-json-schema": "^5.1.0",
-    "filenamify": "^4.3.0",
+    "filenamify": "^6.0.0",
     "json-schema": "^0.4.0",
     "json-schema-traverse": "^1.0.0",
     "lodash.get": "^4.4.2",
