@@ -26,31 +26,23 @@ jobs:
 
       - run: npm ci
 
-      - uses: coverallsapp/github-action@v2
+      - uses: actions/upload-artifact@v3
         if: matrix.node-version == '18'
         with:
+          name: code-coverage
+          path: coverage
+
+  upload-code-coverage:
+    name: 'Upload code coverage'
+    needs: ['test-and-build']
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: code-coverage
+          path: coverage
+
+      - uses: coverallsapp/github-action@v2
+        with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          debug: true
-
-      # - uses: actions/upload-artifact@v3
-      #   if: matrix.node-version == '18'
-      #   with:
-      #     name: code-coverage
-      #     path: coverage
-
-  # upload-code-coverage:
-  #   name: 'Upload code coverage'
-  #   needs: ['test-and-build']
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: code-coverage
-  #         path: coverage
-
-  #     - name: Display structure of downloaded files
-  #       run: ls ./coverage
-
-  #     - name: Cat lcov.info
-  #       run: cat ./coverage/lcov.info
