@@ -1,5 +1,9 @@
 # openapi-ts-json-schema
 
+[![Build Status][ci-badge]][ci]
+[![Npm version][npm-version-badge]][npm]
+[![Coveralls][coveralls-badge]][coveralls]
+
 Generate JSON schemas TypeScript files (`.ts`) from OpenAPI definitions which can be natively used to infer types from (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts) or [`fastify-type-provider-json-schema-to-ts`](https://github.com/fastify/fastify-type-provider-json-schema-to-ts)).
 
 Given an OpenAPI definition file, `openapi-ts-json-schema` will:
@@ -59,3 +63,10 @@ Generated JSON schemas folders name gets escaped in order to be valid file syste
 ## Todo
 
 - Consider exposing an option to set the output folder path
+
+[ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
+[ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
+[coveralls-badge]: https://coveralls.io/repos/github/toomuchdesign/openapi-ts-json-schema/badge.svg?branch=master
+[coveralls]: https://coveralls.io/github/toomuchdesign/openapi-ts-json-schema?branch=master
+[npm]: https://www.npmjs.com/package/openapi-ts-json-schema
+[npm-version-badge]: https://img.shields.io/npm/v/openapi-ts-json-schema.svg
