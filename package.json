@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json",
     "test": "vitest --config ./vitest.config.mts --dir ./test",
-    "prepare": "npx simple-git-hooks",
+    "prepare": "npx simple-git-hooks && npm run test -- --run && npm run source:check && npm run build",
     "tag": "git tag v$(node -p \"require('./package.json').version\")",
     "posttag": "git push --tags",
     "prettier:check": "prettier . --check",
