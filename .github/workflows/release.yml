@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    name: Release
+    name: Release new version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
