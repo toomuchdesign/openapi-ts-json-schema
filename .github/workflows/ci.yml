@@ -49,6 +49,9 @@ jobs:
       - name: Display structure of downloaded files
         run: ls ./coverage
 
+      - name: Cat lcov.info
+        run: cat ./coverage/lcov.info
+
       - uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
