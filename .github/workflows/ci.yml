@@ -26,27 +26,41 @@ jobs:
 
       - run: npm ci
 
+      - name: Cat lcov.info
+        if: matrix.node-version == '18'
+        run: cat ./coverage/lcov.info
+
       - uses: coverallsapp/github-action@v2
         if: matrix.node-version == '18'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # - uses: actions/upload-artifact@v3
-      #   if: matrix.node-version == '18'
-      #   with:
-      #     name: code-coverage
-      #     path: coverage
+      - uses: actions/upload-artifact@v3
+        if: matrix.node-version == '18'
+        with:
+          name: code-coverage
+          path: coverage
+          if-no-files-found: warn # 'warn' or 'ignore' are also available, defaults to `warn`
 
-  # upload-code-coverage:
-  #   name: 'Upload code coverage'
-  #   needs: ['test-and-build']
-  #   runs-on: ubuntu-latest
+  upload-code-coverage:
+    name: 'Upload code coverage'
+    needs: ['test-and-build']
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: code-coverage
-  #         path: coverage
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: code-coverage
+          path: coverage
+
+      - uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cat lcov.info
+        run: cat ./coverage/lcov.info
 
   #     - uses: coverallsapp/github-action@v2
   #       with:
