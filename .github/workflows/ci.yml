@@ -46,6 +46,10 @@ jobs:
           name: code-coverage
           path: coverage
 
-      - uses: coverallsapp/github-action@master
+      - name: Display structure of downloaded files
+        run: ls ./coverage
+
+      - uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true

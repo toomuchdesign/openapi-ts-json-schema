@@ -9,6 +9,7 @@ export default defineConfig({
       concurrent: false,
     },
     coverage: {
+      provider: 'istanbul',
       enabled: true,
       reporter: [['lcov', { projectRoot: './src' }], ['text']],
     },
