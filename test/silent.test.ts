@@ -16,11 +16,12 @@ describe('silent option', async () => {
   it('console.log user messages', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      definitionPathsToGenerateFrom: ['paths'],
       silent: false,
     });
 
     expect(console.log).toHaveBeenCalledWith(
-      `✅ JSON schema models generated at ${outputFolder}`,
+      `[openapi-ts-json-schema] ✅ JSON schema models generated at ${outputFolder}`,
     );
   });
 });

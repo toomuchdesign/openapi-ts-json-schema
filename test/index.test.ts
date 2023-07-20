@@ -1,6 +1,6 @@
 import path from 'path';
 import { existsSync } from 'fs';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { importFresh } from './utils';
 import { openapiToTsJsonSchema } from '../src';
 
@@ -118,9 +118,27 @@ describe('openapiToTsJsonSchema', async () => {
       await expect(() =>
         openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'does-not-exist.yaml'),
+          definitionPathsToGenerateFrom: ['components'],
           silent: true,
         }),
       ).rejects.toThrow("Provided OpenAPI definition path doesn't exist:");
+    });
+  });
+
+  describe('empty definitionPathsToGenerateFrom option', async () => {
+    beforeEach(() => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+    });
+
+    it('logs expected message', async () => {
+      await openapiToTsJsonSchema({
+        openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+        definitionPathsToGenerateFrom: [],
+      });
+
+      expect(console.log).toHaveBeenCalledWith(
+        `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
+      );
     });
   });
 });

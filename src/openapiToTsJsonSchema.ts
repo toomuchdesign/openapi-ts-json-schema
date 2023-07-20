@@ -14,10 +14,16 @@ export async function openapiToTsJsonSchema({
   silent,
 }: {
   openApiSchema: string;
-  definitionPathsToGenerateFrom?: string[];
+  definitionPathsToGenerateFrom: string[];
   schemaPatcher?: (params: { schema: JSONSchema }) => void;
   silent?: boolean;
 }) {
+  if (definitionPathsToGenerateFrom.length === 0 && !silent) {
+    console.log(
+      `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
+    );
+  }
+
   const openApiSchemaPath = path.resolve(openApiSchemaRelative);
   if (!existsSync(openApiSchemaPath)) {
     throw new Error(
@@ -57,7 +63,9 @@ export async function openapiToTsJsonSchema({
   }
 
   if (!silent) {
-    console.log(`✅ JSON schema models generated at ${outputFolder}`);
+    console.log(
+      `[openapi-ts-json-schema] ✅ JSON schema models generated at ${outputFolder}`,
+    );
   }
   return { outputFolder };
 }
