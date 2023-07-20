@@ -53,16 +53,17 @@ Generated JSON schemas folders name gets escaped in order to be valid file syste
 
 ## Options
 
-| Property                          | Type                                       | Description                                                                                                                                                 | Default |
-| --------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| **openApiSchema** _(required)_    | `string`                                   | Path to the OpenApi file (supports yaml and json)                                                                                                           | -       |
-| **definitionPathsToGenerateFrom** | `string[]`                                 | OpenApi definition object paths to generate the JSON schemas from. Only matching paths will be generated. (Supports dot notation: `["components.schemas"]`) | `[]`    |
-| **schemaPatcher**                 | `(params: { schema: JSONSchema }) => void` | Dynamically patch generated JSON schemas. The provided function will be invoked against every single JSON schema node.                                      | -       |
-| **silent**                        | `boolean`                                  | Don't console.log user messages                                                                                                                             | `false` |
+| Property                                       | Type                                       | Description                                                                                                                                                 | Default |
+| ---------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **openApiSchema** _(required)_                 | `string`                                   | Path to the OpenApi file (supports yaml and json)                                                                                                           | -       |
+| **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenApi definition object paths to generate the JSON schemas from. Only matching paths will be generated. (Supports dot notation: `["components.schemas"]`) | -       |
+| **schemaPatcher**                              | `(params: { schema: JSONSchema }) => void` | Dynamically patch generated JSON schemas. The provided function will be invoked against every single JSON schema node.                                      | -       |
+| **silent**                                     | `boolean`                                  | Don't console.log user messages                                                                                                                             | `false` |
 
 ## Todo
 
 - Consider exposing an option to set the output folder path
+- Explore ability to import shared sub schemas
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
