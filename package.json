@@ -1,7 +1,7 @@
 {
   "name": "openapi-ts-json-schema",
   "version": "0.0.1",
-  "description": "Convert OpenApi definitions to TS JSON schema files",
+  "description": "OpenAPI to JSON schema generator with TypeScript in mind",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -19,7 +19,13 @@
     "source:check": "npm run prettier:check && npm run type:check",
     "source:fix": "npm run prettier:fix"
   },
-  "keywords": [],
+  "keywords": [
+    "openapi",
+    "json",
+    "schema",
+    "typescript",
+    "openapi to json schema"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toomuchdesign/openapi-ts-json-schema.git"
