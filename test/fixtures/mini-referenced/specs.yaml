@@ -12,11 +12,7 @@ components:
         - isJanuary
       properties:
         isJanuary:
-          type: string
-          nullable: true
-          enum:
-            - yes
-            - no
+          $ref: '#/components/schemas/Answer'
 
   schemas:
     Answer:
