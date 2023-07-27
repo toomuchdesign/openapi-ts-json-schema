@@ -25,7 +25,6 @@ jobs:
       - name: Create release pull request
         uses: changesets/action@v1
         with:
-          title: 'chore: version packages'
-          commit: 'chore: version packages'
+          publish: npm run tag
         env:
           GITHUB_TOKEN: ${{ secrets.READ_AND_WRITE_TOKEN }}
