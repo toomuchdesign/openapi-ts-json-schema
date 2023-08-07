@@ -1,5 +1,5 @@
 import traverse from 'json-schema-traverse';
-import { JSONSchema } from './';
+import type { JSONSchema } from './';
 
 export function patchJsonSchema(
   schema: JSONSchema,
