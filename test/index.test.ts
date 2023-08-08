@@ -19,7 +19,7 @@ describe('openapiToTsJsonSchema', async () => {
     );
 
     const januarySchema = await importFresh(
-      path.resolve(outputFolder, 'components.months/January.ts'),
+      path.resolve(outputFolder, 'components.months/January'),
     );
     const februarySchema = await importFresh(
       path.resolve(outputFolder, 'components.months/February'),

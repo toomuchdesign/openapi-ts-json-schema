@@ -7,6 +7,7 @@ export function patchJsonSchema(
 ): JSONSchema {
   if (schema && schemaPatcher) {
     traverse(schema, {
+      allKeys: true,
       cb: (schema) => {
         schemaPatcher({ schema });
       },
