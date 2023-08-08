@@ -8,8 +8,8 @@ const fixtures = path.resolve(__dirname, 'fixtures');
 describe('"schemaPatcher" option', () => {
   it('transforms generated JSON schemas', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
-      definitionPathsToGenerateFrom: ['components.months'],
+      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      definitionPathsToGenerateFrom: ['components.months', 'paths'],
       schemaPatcher: ({ schema }) => {
         if (schema.description === 'January description') {
           schema.description = 'Patched January description';
@@ -30,5 +30,15 @@ describe('"schemaPatcher" option', () => {
         isJanuary: { type: ['string', 'null'], enum: ['yes', 'no', null] },
       },
     });
+
+    // Testing deep nested props being patched, too
+    const pathSchema = await importFresh(
+      path.resolve(outputFolder, 'paths/v1|path-1'),
+    );
+
+    expect(
+      pathSchema.default.get.responses[200].content['application/json'].schema
+        .oneOf[0].description,
+    ).toBe('Patched January description');
   });
 });
