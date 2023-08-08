@@ -64,6 +64,7 @@ Generated JSON schemas folders name gets escaped in order to be valid file syste
 
 - Consider exposing an option to set the output folder path
 - Explore ability to import shared sub schemas
+- Consider merging "operation" and "path" parameters definition
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
