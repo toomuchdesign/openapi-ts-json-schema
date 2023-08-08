@@ -12,7 +12,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('silent option', async () => {
+describe('"silent" option', async () => {
   it('console.log user messages', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),

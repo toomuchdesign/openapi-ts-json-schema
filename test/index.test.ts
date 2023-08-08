@@ -125,7 +125,7 @@ describe('openapiToTsJsonSchema', async () => {
     });
   });
 
-  describe('empty definitionPathsToGenerateFrom option', async () => {
+  describe('empty "definitionPathsToGenerateFrom" option', async () => {
     beforeEach(() => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
     });

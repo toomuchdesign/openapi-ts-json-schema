@@ -2,4 +2,5 @@ export { patchJsonSchema } from './patchJsonSchema';
 export { clearFolder } from './clearFolder';
 export { jsonSchemaToTsConst } from './jsonSchemaToTsConst';
 export { generateJsonSchemaFiles } from './generateJsonSchemaFiles';
-export { JSONSchema } from './types';
+export { convertOpenApiParameters } from './convertOpenApiParameters';
+export type { JSONSchema } from './types';

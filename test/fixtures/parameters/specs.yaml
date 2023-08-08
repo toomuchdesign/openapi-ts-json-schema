@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    Answer:
+      type: string
+      enum:
+        - yes
+        - no
+
+paths:
+  /v1/path-1:
+    get:
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: headers-param-1
+          required: true
+          description: headers-param-1 description
+        - schema:
+            $ref: '#/components/schemas/Answer'
+          in: header
+          name: headers-param-2
+          required: true
+          description: headers-param-2 description
+        - schema:
+            type: string
+            enum:
+              - foo
+              - bar
+          in: body
+          required: true
+          description: Body param description
+        - schema:
+            type: string
+          in: path
+          name: path-param-1
+          required: true
+          description: Path param description
+        - schema:
+            type: string
+          in: query
+          name: query-param-1
+          required: true
+          description: Query param description
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+
+servers:
+  - url: url

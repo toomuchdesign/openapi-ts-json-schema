@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import { openapiSchemaToJsonSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
+import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 import YAML from 'yaml';
 import get from 'lodash.get';
@@ -45,8 +45,8 @@ export async function openapiToTsJsonSchema({
     jsonOpenApiSchema,
   );
 
-  // @NOTE path schema is converted by default
-  const jsonSchema = openapiSchemaToJsonSchema(dereferencedOpenApiSchema, {
+  // @NOTE paths schema is converted by default
+  const jsonSchema = fromSchema(dereferencedOpenApiSchema, {
     definitionKeywords: definitionPathsToGenerateFrom,
   });
 

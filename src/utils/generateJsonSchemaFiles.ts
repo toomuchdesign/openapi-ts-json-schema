@@ -1,7 +1,12 @@
 import filenamify from 'filenamify';
 import fs from 'fs/promises';
 import path from 'path';
-import { patchJsonSchema, jsonSchemaToTsConst, JSONSchema } from './';
+import {
+  patchJsonSchema,
+  jsonSchemaToTsConst,
+  JSONSchema,
+  convertOpenApiParameters,
+} from './';
 
 export async function generateJsonSchemaFiles({
   schemas,
@@ -16,6 +21,8 @@ export async function generateJsonSchemaFiles({
     const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
     const schema = schemas[schemaName];
     const patchedSchema = patchJsonSchema(schema, schemaPatcher);
+    convertOpenApiParameters(patchedSchema);
+
     const tsSchema = await jsonSchemaToTsConst(patchedSchema);
 
     await fs.mkdir(outputFolder, { recursive: true });
