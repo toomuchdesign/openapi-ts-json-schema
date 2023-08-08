@@ -5,8 +5,8 @@ import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('definitionPathsToGenerateFrom option', () => {
-  it('Dereferences and transforms even from paths not marked from generation', async () => {
+describe('OpenAPI parameters', () => {
+  it('Transforms parameters array into a JSON schema record', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'parameters/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],

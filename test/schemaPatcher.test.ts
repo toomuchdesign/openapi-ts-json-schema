@@ -5,8 +5,8 @@ import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('schemaPatcher option 1', () => {
-  it('transforms generated JSON schemas 1', async () => {
+describe('"schemaPatcher" option', () => {
+  it('transforms generated JSON schemas', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],

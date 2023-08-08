@@ -5,7 +5,7 @@ import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('JSON openApi input', async () => {
+describe('JSON OpenAPI input', async () => {
   it('generates expected schemas', async () => {
     const { outputFolder } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'json/specs.json'),
