@@ -24,7 +24,7 @@ npm i openapi-ts-json-schema -D
 ```ts
 import { openapiToTsJsonSchema } from 'openapi-ts-json-schema';
 
-const { outputFolder } = await openapiToTsJsonSchema({
+const { outputPath } = await openapiToTsJsonSchema({
   openApiSchema: path.resolve(fixtures, 'path/to/my/specs.yaml'),
   definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
 });
