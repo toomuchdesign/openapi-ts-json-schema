@@ -7,14 +7,14 @@ const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('JSON OpenAPI input', async () => {
   it('generates expected schemas', async () => {
-    const { outputFolder } = await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'json/specs.json'),
       definitionPathsToGenerateFrom: ['components.months'],
       silent: true,
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputFolder, 'components.months/January'),
+      path.resolve(outputPath, 'components.months/January'),
     );
 
     expect(januarySchema.default).toEqual({

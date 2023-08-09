@@ -24,7 +24,7 @@ npm i openapi-ts-json-schema -D
 ```ts
 import { openapiToTsJsonSchema } from 'openapi-ts-json-schema';
 
-const { outputFolder } = await openapiToTsJsonSchema({
+const { outputPath } = await openapiToTsJsonSchema({
   openApiSchema: path.resolve(fixtures, 'path/to/my/specs.yaml'),
   definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
 });
@@ -58,6 +58,7 @@ Generated JSON schemas folders name gets escaped in order to be valid file syste
 | **openApiSchema** _(required)_                 | `string`                                   | Path to the OpenApi file (supports yaml and json)                                                                                                           | -       |
 | **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenApi definition object paths to generate the JSON schemas from. Only matching paths will be generated. (Supports dot notation: `["components.schemas"]`) | -       |
 | **schemaPatcher**                              | `(params: { schema: JSONSchema }) => void` | Dynamically patch generated JSON schemas. The provided function will be invoked against every single JSON schema node.                                      | -       |
+| **outputPath**                                 | `string`                                   | Path where the generated schemas will be saved                                                                                                              | -       |
 | **silent**                                     | `boolean`                                  | Don't console.log user messages                                                                                                                             | `false` |
 
 ## Todo

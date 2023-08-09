@@ -7,7 +7,7 @@ const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('"schemaPatcher" option', () => {
   it('transforms generated JSON schemas', async () => {
-    const { outputFolder } = await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
       schemaPatcher: ({ schema }) => {
@@ -19,7 +19,7 @@ describe('"schemaPatcher" option', () => {
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputFolder, 'components.months/January'),
+      path.resolve(outputPath, 'components.months/January'),
     );
 
     expect(januarySchema.default).toEqual({
@@ -33,7 +33,7 @@ describe('"schemaPatcher" option', () => {
 
     // Testing deep nested props being patched, too
     const pathSchema = await importFresh(
-      path.resolve(outputFolder, 'paths/v1|path-1'),
+      path.resolve(outputPath, 'paths/v1|path-1'),
     );
 
     expect(

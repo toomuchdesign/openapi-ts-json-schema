@@ -7,14 +7,14 @@ const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('Deferencing', () => {
   it('Dereferences and transforms even from paths not marked for generation', async () => {
-    const { outputFolder } = await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],
       silent: true,
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputFolder, 'components.months/January'),
+      path.resolve(outputPath, 'components.months/January'),
     );
 
     expect(januarySchema.default).toEqual({

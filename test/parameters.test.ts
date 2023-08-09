@@ -7,14 +7,14 @@ const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('OpenAPI parameters', () => {
   it('Transforms parameters array into a JSON schema record', async () => {
-    const { outputFolder } = await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'parameters/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });
 
     const pathSchema = await importFresh(
-      path.resolve(outputFolder, 'paths/v1|path-1'),
+      path.resolve(outputPath, 'paths/v1|path-1'),
     );
 
     expect(pathSchema.default).toEqual({

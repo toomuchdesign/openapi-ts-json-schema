@@ -10,11 +10,11 @@ import {
 
 export async function generateJsonSchemaFiles({
   schemas,
-  outputFolder,
+  outputPath,
   schemaPatcher,
 }: {
   schemas: Record<string, JSONSchema>;
-  outputFolder: string;
+  outputPath: string;
   schemaPatcher?: (params: { schema: JSONSchema }) => void;
 }) {
   for (const schemaName in schemas) {
@@ -25,9 +25,9 @@ export async function generateJsonSchemaFiles({
 
     const tsSchema = await jsonSchemaToTsConst(patchedSchema);
 
-    await fs.mkdir(outputFolder, { recursive: true });
+    await fs.mkdir(outputPath, { recursive: true });
     await fs.writeFile(
-      path.resolve(outputFolder, `${schemaNamedEscaped}.ts`),
+      path.resolve(outputPath, `${schemaNamedEscaped}.ts`),
       tsSchema,
     );
   }
