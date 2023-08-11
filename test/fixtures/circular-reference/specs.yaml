@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    January:
+      description: January description
+      type: object
+      properties:
+        nextMonth:
+          $ref: '#/components/schemas/February'
+    February:
+      description: February description
+      type: object
+      properties:
+        previousMonth:
+          $ref: '#/components/schemas/January'
