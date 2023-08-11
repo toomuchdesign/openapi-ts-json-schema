@@ -9,6 +9,7 @@ import {
   generateJsonSchemaFiles,
   JSONSchema,
   convertOpenApiToJsonSchema,
+  convertOpenApiParameters,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -45,15 +46,14 @@ export async function openapiToTsJsonSchema({
 
   const openApiSchema = await fs.readFile(openApiSchemaPath, 'utf-8');
   const jsonOpenApiSchema: Record<string, any> = YAML.parse(openApiSchema);
-
-  // @NOTE paths schema is converted by default
-  const jsonSchema = convertOpenApiToJsonSchema(jsonOpenApiSchema);
-
-  // @NOTE We are using a JSONschema resolver on an OpenApi file :)
-  const dereferencedOpenApiSchema = await $RefParser.dereference(jsonSchema);
+  const initialJsonSchema = convertOpenApiToJsonSchema(jsonOpenApiSchema);
+  const dereferencedOpenApiSchema = await $RefParser.dereference(
+    initialJsonSchema,
+  );
+  const jsonSchema = convertOpenApiParameters(dereferencedOpenApiSchema);
 
   for (const definitionPath of definitionPathsToGenerateFrom) {
-    const schemas = get(dereferencedOpenApiSchema, definitionPath);
+    const schemas = get(jsonSchema, definitionPath);
     const schemasOutputPath = path.resolve(outputPath, definitionPath);
     if (schemas) {
       await generateJsonSchemaFiles({
