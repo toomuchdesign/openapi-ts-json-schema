@@ -1,29 +1,36 @@
-import traverse from 'json-schema-traverse';
 import { convertParametersToJSONSchema } from 'openapi-jsonschema-parameters';
 import type { JSONSchema } from '.';
 
 /**
- * https://swagger.io/docs/specification/describing-parameters/#describing-parameters
- * @NOTE @openapi-contrib/openapi-schema-to-json-schema FromParams doesn't consider required field
- * @NOTE We are looking for parameter arrays everywhere while they are expected to be only in an "operation" or "path" definition
- * @NOTE We are converting parameters in isolation: specifications expects "path" parameters to override "operation" parameters
+ * Parameters field can only be found in:
+ * - paths[path].parameters
+ * - paths[path][operation].parameters
+ *
+ * https://swagger.io/docs/specification/describing-parameters/
  */
-function convertParameters(schema: JSONSchema) {
-  if (
-    'parameters' in schema &&
-    Array.isArray(schema.parameters) &&
-    'in' in schema.parameters[0]
-  ) {
-    schema.parameters = convertParametersToJSONSchema(schema.parameters);
-    return schema;
-  }
-}
-
 export function convertOpenApiParameters(schema: JSONSchema) {
-  traverse(schema, {
-    allKeys: true,
-    cb: (schema) => {
-      convertParameters(schema);
-    },
-  });
+  if ('paths' in schema) {
+    for (const path in schema.paths) {
+      const pathSchema = schema.paths[path];
+
+      // Path parameters
+      if ('parameters' in pathSchema) {
+        pathSchema.parameters = convertParametersToJSONSchema(
+          pathSchema.parameters,
+        );
+      }
+
+      // operation parameters
+      for (const operation in pathSchema) {
+        const operationSchema = pathSchema[operation];
+        if ('parameters' in operationSchema) {
+          operationSchema.parameters = convertParametersToJSONSchema(
+            operationSchema.parameters,
+          );
+        }
+      }
+    }
+  }
+
+  return schema;
 }

@@ -1,5 +1,5 @@
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import type { OpenApiSchema } from '.';
+import { OpenApiSchema, convertOpenApiParameters } from '.';
 
 export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
   // Build a list of components dotted paths to convert
@@ -10,7 +10,9 @@ export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
     );
   }
 
-  return fromSchema(schema, {
+  const jsonSchema = fromSchema(schema, {
     definitionKeywords,
   });
+
+  return jsonSchema;
 }
