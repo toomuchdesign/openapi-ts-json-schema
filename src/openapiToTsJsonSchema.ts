@@ -1,11 +1,15 @@
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 import YAML from 'yaml';
 import get from 'lodash.get';
-import { clearFolder, generateJsonSchemaFiles, JSONSchema } from './utils';
+import {
+  clearFolder,
+  generateJsonSchemaFiles,
+  JSONSchema,
+  convertOpenApiToJsonSchema,
+} from './utils';
 
 export async function openapiToTsJsonSchema({
   openApiSchema: openApiSchemaRelative,
@@ -40,24 +44,21 @@ export async function openapiToTsJsonSchema({
   await clearFolder(outputPath);
 
   const openApiSchema = await fs.readFile(openApiSchemaPath, 'utf-8');
-  const jsonOpenApiSchema = YAML.parse(openApiSchema);
-  // @NOTE We are using a JSONschema resolver on an OpenApi file :)
-  const dereferencedOpenApiSchema = await $RefParser.dereference(
-    jsonOpenApiSchema,
-  );
+  const jsonOpenApiSchema: Record<string, any> = YAML.parse(openApiSchema);
 
   // @NOTE paths schema is converted by default
-  const jsonSchema = fromSchema(dereferencedOpenApiSchema, {
-    definitionKeywords: definitionPathsToGenerateFrom,
-  });
+  const jsonSchema = convertOpenApiToJsonSchema(jsonOpenApiSchema);
+
+  // @NOTE We are using a JSONschema resolver on an OpenApi file :)
+  const dereferencedOpenApiSchema = await $RefParser.dereference(jsonSchema);
 
   for (const definitionPath of definitionPathsToGenerateFrom) {
-    const schemas = get(jsonSchema, definitionPath);
-    const schemasoutputPath = path.resolve(outputPath, definitionPath);
+    const schemas = get(dereferencedOpenApiSchema, definitionPath);
+    const schemasOutputPath = path.resolve(outputPath, definitionPath);
     if (schemas) {
       await generateJsonSchemaFiles({
         schemas,
-        outputPath: schemasoutputPath,
+        outputPath: schemasOutputPath,
         schemaPatcher,
       });
     }

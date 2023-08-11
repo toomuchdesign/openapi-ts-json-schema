@@ -26,4 +26,28 @@ describe('Deferencing', () => {
       },
     });
   });
+
+  it('Transforms deeply nested schemas', async () => {
+    const { outputPath } = await openapiToTsJsonSchema({
+      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      definitionPathsToGenerateFrom: ['paths'],
+      silent: true,
+    });
+
+    const pathsSchema = await importFresh(
+      path.resolve(outputPath, 'paths/v1|path-1'),
+    );
+
+    expect(
+      pathsSchema.default.get.responses[200].content['application/json'].schema
+        .oneOf[0],
+    ).toEqual({
+      description: 'January description',
+      type: 'object',
+      required: ['isJanuary'],
+      properties: {
+        isJanuary: { type: ['string', 'null'], enum: ['yes', 'no', null] },
+      },
+    });
+  });
 });
