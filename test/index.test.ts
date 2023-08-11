@@ -63,9 +63,8 @@ describe('openapiToTsJsonSchema', async () => {
                       required: ['isJanuary'],
                       properties: {
                         isJanuary: {
-                          type: 'string',
-                          nullable: true,
-                          enum: ['yes', 'no'],
+                          type: ['string', 'null'],
+                          enum: ['yes', 'no', null],
                         },
                       },
                     },
@@ -75,9 +74,8 @@ describe('openapiToTsJsonSchema', async () => {
                       required: ['isFebruary'],
                       properties: {
                         isFebruary: {
-                          type: 'string',
-                          nullable: true,
-                          enum: ['yes', 'no'],
+                          type: ['string', 'null'],
+                          enum: ['yes', 'no', null],
                         },
                       },
                     },

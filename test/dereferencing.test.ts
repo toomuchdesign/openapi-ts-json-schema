@@ -27,7 +27,7 @@ describe('Deferencing', () => {
     });
   });
 
-  it.fails('Transforms deeply nested schemas', async () => {
+  it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],
