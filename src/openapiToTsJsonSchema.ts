@@ -52,6 +52,23 @@ export async function openapiToTsJsonSchema({
   // Replace $refs
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
+    {
+      dereference: {
+        // @ts-expect-error onDereference seems not to be properly typed
+        onDereference: (path, value) => {
+          /**
+           * Add commented out $ref prop with:
+           * https://github.com/kaelzhang/node-comment-json
+           */
+          value[Symbol.for('before')] = [
+            {
+              type: 'LineComment',
+              value: ` $ref: "${path}"`,
+            },
+          ];
+        },
+      },
+    },
   );
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
 

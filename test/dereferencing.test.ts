@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
 import { importFresh } from './utils';
 import { openapiToTsJsonSchema } from '../src';
@@ -49,5 +50,33 @@ describe('Deferencing', () => {
         isJanuary: { type: ['string', 'null'], enum: ['yes', 'no', null] },
       },
     });
+  });
+
+  it('Preserves original "$ref" information as a commented prop', async () => {
+    const { outputPath } = await openapiToTsJsonSchema({
+      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      definitionPathsToGenerateFrom: ['components.months'],
+      silent: true,
+    });
+
+    const januarySchemaAsText = await fs.readFile(
+      path.resolve(outputPath, 'components.months/January.ts'),
+      {
+        encoding: 'utf8',
+      },
+    );
+
+    const expectedInlinedRef = `
+  properties: {
+    isJanuary: {
+      // $ref: "#/components/schemas/Answer"
+      type: ["string", "null"],
+      enum: ["yes", "no", null],
+    },
+  },`;
+
+    expect(januarySchemaAsText).toEqual(
+      expect.stringContaining(expectedInlinedRef),
+    );
   });
 });
