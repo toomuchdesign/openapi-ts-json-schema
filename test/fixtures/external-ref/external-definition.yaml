@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    Foo:
+      description: External Foo description
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no
+    Bar:
+      description: External Bar description
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no

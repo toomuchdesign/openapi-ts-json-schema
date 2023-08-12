@@ -46,11 +46,14 @@ export async function openapiToTsJsonSchema({
 
   const openApiSchema = await fs.readFile(openApiSchemaPath, 'utf-8');
   const jsonOpenApiSchema: Record<string, any> = YAML.parse(openApiSchema);
-  const initialJsonSchema = convertOpenApiToJsonSchema(jsonOpenApiSchema);
-  const dereferencedOpenApiSchema = await $RefParser.dereference(
+  // Resolve external/remote references (keeping $refs)
+  const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
+  const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
+  // Replace $refs
+  const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
   );
-  const jsonSchema = convertOpenApiParameters(dereferencedOpenApiSchema);
+  const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
 
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
