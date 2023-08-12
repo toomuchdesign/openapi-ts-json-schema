@@ -8,7 +8,7 @@ Generate JSON schema TypeScript files (`.ts`) from OpenAPI definitions which can
 
 Given an OpenAPI definition file, `openapi-ts-json-schema` will:
 
-- Dereference the definitions with [`@apidevtools/json-schema-ref-parser`](https://github.com/APIDevTools/json-schema-ref-parser) (resolving `$ref`'s)
+- Resolve external/remote `$ref`s and dereference them with [`@apidevtools/json-schema-ref-parser`](https://github.com/APIDevTools/json-schema-ref-parser) (resolving `$ref`'s)
 - Convert to JSON schema with [`@openapi-contrib/openapi-schema-to-json-schema`](https://github.com/openapi-contrib/openapi-schema-to-json-schema) and [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters)
 - Generate one TypeScript JSON schema file for each definition (`.ts` files with `as const` assertion)
 - Store schemas in a folder structure reflecting the original OpenAPI definition structure
@@ -61,7 +61,6 @@ Generated JSON schema path names get escaped in order to be valid file system na
 
 ## Todo
 
-- Consider exposing an option to set the output folder path
 - Explore ability to import shared sub schemas
 - Consider merging "operation" and "path" parameters definition
 

@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    LocalDefinitionReferencingExternal:
+      type: object
+      properties:
+        remoteDefinition:
+          $ref: '#/components/schemas/ExternalDefinition'
+    ExternalDefinition:
+      $ref: 'test/fixtures/external-ref/external-definition.yaml#/components/schemas/Foo'
