@@ -14,7 +14,7 @@ import {
 
 export async function openapiToTsJsonSchema({
   openApiSchema: openApiSchemaRelative,
-  definitionPathsToGenerateFrom = [],
+  definitionPathsToGenerateFrom,
   schemaPatcher,
   outputPath: providedOutputPath,
   silent,
