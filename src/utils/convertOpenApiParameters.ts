@@ -13,14 +13,18 @@ export function convertOpenApiParameters(schema: JSONSchema) {
     for (const path in schema.paths) {
       const pathSchema = schema.paths[path];
 
-      // Path parameters
-      if ('parameters' in pathSchema) {
+      /**
+       * Path level parameters
+       * These could be merged with operation params:
+       * https://swagger.io/docs/specification/describing-parameters/#common
+       */
+      https: if ('parameters' in pathSchema) {
         pathSchema.parameters = convertParametersToJSONSchema(
           pathSchema.parameters,
         );
       }
 
-      // operation parameters
+      // Operation level parameters
       for (const operation in pathSchema) {
         const operationSchema = pathSchema[operation];
         if ('parameters' in operationSchema) {
