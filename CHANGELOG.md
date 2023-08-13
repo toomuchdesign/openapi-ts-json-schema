@@ -1,5 +1,17 @@
 # openapi-ts-json-schema
 
+## 0.2.0
+
+### Minor Changes
+
+- 56cf900: OpenAPI parameters get converted only when found in the places dictated by the specs (`paths[path].parameters` and `paths[path][operation].parameters`)
+- 1543d34: Preserve commented `$ref` property in deferenced schemas
+- d4395ea: Resolve external and public remote $refs
+
+### Patch Changes
+
+- d3d5fa5: Convert deeply nested OpenAPI definitions
+
 ## 0.1.0
 
 ### Minor Changes
