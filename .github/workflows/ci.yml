@@ -10,23 +10,17 @@ env:
 
 jobs:
   test-and-build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node-version: [18, 20]
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.version }}
+          node-version-file: '.nvmrc'
 
       - run: npm ci
 
       - uses: coverallsapp/github-action@v2
-        if: matrix.node-version == '18'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
