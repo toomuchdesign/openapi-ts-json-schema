@@ -61,8 +61,9 @@ Generated JSON schema path names get escaped in order to be valid file system na
 
 ## Todo
 
-- Explore ability to import shared sub schemas
+- Explore ability to import dereferenced schemas instead of inlining
 - Consider merging "operation" and "path" parameters definition
+- Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
