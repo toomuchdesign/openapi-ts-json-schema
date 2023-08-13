@@ -1,8 +1,12 @@
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import { OpenApiSchema, convertOpenApiParameters } from '.';
+import { OpenApiSchema } from '.';
 
 export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
-  // Build a list of components dotted paths to convert
+  /**
+   * @openapi-contrib/openapi-schema-to-json-schema doesn't convert definitions by default,
+   * Here we convert all direct children of components
+   * https://github.com/openapi-contrib/openapi-schema-to-json-schema#definitionkeywords-array
+   */
   const definitionKeywords = ['components'];
   if ('components' in schema) {
     definitionKeywords.push(

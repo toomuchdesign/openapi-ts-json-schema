@@ -18,6 +18,16 @@ describe('OpenAPI parameters', () => {
     );
 
     expect(pathSchema.default).toEqual({
+      parameters: {
+        headers: {
+          required: ['path-headers-param-1'],
+          properties: {
+            'path-headers-param-1': {
+              type: 'string',
+            },
+          },
+        },
+      },
       get: {
         parameters: {
           headers: {
