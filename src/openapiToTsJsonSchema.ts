@@ -6,8 +6,8 @@ import YAML from 'yaml';
 import get from 'lodash.get';
 import {
   clearFolder,
-  generateJsonSchemaFiles,
-  JSONSchema,
+  makeJsonSchemaFile,
+  SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
 } from './utils';
@@ -21,7 +21,7 @@ export async function openapiToTsJsonSchema({
 }: {
   openApiSchema: string;
   definitionPathsToGenerateFrom: string[];
-  schemaPatcher?: (params: { schema: JSONSchema }) => void;
+  schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
 }) {
@@ -75,9 +75,11 @@ export async function openapiToTsJsonSchema({
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
     const schemasOutputPath = path.resolve(outputPath, definitionPath);
-    if (schemas) {
-      await generateJsonSchemaFiles({
-        schemas,
+
+    for (const schemaName in schemas) {
+      await makeJsonSchemaFile({
+        schema: schemas[schemaName],
+        schemaName,
         outputPath: schemasOutputPath,
         schemaPatcher,
       });
