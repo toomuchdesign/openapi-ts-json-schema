@@ -1,9 +1,9 @@
 import traverse from 'json-schema-traverse';
-import type { JSONSchema } from './';
+import type { JSONSchema, SchemaPatcher } from './';
 
 export function patchJsonSchema(
   schema: JSONSchema,
-  schemaPatcher?: (params: { schema: JSONSchema }) => void,
+  schemaPatcher?: SchemaPatcher,
 ): JSONSchema {
   if (schema && schemaPatcher) {
     traverse(schema, {
