@@ -1,4 +1,5 @@
 import filenamify from 'filenamify';
+import prettier from 'prettier';
 import fs from 'fs/promises';
 import path from 'path';
 import {
@@ -6,6 +7,7 @@ import {
   jsonSchemaToTsConst,
   JSONSchema,
   SchemaPatcher,
+  replacePlaceholdersWithImportedSchemas,
 } from './';
 
 /**
@@ -14,21 +16,38 @@ import {
 export async function makeJsonSchemaFile({
   schema,
   schemaName,
+  schemaOutputPath,
   outputPath,
   schemaPatcher,
+  replacementRefs,
 }: {
   schema: JSONSchema;
   schemaName: string;
+  schemaOutputPath: string;
   outputPath: string;
   schemaPatcher?: SchemaPatcher;
+  replacementRefs?: Map<string, JSONSchema>;
 }) {
   const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
   const patchedSchema = patchJsonSchema(schema, schemaPatcher);
-  const tsSchema = await jsonSchemaToTsConst(patchedSchema);
+  let tsSchema = await jsonSchemaToTsConst(patchedSchema);
 
-  await fs.mkdir(outputPath, { recursive: true });
+  if (replacementRefs) {
+    tsSchema = replacePlaceholdersWithImportedSchemas({
+      schemaAsText: tsSchema,
+      replacementRefs,
+      schemaOutputPath,
+      outputPath,
+    });
+  }
+
+  const formattedSchema = await prettier.format(tsSchema, {
+    parser: 'typescript',
+  });
+
+  await fs.mkdir(schemaOutputPath, { recursive: true });
   await fs.writeFile(
-    path.resolve(outputPath, `${schemaNamedEscaped}.ts`),
-    tsSchema,
+    path.resolve(schemaOutputPath, `${schemaNamedEscaped}.ts`),
+    formattedSchema,
   );
 }

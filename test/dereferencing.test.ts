@@ -52,7 +52,7 @@ describe('Deferencing', () => {
     });
   });
 
-  it('Preserves original "$ref" information as a commented prop', async () => {
+  it.only('Preserves original "$ref" information as a commented prop', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],

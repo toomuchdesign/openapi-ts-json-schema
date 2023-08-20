@@ -7,9 +7,13 @@ import get from 'lodash.get';
 import {
   clearFolder,
   makeJsonSchemaFile,
+  REF_SYMBOL,
   SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
+  JSONSchema,
+  refToPath,
+  replaceInlinedRefsWithStringPlaceholder,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -18,12 +22,14 @@ export async function openapiToTsJsonSchema({
   schemaPatcher,
   outputPath: providedOutputPath,
   silent,
+  experimentalImportRefs = false,
 }: {
   openApiSchema: string;
   definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
+  experimentalImportRefs?: boolean;
 }) {
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
@@ -49,29 +55,61 @@ export async function openapiToTsJsonSchema({
   // Resolve external/remote references (keeping $refs)
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
-  // Replace $refs
+
+  // Inline $refs
+  const refs = new Map<string, JSONSchema>();
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (path, value) => {
-          /**
-           * Add commented out $ref prop with:
-           * https://github.com/kaelzhang/node-comment-json
-           */
-          value[Symbol.for('before')] = [
-            {
-              type: 'LineComment',
-              value: ` $ref: "${path}"`,
-            },
-          ];
+          if (experimentalImportRefs) {
+            // Mark inlined refs with a "REF_SYMBOL" prop
+            value[REF_SYMBOL] = path;
+            refs.set(path, replaceInlinedRefsWithStringPlaceholder(value));
+          } else {
+            /**
+             * Add a $ref comment to each inlined schema with the original ref value. Using:
+             * https://github.com/kaelzhang/node-comment-json
+             */
+            value[Symbol.for('before')] = [
+              {
+                type: 'LineComment',
+                value: ` $ref: "${path}"`,
+              },
+            ];
+          }
         },
       },
     },
   );
-  const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
+  let jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
 
+  if (experimentalImportRefs) {
+    // Generate JSON schema files for $ref's (experimentalImportRefs option)
+    for (const [ref, schema] of refs) {
+      // @TODO store this info into refs
+      const { schemaOutputPath, schemaName } = refToPath({
+        ref,
+        outputPath,
+      });
+
+      await makeJsonSchemaFile({
+        schema,
+        schemaName,
+        schemaOutputPath,
+        outputPath,
+        schemaPatcher,
+        replacementRefs: refs,
+      });
+    }
+
+    // Replace inlined Ref schemas with a string placeholder
+    jsonSchema = replaceInlinedRefsWithStringPlaceholder(jsonSchema);
+  }
+
+  // Generate user defined schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
     const schemasOutputPath = path.resolve(outputPath, definitionPath);
@@ -80,8 +118,10 @@ export async function openapiToTsJsonSchema({
       await makeJsonSchemaFile({
         schema: schemas[schemaName],
         schemaName,
-        outputPath: schemasOutputPath,
+        schemaOutputPath: schemasOutputPath,
+        outputPath,
         schemaPatcher,
+        replacementRefs: experimentalImportRefs ? refs : undefined,
       });
     }
   }
