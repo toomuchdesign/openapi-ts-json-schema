@@ -7,6 +7,7 @@ components:
   schemas:
     Answer:
       type: string
+      nullable: true
       enum:
         - yes
         - no
@@ -15,25 +16,44 @@ paths:
   /v1/path-1:
     parameters:
       - schema:
-          type: string
+          const: from-path
         in: header
-        name: path-headers-param-1
+        name: headers-param-1
         required: true
-        description: path-headers-param-1 description
+        description: headers-param-1 description
+      - schema:
+          const: from-path
+        in: header
+        name: headers-param-2
+        required: true
+        description: headers-param-2 description
+      - schema:
+          const: from-path
+        in: header
+        name: headers-param-3
+        required: true
+        description: headers-param-3 description
+
     get:
       parameters:
         - schema:
-            type: string
+            const: from-operation
           in: header
           name: headers-param-1
           required: true
           description: headers-param-1 description
         - schema:
-            $ref: '#/components/schemas/Answer'
+            const: from-operation
           in: header
           name: headers-param-2
           required: true
           description: headers-param-2 description
+        - schema:
+            const: from-operation
+          in: header
+          name: headers-param-4
+          required: true
+          description: headers-param-4 description
         - schema:
             type: string
             enum:
@@ -53,7 +73,13 @@ paths:
           in: query
           name: query-param-1
           required: true
-          description: Query param description
+          description: Query param 1 description
+        - schema:
+            $ref: '#/components/schemas/Answer'
+          in: query
+          name: deferenced-query-param
+          required: true
+          description: deferenced-query-param description
       responses:
         '200':
           content:

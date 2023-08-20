@@ -35,12 +35,8 @@ describe('OpenAPI parameters', () => {
               'headers-param-1': {
                 type: 'string',
               },
-              'headers-param-2': {
-                type: 'string',
-                enum: ['yes', 'no'],
-              },
             },
-            required: ['headers-param-1', 'headers-param-2'],
+            required: ['headers-param-1'],
           },
           body: { type: 'string', enum: ['foo', 'bar'] },
           path: {
@@ -56,8 +52,12 @@ describe('OpenAPI parameters', () => {
               'query-param-1': {
                 type: 'string',
               },
+              'deferenced-query-param': {
+                type: ['string', 'null'],
+                enum: ['yes', 'no', null],
+              },
             },
-            required: ['query-param-1'],
+            required: ['query-param-1', 'deferenced-query-param'],
           },
         },
 
