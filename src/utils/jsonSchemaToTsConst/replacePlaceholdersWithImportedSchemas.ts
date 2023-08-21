@@ -44,10 +44,15 @@ export function replacePlaceholdersWithImportedSchemas({
     },
   });
 
-  importStatements.forEach((entry) => {
-    schemaWithReplacedPlaceholders =
-      entry + '\n' + schemaWithReplacedPlaceholders;
-  });
+  if (importStatements.size > 0) {
+    // Empty line between imports and schema :)
+    schemaWithReplacedPlaceholders = '\n' + schemaWithReplacedPlaceholders;
+
+    importStatements.forEach((entry) => {
+      schemaWithReplacedPlaceholders =
+        entry + '\n' + schemaWithReplacedPlaceholders;
+    });
+  }
 
   return schemaWithReplacedPlaceholders;
 }

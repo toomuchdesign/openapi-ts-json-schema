@@ -43,3 +43,7 @@ import Bar from '../foo/Bar';
 ```
 
 This process could be definitely shorter if `@apidevtools/json-schema-ref-parser`'s `dereference` method allowed to access the parent object holding the `$ref` value to be replaced. In that case step 2 could be skipped and the ref object could be immediately replaced with the relevant **string placeholder**.
+
+## Debugging tests
+
+Comment [this line](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/vitest.setup.mts#L17) out to disable schemas cleanup after tests and check the generated files.
