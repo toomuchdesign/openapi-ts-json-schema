@@ -16,6 +16,7 @@ export function refToPath({
   schemaName: string;
   schemaOutputPath: string;
 } {
+  /* istanbul ignore if: if this condition was true the execution would break before getting to this line -- @preserve */
   if (!ref.startsWith('#/')) {
     throw new Error(`[openapi-ts-json-schema] Unsupported ref value: "${ref}"`);
   }

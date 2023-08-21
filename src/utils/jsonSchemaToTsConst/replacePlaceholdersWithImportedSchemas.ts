@@ -19,6 +19,8 @@ export function replacePlaceholdersWithImportedSchemas({
     text: schemaAsText,
     replacer: (ref) => {
       const schemaMeta = inlinedRefs.get(ref);
+
+      /* istanbul ignore if: It should not be possible to execute this condition -- @preserve */
       if (!schemaMeta) {
         throw new Error(
           '[openapi-ts-json-schema] No matching schema found in "inlinedRefs"',
