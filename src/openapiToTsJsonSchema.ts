@@ -100,7 +100,7 @@ export async function openapiToTsJsonSchema({
   let jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
 
   if (experimentalImportRefs) {
-    // Generate JSON schema files for $ref's (experimentalImportRefs option)
+    // Generate JSON schema files for inlined $ref's (experimentalImportRefs option)
     for (const [ref, schemaMeta] of inlinedRefs) {
       const { schema, schemaName, schemaOutputPath } = schemaMeta;
       await makeJsonSchemaFile({
@@ -117,6 +117,7 @@ export async function openapiToTsJsonSchema({
   }
 
   // Generate user defined schemas
+  // @TODO make sure generated inlined schemas don't get overridden bu user requested schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
     const schemasOutputPath = path.resolve(outputPath, definitionPath);
