@@ -19,7 +19,7 @@ describe('"experimentalImportRefs" option', () => {
       path.resolve(outputPath, 'paths/v1|path-1'),
     );
 
-    // Parsed root schema
+    // Expectations against parsed root schema
     expect(path1.default).toEqual({
       get: {
         responses: {
@@ -60,6 +60,7 @@ describe('"experimentalImportRefs" option', () => {
       },
     });
 
+    // Expectations against actual root schema file
     const actualPath1File = await fs.readFile(
       path.resolve(outputPath, 'paths/v1|path-1.ts'),
       {
@@ -86,9 +87,61 @@ describe('"experimentalImportRefs" option', () => {
             },
           },
         },
-      } as const;
-    `);
+      } as const;`);
 
     expect(actualPath1File).toEqual(expectedPath1File);
+  });
+
+  it('Generates expected $ref schemas', async () => {
+    const { outputPath } = await openapiToTsJsonSchema({
+      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      definitionPathsToGenerateFrom: ['paths'],
+      silent: true,
+      experimentalImportRefs: true,
+    });
+
+    // January schema
+    const actualJanuarySchemaFile = await fs.readFile(
+      path.resolve(outputPath, 'components.months/January.ts'),
+      {
+        encoding: 'utf8',
+      },
+    );
+
+    const expectedJanuarySchemaFile = await formatTypeScript(`
+      import Answer from "../components.schemas/Answer";
+
+      export default {
+        description: "January description",
+        type: "object",
+        required: ["isJanuary"],
+        properties: {
+          isJanuary: Answer,
+        },
+      } as const;`);
+
+    expect(actualJanuarySchemaFile).toEqual(expectedJanuarySchemaFile);
+
+    // February schema
+    const actualFebruarySchemaFile = await fs.readFile(
+      path.resolve(outputPath, 'components.months/February.ts'),
+      {
+        encoding: 'utf8',
+      },
+    );
+
+    const expectedFebruarySchemaFile = await formatTypeScript(`
+      import Answer from "../components.schemas/Answer";
+
+      export default {
+        description: "February description",
+        type: "object",
+        required: ["isFebruary"],
+        properties: {
+          isFebruary: Answer,
+        },
+      } as const;`);
+
+    expect(actualFebruarySchemaFile).toEqual(expectedFebruarySchemaFile);
   });
 });
