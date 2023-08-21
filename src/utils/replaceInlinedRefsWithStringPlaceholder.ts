@@ -8,7 +8,7 @@ function isObject(value: unknown): value is Record<string | symbol, unknown> {
 /**
  * Get if an object holds a REF_SYMBOL prop
  */
-export function isInlinedRefSchema(
+function isInlinedRefSchema(
   schema: JSONSchema,
 ): schema is Record<string | symbol, JSONSchema> {
   return isObject(schema) && REF_SYMBOL in schema;
@@ -17,7 +17,7 @@ export function isInlinedRefSchema(
 /**
  * Retrieve REF_SYMBOL prop value
  */
-export function getRef(schema: JSONSchema): string {
+function getRef(schema: JSONSchema): string {
   if (REF_SYMBOL in schema && typeof schema[REF_SYMBOL] === 'string') {
     return schema[REF_SYMBOL];
   }
@@ -25,8 +25,9 @@ export function getRef(schema: JSONSchema): string {
 }
 
 /**
- * Find inlined ref schemas. They are marked with a property with key set as REF_SYMBOL.
- * Replace them with a string placeholder with a reference to the $ref value
+ * Iterate a JSON schema to find inlined ref schema objects.
+ * Inlined ref schemas objects are marked with a property key set as REF_SYMBOL.
+ * Replace the object with a string placeholder with a reference to the $ref value
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,

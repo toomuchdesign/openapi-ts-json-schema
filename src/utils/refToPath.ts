@@ -17,7 +17,7 @@ export function refToPath({
   schemaOutputPath: string;
 } {
   if (!ref.startsWith('#/')) {
-    throw new Error(`Unexpected ref value: "${ref}"`);
+    throw new Error(`[openapi-ts-json-schema] Unsupported ref value: "${ref}"`);
   }
 
   const refPath = ref.replace('#/', '');

@@ -11,9 +11,9 @@ import {
   SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
-  JSONSchema,
   refToPath,
   replaceInlinedRefsWithStringPlaceholder,
+  SchemaRecord,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -57,17 +57,27 @@ export async function openapiToTsJsonSchema({
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   // Inline $refs
-  const refs = new Map<string, JSONSchema>();
+  const refs: SchemaRecord = new Map();
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
-        onDereference: (path, value) => {
+        onDereference: (ref, value) => {
           if (experimentalImportRefs) {
             // Mark inlined refs with a "REF_SYMBOL" prop
-            value[REF_SYMBOL] = path;
-            refs.set(path, replaceInlinedRefsWithStringPlaceholder(value));
+            value[REF_SYMBOL] = ref;
+
+            const { schemaOutputPath, schemaName } = refToPath({
+              ref,
+              outputPath,
+            });
+
+            refs.set(ref, {
+              schemaName,
+              schemaOutputPath,
+              schema: replaceInlinedRefsWithStringPlaceholder(value),
+            });
           } else {
             /**
              * Add a $ref comment to each inlined schema with the original ref value. Using:
@@ -76,7 +86,7 @@ export async function openapiToTsJsonSchema({
             value[Symbol.for('before')] = [
               {
                 type: 'LineComment',
-                value: ` $ref: "${path}"`,
+                value: ` $ref: "${ref}"`,
               },
             ];
           }
@@ -88,18 +98,12 @@ export async function openapiToTsJsonSchema({
 
   if (experimentalImportRefs) {
     // Generate JSON schema files for $ref's (experimentalImportRefs option)
-    for (const [ref, schema] of refs) {
-      // @TODO store this info into refs
-      const { schemaOutputPath, schemaName } = refToPath({
-        ref,
-        outputPath,
-      });
-
+    for (const [ref, schemaMeta] of refs) {
+      const { schema, schemaName, schemaOutputPath } = schemaMeta;
       await makeJsonSchemaFile({
         schema,
         schemaName,
         schemaOutputPath,
-        outputPath,
         schemaPatcher,
         replacementRefs: refs,
       });
@@ -119,7 +123,6 @@ export async function openapiToTsJsonSchema({
         schema: schemas[schemaName],
         schemaName,
         schemaOutputPath: schemasOutputPath,
-        outputPath,
         schemaPatcher,
         replacementRefs: experimentalImportRefs ? refs : undefined,
       });

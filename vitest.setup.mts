@@ -14,6 +14,7 @@ export async function clearGeneratedFiles() {
 }
 
 afterEach(async () => {
+  await clearGeneratedFiles();
   vi.resetAllMocks();
   vi.restoreAllMocks();
 });

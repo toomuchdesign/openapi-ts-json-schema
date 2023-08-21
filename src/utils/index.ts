@@ -12,4 +12,9 @@ export {
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
 export { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
-export type { JSONSchema, OpenApiSchema, SchemaPatcher } from './types';
+export type {
+  JSONSchema,
+  OpenApiSchema,
+  SchemaPatcher,
+  SchemaRecord,
+} from './types';

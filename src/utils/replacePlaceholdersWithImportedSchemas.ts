@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { replacePlaceholdersWith, JSONSchema, refToPath } from './';
+import { replacePlaceholdersWith, SchemaRecord } from './';
 
 /**
  * Replace Refs placeholders with imported schemas
@@ -7,30 +7,28 @@ import { replacePlaceholdersWith, JSONSchema, refToPath } from './';
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
   replacementRefs,
-  outputPath,
   schemaOutputPath,
 }: {
   schemaAsText: string;
-  replacementRefs: Map<string, JSONSchema>;
-  outputPath: string;
+  replacementRefs: SchemaRecord;
   schemaOutputPath: string;
 }): string {
   const importStatements = new Set<string>();
+
   let schemaWithReplacedPlaceholders = replacePlaceholdersWith({
     text: schemaAsText,
     replacer: (ref) => {
-      const schema = replacementRefs.get(ref);
-      if (!schema) {
-        throw new Error('No matching schema found in "replacementRefs"');
+      const schemaMeta = replacementRefs.get(ref);
+      if (!schemaMeta) {
+        throw new Error(
+          '[openapi-ts-json-schema] No matching schema found in "replacementRefs"',
+        );
       }
 
       const {
         schemaOutputPath: importedSchemaPath,
         schemaName: importedSchemaName,
-      } = refToPath({
-        ref,
-        outputPath,
-      });
+      } = schemaMeta;
 
       const relativePath = path.relative(
         schemaOutputPath,

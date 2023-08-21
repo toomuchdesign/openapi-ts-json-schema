@@ -8,6 +8,7 @@ import {
   JSONSchema,
   SchemaPatcher,
   replacePlaceholdersWithImportedSchemas,
+  SchemaRecord,
 } from './';
 
 /**
@@ -17,16 +18,14 @@ export async function makeJsonSchemaFile({
   schema,
   schemaName,
   schemaOutputPath,
-  outputPath,
   schemaPatcher,
   replacementRefs,
 }: {
   schema: JSONSchema;
   schemaName: string;
   schemaOutputPath: string;
-  outputPath: string;
   schemaPatcher?: SchemaPatcher;
-  replacementRefs?: Map<string, JSONSchema>;
+  replacementRefs?: SchemaRecord;
 }) {
   const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
   const patchedSchema = patchJsonSchema(schema, schemaPatcher);
@@ -37,7 +36,6 @@ export async function makeJsonSchemaFile({
       schemaAsText: tsSchema,
       replacementRefs,
       schemaOutputPath,
-      outputPath,
     });
   }
 
