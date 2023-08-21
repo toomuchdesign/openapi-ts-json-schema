@@ -4,7 +4,7 @@ import path from 'node:path';
  * Parses OpenAPI refs (#/components/schema/Foo) to the derive the same output path patterns
  * this library saves generated JSON schemas to (...outputPath/components.schema/Foo)
  *
- * @NOTE We are just supporting `/#` like refs as am initial implementation
+ * @NOTE We are just supporting `/#` like refs as initial implementation
  */
 export function refToPath({
   ref,

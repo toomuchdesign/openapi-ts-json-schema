@@ -6,20 +6,20 @@ import type { SchemaRecord } from '../';
 export async function jsonSchemaToTsConst({
   schema,
   schemaOutputPath,
-  replacementRefs,
+  inlinedRefs,
 }: {
   schema: unknown;
   schemaOutputPath: string;
-  replacementRefs?: SchemaRecord;
+  inlinedRefs?: SchemaRecord;
 }): Promise<string> {
   // Stringify schema with "node-comment-json" to generate inline comments
   const stringifiedSchema = stringify(schema, null, 2);
   let tsSchema = `export default ` + stringifiedSchema + 'as const';
 
-  if (replacementRefs) {
+  if (inlinedRefs && inlinedRefs.size > 0) {
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
-      replacementRefs,
+      inlinedRefs,
       schemaOutputPath,
     });
   }

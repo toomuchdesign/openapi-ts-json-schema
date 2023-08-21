@@ -17,20 +17,20 @@ export async function makeJsonSchemaFile({
   schemaName,
   schemaOutputPath,
   schemaPatcher,
-  replacementRefs,
+  inlinedRefs,
 }: {
   schema: JSONSchema;
   schemaName: string;
   schemaOutputPath: string;
   schemaPatcher?: SchemaPatcher;
-  replacementRefs?: SchemaRecord;
+  inlinedRefs?: SchemaRecord;
 }) {
   const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
   const patchedSchema = patchJsonSchema(schema, schemaPatcher);
   const tsSchema = await jsonSchemaToTsConst({
     schema: patchedSchema,
     schemaOutputPath,
-    replacementRefs,
+    inlinedRefs,
   });
 
   await fs.mkdir(schemaOutputPath, { recursive: true });

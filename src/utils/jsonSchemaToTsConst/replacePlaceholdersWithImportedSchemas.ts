@@ -6,11 +6,11 @@ import { replacePlaceholdersWith, SchemaRecord } from '..';
  */
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
-  replacementRefs,
+  inlinedRefs,
   schemaOutputPath,
 }: {
   schemaAsText: string;
-  replacementRefs: SchemaRecord;
+  inlinedRefs: SchemaRecord;
   schemaOutputPath: string;
 }): string {
   const importStatements = new Set<string>();
@@ -18,10 +18,10 @@ export function replacePlaceholdersWithImportedSchemas({
   let schemaWithReplacedPlaceholders = replacePlaceholdersWith({
     text: schemaAsText,
     replacer: (ref) => {
-      const schemaMeta = replacementRefs.get(ref);
+      const schemaMeta = inlinedRefs.get(ref);
       if (!schemaMeta) {
         throw new Error(
-          '[openapi-ts-json-schema] No matching schema found in "replacementRefs"',
+          '[openapi-ts-json-schema] No matching schema found in "inlinedRefs"',
         );
       }
 
