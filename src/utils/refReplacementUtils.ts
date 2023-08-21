@@ -4,7 +4,7 @@ const _REF_MARKER_START_ = '_OTJS-START_';
 const _REF_MARKER_END_ = '_OTJS-END_';
 
 const PLACEHOLDER_REGEX = new RegExp(
-  `"${_REF_MARKER_START_}(.+)${_REF_MARKER_END_}"`,
+  `["']${_REF_MARKER_START_}(.+)${_REF_MARKER_END_}["']`,
   'g',
 );
 
