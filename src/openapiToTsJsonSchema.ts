@@ -58,6 +58,7 @@ export async function openapiToTsJsonSchema({
 
   // Inline $refs
   const inlinedRefs: SchemaRecord = new Map();
+
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
@@ -95,6 +96,7 @@ export async function openapiToTsJsonSchema({
       },
     },
   );
+
   let jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
 
   if (experimentalImportRefs) {
