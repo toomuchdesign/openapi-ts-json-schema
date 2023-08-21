@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { replacePlaceholdersWith, SchemaRecord } from './';
+import { replacePlaceholdersWith, SchemaRecord } from '..';
 
 /**
  * Replace Refs placeholders with imported schemas
@@ -30,13 +30,13 @@ export function replacePlaceholdersWithImportedSchemas({
         schemaName: importedSchemaName,
       } = schemaMeta;
 
-      const relativePath = path.relative(
+      const importedSchemaRelativePath = path.relative(
         schemaOutputPath,
         path.resolve(importedSchemaPath, importedSchemaName),
       );
 
       importStatements.add(
-        `import ${importedSchemaName} from "${relativePath}"`,
+        `import ${importedSchemaName} from "${importedSchemaRelativePath}"`,
       );
 
       // @TODO Avoid name clashes

@@ -8,10 +8,17 @@ const PLACEHOLDER_REGEX = new RegExp(
   'g',
 );
 
+/**
+ * Generate a string placeholder containing the ref value to be retrieved later
+ */
 export function refToPlaceholder(ref: string): string {
   return _REF_MARKER_START_ + ref + _REF_MARKER_END_;
 }
 
+/**
+ * Search placeholder in a text file and replace them with
+ * the value returned by the replacer
+ */
 export function replacePlaceholdersWith({
   text,
   replacer,
@@ -19,5 +26,5 @@ export function replacePlaceholdersWith({
   text: string;
   replacer: (ref: string) => string;
 }): string {
-  return text.replaceAll(PLACEHOLDER_REGEX, (match, p1) => replacer(p1));
+  return text.replaceAll(PLACEHOLDER_REGEX, (_match, ref) => replacer(ref));
 }

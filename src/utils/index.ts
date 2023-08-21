@@ -11,7 +11,7 @@ export {
   refToPlaceholder,
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
-export { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
+export { replacePlaceholdersWithImportedSchemas } from './jsonSchemaToTsConst/replacePlaceholdersWithImportedSchemas';
 export type {
   JSONSchema,
   OpenApiSchema,
