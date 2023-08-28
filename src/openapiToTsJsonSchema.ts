@@ -6,15 +6,15 @@ import YAML from 'yaml';
 import get from 'lodash.get';
 import {
   clearFolder,
-  makeJsonSchemaFile,
+  makeJsonSchemaFiles,
   REF_SYMBOL,
   SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
   refToPath,
-  replaceInlinedRefsWithStringPlaceholder,
-  InlinedRefs,
   SchemaMetaInfoMap,
+  JSONSchema,
+  addSchemaToGenerationMap,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -57,7 +57,7 @@ export async function openapiToTsJsonSchema({
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
-  const inlinedRefs: InlinedRefs = new Map();
+  const inlinedRefs: Map<string, JSONSchema> = new Map();
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
@@ -87,18 +87,20 @@ export async function openapiToTsJsonSchema({
     },
   );
 
-  let jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
+  const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
   const schemasToGenerate: SchemaMetaInfoMap = new Map();
 
+  // Generate schema meta info for inlined refs, first
   if (experimentalImportRefs) {
-    // Generate schema meta info for inlined refs, first
     for (const [ref, schema] of inlinedRefs) {
-      const { schemaRelativePath, schemaRelativeDirName, schemaName } =
-        refToPath(ref);
-      schemasToGenerate.set(schemaRelativePath, {
-        schemaAbsoluteDirName: path.join(outputPath, schemaRelativeDirName),
+      const { schemaRelativeDirName, schemaName } = refToPath(ref);
+      addSchemaToGenerationMap({
+        schemasToGenerate,
+        schemaRelativeDirName,
+        outputPath,
         schemaName,
-        schema: replaceInlinedRefsWithStringPlaceholder(schema),
+        schema,
+        experimentalImportRefs,
       });
     }
   }
@@ -106,30 +108,22 @@ export async function openapiToTsJsonSchema({
   // Generate schema meta info for user requested schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
-
     for (const schemaName in schemas) {
-      const schemaRelativePath = path.join(definitionPath, schemaName);
-      // Do not override existing meta info of inlined schemas
-      if (schemasToGenerate.has(schemaRelativePath) === false) {
-        schemasToGenerate.set(schemaRelativePath, {
-          schemaAbsoluteDirName: path.join(outputPath, definitionPath),
-          schemaName,
-          schema: experimentalImportRefs
-            ? replaceInlinedRefsWithStringPlaceholder(schemas[schemaName])
-            : schemas[schemaName],
-        });
-      }
+      addSchemaToGenerationMap({
+        schemasToGenerate,
+        schemaRelativeDirName: definitionPath,
+        outputPath,
+        schemaName,
+        schema: schemas[schemaName],
+        experimentalImportRefs,
+      });
     }
   }
 
-  for (const [_, schemaMetaInfo] of schemasToGenerate) {
-    await makeJsonSchemaFile({
-      schemaMetaInfo,
-      schemasToGenerate,
-      schemaPatcher,
-      inlinedRefs,
-    });
-  }
+  await makeJsonSchemaFiles({
+    schemasToGenerate,
+    schemaPatcher,
+  });
 
   if (!silent) {
     console.log(
