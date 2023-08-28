@@ -7,89 +7,104 @@ import { openapiToTsJsonSchema } from '../src';
 const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('"experimentalImportRefs" option', () => {
-  it('Generates expected schema', async () => {
-    const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+  describe.each([
+    {
+      description: 'Generating only root schema',
       definitionPathsToGenerateFrom: ['paths'],
-      silent: true,
-      experimentalImportRefs: true,
-    });
+    },
+    {
+      description: 'Generating also $ref schema',
+      definitionPathsToGenerateFrom: [
+        'paths',
+        'components.months',
+        'components.schemas',
+      ],
+    },
+  ])('$description', ({ definitionPathsToGenerateFrom }) => {
+    it('Generates expected schema', async () => {
+      const { outputPath } = await openapiToTsJsonSchema({
+        openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+        definitionPathsToGenerateFrom,
+        silent: true,
+        experimentalImportRefs: true,
+      });
 
-    const path1 = await importFresh(
-      path.resolve(outputPath, 'paths/v1|path-1'),
-    );
+      const path1 = await importFresh(
+        path.resolve(outputPath, 'paths/v1|path-1'),
+      );
 
-    // Expectations against parsed root schema
-    expect(path1.default).toEqual({
-      get: {
-        responses: {
-          '200': {
-            description: 'A description',
-            content: {
-              'application/json': {
-                schema: {
-                  oneOf: [
-                    {
-                      description: 'January description',
-                      type: 'object',
-                      required: ['isJanuary'],
-                      properties: {
-                        isJanuary: {
-                          type: ['string', 'null'],
-                          enum: ['yes', 'no', null],
-                        },
-                      },
-                    },
-                    {
-                      description: 'February description',
-                      type: 'object',
-                      required: ['isFebruary'],
-                      properties: {
-                        isFebruary: {
-                          type: ['string', 'null'],
-                          enum: ['yes', 'no', null],
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    // Expectations against actual root schema file
-    const actualPath1File = await fs.readFile(
-      path.resolve(outputPath, 'paths/v1|path-1.ts'),
-      {
-        encoding: 'utf8',
-      },
-    );
-
-    const expectedPath1File = await formatTypeScript(`
-      import February from "../components.months/February";
-      import January from "../components.months/January";
-
-      export default {
+      // Expectations against parsed root schema
+      expect(path1.default).toEqual({
         get: {
           responses: {
-            "200": {
-              description: "A description",
+            '200': {
+              description: 'A description',
               content: {
-                "application/json": {
+                'application/json': {
                   schema: {
-                    oneOf: [January, February],
+                    oneOf: [
+                      {
+                        description: 'January description',
+                        type: 'object',
+                        required: ['isJanuary'],
+                        properties: {
+                          isJanuary: {
+                            type: ['string', 'null'],
+                            enum: ['yes', 'no', null],
+                          },
+                        },
+                      },
+                      {
+                        description: 'February description',
+                        type: 'object',
+                        required: ['isFebruary'],
+                        properties: {
+                          isFebruary: {
+                            type: ['string', 'null'],
+                            enum: ['yes', 'no', null],
+                          },
+                        },
+                      },
+                    ],
                   },
                 },
               },
             },
           },
         },
-      } as const;`);
+      });
 
-    expect(actualPath1File).toEqual(expectedPath1File);
+      // Expectations against actual root schema file
+      const actualPath1File = await fs.readFile(
+        path.resolve(outputPath, 'paths/v1|path-1.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedPath1File = await formatTypeScript(`
+        import February from "../components.months/February";
+        import January from "../components.months/January";
+
+        export default {
+          get: {
+            responses: {
+              "200": {
+                description: "A description",
+                content: {
+                  "application/json": {
+                    schema: {
+                      oneOf: [January, February],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        } as const;`);
+
+      expect(actualPath1File).toEqual(expectedPath1File);
+    });
   });
 
   it('Generates expected $ref schemas', async () => {
