@@ -8,6 +8,7 @@ import path from 'node:path';
  */
 export function refToPath(ref: string): {
   schemaName: string;
+  schemaRelativeDirName: string;
   schemaRelativePath: string;
 } {
   /* istanbul ignore if: if this condition was true the execution would break before getting to this line -- @preserve */
@@ -16,9 +17,12 @@ export function refToPath(ref: string): {
   }
 
   const refPath = ref.replace('#/', '');
+  const schemaName = path.basename(refPath);
+  const schemaRelativeDirName = path.dirname(refPath).replaceAll('/', '.');
 
   return {
-    schemaName: path.basename(refPath),
-    schemaRelativePath: path.dirname(refPath).replaceAll('/', '.'),
+    schemaName,
+    schemaRelativeDirName,
+    schemaRelativePath: path.join(schemaRelativeDirName, schemaName),
   };
 }

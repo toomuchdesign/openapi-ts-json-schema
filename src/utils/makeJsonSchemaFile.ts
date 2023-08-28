@@ -4,38 +4,39 @@ import path from 'path';
 import {
   patchJsonSchema,
   jsonSchemaToTsConst,
-  JSONSchema,
   SchemaPatcher,
-  SchemaRecord,
+  InlinedRefs,
+  SchemaMetaInfo,
+  SchemaMetaInfoMap,
 } from './';
 
 /**
  * Save TS JSON schema with the expected naming conventions
  */
 export async function makeJsonSchemaFile({
-  schema,
-  schemaName,
-  schemaAbsolutePath,
+  schemaMetaInfo,
+  schemasToGenerate,
   schemaPatcher,
   inlinedRefs,
 }: {
-  schema: JSONSchema;
-  schemaName: string;
-  schemaAbsolutePath: string;
+  schemaMetaInfo: SchemaMetaInfo;
+  schemasToGenerate: SchemaMetaInfoMap;
   schemaPatcher?: SchemaPatcher;
-  inlinedRefs?: SchemaRecord;
+  inlinedRefs?: InlinedRefs;
 }) {
-  const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
+  const { schemaName, schemaAbsoluteDirName, schema } = schemaMetaInfo;
   const patchedSchema = patchJsonSchema(schema, schemaPatcher);
   const tsSchema = await jsonSchemaToTsConst({
     schema: patchedSchema,
-    schemaAbsolutePath,
+    schemaAbsoluteDirName,
     inlinedRefs,
+    schemasToGenerate,
   });
 
-  await fs.mkdir(schemaAbsolutePath, { recursive: true });
+  await fs.mkdir(schemaAbsoluteDirName, { recursive: true });
+  const schemaNamedEscaped = filenamify(schemaName, { replacement: '|' });
   await fs.writeFile(
-    path.resolve(schemaAbsolutePath, `${schemaNamedEscaped}.ts`),
+    path.resolve(schemaAbsoluteDirName, `${schemaNamedEscaped}.ts`),
     tsSchema,
   );
 }

@@ -16,5 +16,7 @@ export type {
   JSONSchema,
   OpenApiSchema,
   SchemaPatcher,
-  SchemaRecord,
+  InlinedRefs,
+  SchemaMetaInfo,
+  SchemaMetaInfoMap,
 } from './types';

@@ -1,40 +1,41 @@
 import path from 'node:path';
-import { replacePlaceholdersWith, SchemaRecord } from '..';
+import { replacePlaceholdersWith, refToPath, SchemaMetaInfoMap } from '..';
 
 /**
  * Replace Refs placeholders with imported schemas
  */
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
-  inlinedRefs,
-  schemaAbsolutePath,
+  schemaAbsoluteDirName,
+  schemasToGenerate,
 }: {
   schemaAsText: string;
-  inlinedRefs: SchemaRecord;
-  schemaAbsolutePath: string;
+  schemaAbsoluteDirName: string;
+  schemasToGenerate: SchemaMetaInfoMap;
 }): string {
   const importStatements = new Set<string>();
 
   let schemaWithReplacedPlaceholders = replacePlaceholdersWith({
     text: schemaAsText,
     replacer: (ref) => {
-      const schemaMeta = inlinedRefs.get(ref);
+      const { schemaRelativePath } = refToPath(ref);
+      const schemaMeta = schemasToGenerate.get(schemaRelativePath);
 
       /* istanbul ignore if: It should not be possible to execute this condition -- @preserve */
       if (!schemaMeta) {
         throw new Error(
-          '[openapi-ts-json-schema] No matching schema found in "inlinedRefs"',
+          '[openapi-ts-json-schema] No matching schema found in "schemasToGenerate"',
         );
       }
 
       const {
-        schemaAbsolutePath: importedSchemaPath,
+        schemaAbsoluteDirName: importedSchemaDirName,
         schemaName: importedSchemaName,
       } = schemaMeta;
 
       const importedSchemaRelativePath = path.relative(
-        schemaAbsolutePath,
-        path.resolve(importedSchemaPath, importedSchemaName),
+        schemaAbsoluteDirName,
+        path.resolve(importedSchemaDirName, importedSchemaName),
       );
 
       importStatements.add(

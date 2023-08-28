@@ -13,7 +13,8 @@ import {
   convertOpenApiParameters,
   refToPath,
   replaceInlinedRefsWithStringPlaceholder,
-  SchemaRecord,
+  InlinedRefs,
+  SchemaMetaInfoMap,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -25,7 +26,7 @@ export async function openapiToTsJsonSchema({
   experimentalImportRefs = false,
 }: {
   openApiSchema: string;
-  definitionPathsToGenerateFrom: string[];
+  definitionPathsToGenerateFrom: string[]; // @TODO validate to be relative paths
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
@@ -56,8 +57,7 @@ export async function openapiToTsJsonSchema({
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
-  const inlinedRefs: SchemaRecord = new Map();
-
+  const inlinedRefs: InlinedRefs = new Map();
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
@@ -68,14 +68,8 @@ export async function openapiToTsJsonSchema({
             // Mark inlined refs with a "REF_SYMBOL" prop
             inlinedSchema[REF_SYMBOL] = ref;
 
-            const { schemaRelativePath, schemaName } = refToPath(ref);
-
             // Keep track of inline refs
-            inlinedRefs.set(ref, {
-              schemaName,
-              schemaAbsolutePath: path.join(outputPath, schemaRelativePath),
-              schema: replaceInlinedRefsWithStringPlaceholder(inlinedSchema),
-            });
+            inlinedRefs.set(ref, inlinedSchema);
           } else {
             /**
              * Add a $ref comment to each inlined schema with the original ref value. Using:
@@ -94,39 +88,47 @@ export async function openapiToTsJsonSchema({
   );
 
   let jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
+  const schemasToGenerate: SchemaMetaInfoMap = new Map();
 
   if (experimentalImportRefs) {
-    // Generate JSON schema files for inlined $ref's (experimentalImportRefs option)
-    for (const [_ref, schemaMeta] of inlinedRefs) {
-      const { schema, schemaName, schemaAbsolutePath } = schemaMeta;
-      await makeJsonSchemaFile({
-        schema,
+    // Generate schema meta info for inlined refs, first
+    for (const [ref, schema] of inlinedRefs) {
+      const { schemaRelativePath, schemaRelativeDirName, schemaName } =
+        refToPath(ref);
+      schemasToGenerate.set(schemaRelativePath, {
+        schemaAbsoluteDirName: path.join(outputPath, schemaRelativeDirName),
         schemaName,
-        schemaAbsolutePath,
-        schemaPatcher,
-        inlinedRefs,
+        schema: replaceInlinedRefsWithStringPlaceholder(schema),
       });
     }
-
-    // Replace inlined Ref schemas with a string placeholder
-    jsonSchema = replaceInlinedRefsWithStringPlaceholder(jsonSchema);
   }
 
-  // Generate user defined schemas
-  // @TODO make sure generated inlined schemas don't get overridden bu user requested schemas
+  // Generate schema meta info for user requested schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const schemas = get(jsonSchema, definitionPath);
-    const schemasOutputPath = path.resolve(outputPath, definitionPath);
 
     for (const schemaName in schemas) {
-      await makeJsonSchemaFile({
-        schema: schemas[schemaName],
-        schemaName,
-        schemaAbsolutePath: schemasOutputPath,
-        schemaPatcher,
-        inlinedRefs,
-      });
+      const schemaRelativePath = path.join(definitionPath, schemaName);
+      // Do not override existing meta info of inlined schemas
+      if (schemasToGenerate.has(schemaRelativePath) === false) {
+        schemasToGenerate.set(schemaRelativePath, {
+          schemaAbsoluteDirName: path.join(outputPath, definitionPath),
+          schemaName,
+          schema: experimentalImportRefs
+            ? replaceInlinedRefsWithStringPlaceholder(schemas[schemaName])
+            : schemas[schemaName],
+        });
+      }
     }
+  }
+
+  for (const [_, schemaMetaInfo] of schemasToGenerate) {
+    await makeJsonSchemaFile({
+      schemaMetaInfo,
+      schemasToGenerate,
+      schemaPatcher,
+      inlinedRefs,
+    });
   }
 
   if (!silent) {
