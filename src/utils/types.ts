@@ -6,7 +6,7 @@ export type SchemaRecord = Map<
   string,
   {
     schemaName: string;
-    schemaOutputPath: string;
+    schemaAbsolutePath: string;
     schema: JSONSchema;
   }
 >;

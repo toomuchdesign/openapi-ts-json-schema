@@ -15,13 +15,13 @@ import {
 export async function makeJsonSchemaFile({
   schema,
   schemaName,
-  schemaOutputPath,
+  schemaAbsolutePath,
   schemaPatcher,
   inlinedRefs,
 }: {
   schema: JSONSchema;
   schemaName: string;
-  schemaOutputPath: string;
+  schemaAbsolutePath: string;
   schemaPatcher?: SchemaPatcher;
   inlinedRefs?: SchemaRecord;
 }) {
@@ -29,13 +29,13 @@ export async function makeJsonSchemaFile({
   const patchedSchema = patchJsonSchema(schema, schemaPatcher);
   const tsSchema = await jsonSchemaToTsConst({
     schema: patchedSchema,
-    schemaOutputPath,
+    schemaAbsolutePath,
     inlinedRefs,
   });
 
-  await fs.mkdir(schemaOutputPath, { recursive: true });
+  await fs.mkdir(schemaAbsolutePath, { recursive: true });
   await fs.writeFile(
-    path.resolve(schemaOutputPath, `${schemaNamedEscaped}.ts`),
+    path.resolve(schemaAbsolutePath, `${schemaNamedEscaped}.ts`),
     tsSchema,
   );
 }

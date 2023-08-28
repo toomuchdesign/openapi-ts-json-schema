@@ -56,7 +56,6 @@ export async function openapiToTsJsonSchema({
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
-  // Inline $refs
   const inlinedRefs: SchemaRecord = new Map();
 
   const dereferencedJsonSchema = await $RefParser.dereference(
@@ -69,15 +68,12 @@ export async function openapiToTsJsonSchema({
             // Mark inlined refs with a "REF_SYMBOL" prop
             inlinedSchema[REF_SYMBOL] = ref;
 
-            const { schemaOutputPath, schemaName } = refToPath({
-              ref,
-              outputPath,
-            });
+            const { schemaRelativePath, schemaName } = refToPath(ref);
 
             // Keep track of inline refs
             inlinedRefs.set(ref, {
               schemaName,
-              schemaOutputPath,
+              schemaAbsolutePath: path.join(outputPath, schemaRelativePath),
               schema: replaceInlinedRefsWithStringPlaceholder(inlinedSchema),
             });
           } else {
@@ -101,12 +97,12 @@ export async function openapiToTsJsonSchema({
 
   if (experimentalImportRefs) {
     // Generate JSON schema files for inlined $ref's (experimentalImportRefs option)
-    for (const [ref, schemaMeta] of inlinedRefs) {
-      const { schema, schemaName, schemaOutputPath } = schemaMeta;
+    for (const [_ref, schemaMeta] of inlinedRefs) {
+      const { schema, schemaName, schemaAbsolutePath } = schemaMeta;
       await makeJsonSchemaFile({
         schema,
         schemaName,
-        schemaOutputPath,
+        schemaAbsolutePath,
         schemaPatcher,
         inlinedRefs,
       });
@@ -126,7 +122,7 @@ export async function openapiToTsJsonSchema({
       await makeJsonSchemaFile({
         schema: schemas[schemaName],
         schemaName,
-        schemaOutputPath: schemasOutputPath,
+        schemaAbsolutePath: schemasOutputPath,
         schemaPatcher,
         inlinedRefs,
       });

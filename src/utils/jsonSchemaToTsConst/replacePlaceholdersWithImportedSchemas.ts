@@ -7,11 +7,11 @@ import { replacePlaceholdersWith, SchemaRecord } from '..';
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
   inlinedRefs,
-  schemaOutputPath,
+  schemaAbsolutePath,
 }: {
   schemaAsText: string;
   inlinedRefs: SchemaRecord;
-  schemaOutputPath: string;
+  schemaAbsolutePath: string;
 }): string {
   const importStatements = new Set<string>();
 
@@ -28,12 +28,12 @@ export function replacePlaceholdersWithImportedSchemas({
       }
 
       const {
-        schemaOutputPath: importedSchemaPath,
+        schemaAbsolutePath: importedSchemaPath,
         schemaName: importedSchemaName,
       } = schemaMeta;
 
       const importedSchemaRelativePath = path.relative(
-        schemaOutputPath,
+        schemaAbsolutePath,
         path.resolve(importedSchemaPath, importedSchemaName),
       );
 

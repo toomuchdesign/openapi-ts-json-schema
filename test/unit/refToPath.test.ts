@@ -3,13 +3,10 @@ import { refToPath } from '../../src/utils';
 
 describe('refToPath', async () => {
   it('generate expected ref paths', async () => {
-    const actual = refToPath({
-      ref: '#/components/schema/Foo',
-      outputPath: '/absolute/output/path',
-    });
+    const actual = refToPath('#/components/schema/Foo');
     const expected = {
       schemaName: 'Foo',
-      schemaOutputPath: '/absolute/output/path/components.schema',
+      schemaRelativePath: 'components.schema',
     };
 
     expect(actual).toEqual(expected);
