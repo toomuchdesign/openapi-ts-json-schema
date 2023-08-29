@@ -4,6 +4,7 @@ export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type SchemaMetaInfo = {
   schemaName: string;
+  schemaUniqueName: string;
   schemaAbsoluteDirName: string;
   schema: JSONSchema;
 };

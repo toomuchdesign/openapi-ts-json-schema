@@ -1,4 +1,6 @@
 import path from 'path';
+// @ts-expect-error no type defs for namify
+import namify from 'namify';
 import {
   SchemaMetaInfoMap,
   JSONSchema,
@@ -40,6 +42,7 @@ export function addSchemaToGenerationMap({
     schemasToGenerate.set(schemaRelativePath, {
       schemaAbsoluteDirName: path.join(outputPath, schemaRelativeDirName),
       schemaName,
+      schemaUniqueName: namify(schemaRelativePath),
       schema: patchedSchema,
     });
   }

@@ -83,8 +83,8 @@ describe('"experimentalImportRefs" option', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import February from "../components.months/February";
-        import January from "../components.months/January";
+        import componentsMonthsFebruary from "../components.months/February";
+        import componentsMonthsJanuary from "../components.months/January";
 
         export default {
           get: {
@@ -94,7 +94,7 @@ describe('"experimentalImportRefs" option', () => {
                 content: {
                   "application/json": {
                     schema: {
-                      oneOf: [January, February],
+                      oneOf: [componentsMonthsJanuary, componentsMonthsFebruary],
                     },
                   },
                 },
@@ -124,14 +124,14 @@ describe('"experimentalImportRefs" option', () => {
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import Answer from "../components.schemas/Answer";
+      import componentsSchemasAnswer from "../components.schemas/Answer";
 
       export default {
         description: "January description",
         type: "object",
         required: ["isJanuary"],
         properties: {
-          isJanuary: Answer,
+          isJanuary: componentsSchemasAnswer,
         },
       } as const;`);
 
@@ -146,14 +146,14 @@ describe('"experimentalImportRefs" option', () => {
     );
 
     const expectedFebruarySchemaFile = await formatTypeScript(`
-      import Answer from "../components.schemas/Answer";
+      import componentsSchemasAnswer from "../components.schemas/Answer";
 
       export default {
         description: "February description",
         type: "object",
         required: ["isFebruary"],
         properties: {
-          isFebruary: Answer,
+          isFebruary: componentsSchemasAnswer,
         },
       } as const;`);
 
