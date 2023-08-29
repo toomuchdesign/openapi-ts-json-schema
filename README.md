@@ -60,13 +60,15 @@ type MyModel = FromSchema<typeof myModelSchema>;
 
 Generated JSON schema path names get escaped in order to be valid file system names.
 
+Circular `$ref`s can be technically resolved with `experimentalImportRefs` option. But TS will stop the type recursion and type the schema as `any`. See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
+
 Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
 
 ## Todo
 
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
-- Handle circular references
+- Consider adding a way to keep specific `$ref` values in case of recursion
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml

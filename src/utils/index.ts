@@ -20,3 +20,4 @@ export type {
   SchemaMetaInfoMap,
 } from './types';
 export { addSchemaToGenerationMap } from './addSchemaToGenerationMap';
+export { makeRelativePath } from './makeRelativePath';

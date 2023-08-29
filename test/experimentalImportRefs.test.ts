@@ -83,8 +83,8 @@ describe('"experimentalImportRefs" option', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsMonthsFebruary from "../components/months/February";
-        import componentsMonthsJanuary from "../components/months/January";
+        import componentsMonthsFebruary from "./../components/months/February";
+        import componentsMonthsJanuary from "./../components/months/January";
 
         export default {
           get: {
@@ -124,7 +124,7 @@ describe('"experimentalImportRefs" option', () => {
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "../schemas/Answer";
+      import componentsSchemasAnswer from "./../schemas/Answer";
 
       export default {
         description: "January description",
@@ -146,7 +146,7 @@ describe('"experimentalImportRefs" option', () => {
     );
 
     const expectedFebruarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "../schemas/Answer";
+      import componentsSchemasAnswer from "./../schemas/Answer";
 
       export default {
         description: "February description",

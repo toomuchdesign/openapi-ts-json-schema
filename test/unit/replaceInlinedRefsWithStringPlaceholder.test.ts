@@ -4,8 +4,8 @@ import {
   REF_SYMBOL,
 } from '../../src/utils';
 
-describe('replaceInlinedRefsWithStringPlaceholder', async () => {
-  it('replaces objects marked with REF_SYMBOL with expected string placeholder', async () => {
+describe('replaceInlinedRefsWithStringPlaceholder', () => {
+  it('replaces objects marked with REF_SYMBOL with expected string placeholder', () => {
     const actual = replaceInlinedRefsWithStringPlaceholder({
       schemas: {
         object: {
