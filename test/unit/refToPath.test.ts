@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { refToPath } from '../../src/utils';
 
-describe('refToPath', async () => {
-  it('generate expected ref paths', async () => {
+describe('refToPath', () => {
+  it('generate expected ref paths', () => {
     const actual = refToPath('#/components/schema/Foo');
     const expected = {
       schemaName: 'Foo',

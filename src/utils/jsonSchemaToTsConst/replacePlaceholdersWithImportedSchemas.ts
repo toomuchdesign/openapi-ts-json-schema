@@ -1,5 +1,10 @@
 import path from 'node:path';
-import { replacePlaceholdersWith, refToPath, SchemaMetaInfoMap } from '..';
+import {
+  replacePlaceholdersWith,
+  refToPath,
+  SchemaMetaInfoMap,
+  makeRelativePath,
+} from '..';
 
 /**
  * Replace Refs placeholders with imported schemas
@@ -29,13 +34,13 @@ export function replacePlaceholdersWithImportedSchemas({
       }
 
       // Evaluate schema relative path from current schema file
-      const importedSchemaRelativePath = path.relative(
-        schemaAbsoluteDirName,
-        path.resolve(
+      const importedSchemaRelativePath = makeRelativePath({
+        fromDirectory: schemaAbsoluteDirName,
+        to: path.resolve(
           importedSchema.schemaAbsoluteDirName,
           importedSchema.schemaName,
         ),
-      );
+      });
 
       const { schemaUniqueName } = importedSchema;
 
