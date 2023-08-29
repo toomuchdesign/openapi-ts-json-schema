@@ -6,10 +6,15 @@ import YAML from 'yaml';
 import get from 'lodash.get';
 import {
   clearFolder,
-  makeJsonSchemaFile,
+  makeJsonSchemaFiles,
+  REF_SYMBOL,
   SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
+  refToPath,
+  SchemaMetaInfoMap,
+  JSONSchema,
+  addSchemaToGenerationMap,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -18,12 +23,14 @@ export async function openapiToTsJsonSchema({
   schemaPatcher,
   outputPath: providedOutputPath,
   silent,
+  experimentalImportRefs = false,
 }: {
   openApiSchema: string;
   definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
+  experimentalImportRefs?: boolean;
 }) {
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
@@ -31,10 +38,18 @@ export async function openapiToTsJsonSchema({
     );
   }
 
+  definitionPathsToGenerateFrom.forEach((defPath) => {
+    if (path.isAbsolute(defPath)) {
+      throw new Error(
+        `[openapi-ts-json-schema] "definitionPathsToGenerateFrom" must be an array of relative paths. "${defPath}" found.`,
+      );
+    }
+  });
+
   const openApiSchemaPath = path.resolve(openApiSchemaRelative);
   if (!existsSync(openApiSchemaPath)) {
     throw new Error(
-      `Provided OpenAPI definition path doesn't exist: ${openApiSchemaPath}`,
+      `[openapi-ts-json-schema] Provided OpenAPI definition path doesn't exist: ${openApiSchemaPath}`,
     );
   }
 
@@ -49,42 +64,76 @@ export async function openapiToTsJsonSchema({
   // Resolve external/remote references (keeping $refs)
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
-  // Replace $refs
+
+  const inlinedRefs: Map<string, JSONSchema> = new Map();
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
-        onDereference: (path, value) => {
+        onDereference: (ref, inlinedSchema) => {
           /**
-           * Add commented out $ref prop with:
+           * Mark inlined refs with a "REF_SYMBOL" prop to replace them
+           * in case experimentalImportRefs option is true
+           */
+          inlinedSchema[REF_SYMBOL] = ref;
+
+          /**
+           * Add a $ref comment to each inlined schema with the original ref value. Using:
            * https://github.com/kaelzhang/node-comment-json
            */
-          value[Symbol.for('before')] = [
+          inlinedSchema[Symbol.for('before')] = [
             {
               type: 'LineComment',
-              value: ` $ref: "${path}"`,
+              value: ` $ref: "${ref}"`,
             },
           ];
+
+          // Keep track of inline refs
+          inlinedRefs.set(ref, inlinedSchema);
         },
       },
     },
   );
+
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
+  const schemasToGenerate: SchemaMetaInfoMap = new Map();
 
-  for (const definitionPath of definitionPathsToGenerateFrom) {
-    const schemas = get(jsonSchema, definitionPath);
-    const schemasOutputPath = path.resolve(outputPath, definitionPath);
-
-    for (const schemaName in schemas) {
-      await makeJsonSchemaFile({
-        schema: schemas[schemaName],
+  // Generate schema meta info for inlined refs, first
+  if (experimentalImportRefs) {
+    for (const [ref, schema] of inlinedRefs) {
+      const { schemaRelativeDirName, schemaName } = refToPath(ref);
+      addSchemaToGenerationMap({
+        schemasToGenerate,
+        schemaRelativeDirName,
         schemaName,
-        outputPath: schemasOutputPath,
+        schema,
+        outputPath,
         schemaPatcher,
+        experimentalImportRefs,
       });
     }
   }
+
+  // Generate schema meta info for user requested schemas
+  for (const definitionPath of definitionPathsToGenerateFrom) {
+    const schemas = get(jsonSchema, definitionPath);
+    for (const schemaName in schemas) {
+      addSchemaToGenerationMap({
+        schemasToGenerate,
+        schemaRelativeDirName: definitionPath,
+        schemaName,
+        schema: schemas[schemaName],
+        outputPath,
+        schemaPatcher,
+        experimentalImportRefs,
+      });
+    }
+  }
+
+  await makeJsonSchemaFiles({
+    schemasToGenerate,
+  });
 
   if (!silent) {
     console.log(

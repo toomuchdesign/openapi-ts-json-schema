@@ -1,6 +1,6 @@
 import path from 'path';
-import { describe, it, expect, afterEach, beforeEach } from 'vitest';
-import { importFresh } from './utils';
+import { describe, it, expect } from 'vitest';
+import { importFresh } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');

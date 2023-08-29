@@ -1,12 +1,12 @@
 import path from 'path';
 import { existsSync } from 'fs';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { importFresh } from './utils';
+import { importFresh } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('openapiToTsJsonSchema', async () => {
+describe('openapiToTsJsonSchema', () => {
   it('Generates expected JSON schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
@@ -111,7 +111,7 @@ describe('openapiToTsJsonSchema', async () => {
     });
   });
 
-  describe('non existing openAPI definition file', async () => {
+  describe('non existing openAPI definition file', () => {
     it('throws expected error', async () => {
       await expect(() =>
         openapiToTsJsonSchema({
@@ -119,24 +119,41 @@ describe('openapiToTsJsonSchema', async () => {
           definitionPathsToGenerateFrom: ['components'],
           silent: true,
         }),
-      ).rejects.toThrow("Provided OpenAPI definition path doesn't exist:");
+      ).rejects.toThrow(
+        "[openapi-ts-json-schema] Provided OpenAPI definition path doesn't exist:",
+      );
     });
   });
 
-  describe('empty "definitionPathsToGenerateFrom" option', async () => {
+  describe('"definitionPathsToGenerateFrom" option', () => {
     beforeEach(() => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
     });
 
-    it('logs expected message', async () => {
-      await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
-        definitionPathsToGenerateFrom: [],
-      });
+    describe('empty', async () => {
+      it('logs expected message', async () => {
+        await openapiToTsJsonSchema({
+          openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+          definitionPathsToGenerateFrom: [],
+        });
 
-      expect(console.log).toHaveBeenCalledWith(
-        `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
-      );
+        expect(console.log).toHaveBeenCalledWith(
+          `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
+        );
+      });
+    });
+
+    describe('containing non-relative paths', async () => {
+      it('throws with expected message', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+            definitionPathsToGenerateFrom: ['paths', '/components.schema'],
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] "definitionPathsToGenerateFrom" must be an array of relative paths. "/components.schema" found.',
+        );
+      });
     });
   });
 });

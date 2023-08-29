@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
-import { importFresh } from './utils';
+import { importFresh, formatTypeScript } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
@@ -66,7 +66,7 @@ describe('Deferencing', () => {
       },
     );
 
-    const expectedInlinedRef = `
+    const expectedInlinedRef = await `
   properties: {
     isJanuary: {
       // $ref: "#/components/schemas/Answer"

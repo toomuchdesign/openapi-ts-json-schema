@@ -21,6 +21,14 @@ components:
       properties:
         isFebruary:
           $ref: '#/components/schemas/Answer'
+    March:
+      description: March description
+      type: object
+      required:
+        - isMarch
+      properties:
+        isMarch:
+          $ref: '#/components/schemas/Answer'
 
   schemas:
     Answer:
