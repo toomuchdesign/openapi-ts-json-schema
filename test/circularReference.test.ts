@@ -14,7 +14,7 @@ describe('Circular reference', () => {
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components.schemas/January'),
+      path.resolve(outputPath, 'components/schemas/January'),
     );
 
     expect(januarySchema).toBeDefined();

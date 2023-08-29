@@ -14,7 +14,7 @@ describe('External $ref', () => {
     });
 
     const externalDefinitionSchema = await importFresh(
-      path.resolve(outputPath, 'components.schemas/ExternalDefinition'),
+      path.resolve(outputPath, 'components/schemas/ExternalDefinition'),
     );
 
     expect(externalDefinitionSchema.default).toEqual({
@@ -26,7 +26,7 @@ describe('External $ref', () => {
     const localDefinitionReferencingExternalSchema = await importFresh(
       path.resolve(
         outputPath,
-        'components.schemas/LocalDefinitionReferencingExternal',
+        'components/schemas/LocalDefinitionReferencingExternal',
       ),
     );
 

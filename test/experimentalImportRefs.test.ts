@@ -83,8 +83,8 @@ describe('"experimentalImportRefs" option', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsMonthsFebruary from "../components.months/February";
-        import componentsMonthsJanuary from "../components.months/January";
+        import componentsMonthsFebruary from "../components/months/February";
+        import componentsMonthsJanuary from "../components/months/January";
 
         export default {
           get: {
@@ -117,14 +117,14 @@ describe('"experimentalImportRefs" option', () => {
 
     // January schema
     const actualJanuarySchemaFile = await fs.readFile(
-      path.resolve(outputPath, 'components.months/January.ts'),
+      path.resolve(outputPath, 'components/months/January.ts'),
       {
         encoding: 'utf8',
       },
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "../components.schemas/Answer";
+      import componentsSchemasAnswer from "../schemas/Answer";
 
       export default {
         description: "January description",
@@ -139,14 +139,14 @@ describe('"experimentalImportRefs" option', () => {
 
     // February schema
     const actualFebruarySchemaFile = await fs.readFile(
-      path.resolve(outputPath, 'components.months/February.ts'),
+      path.resolve(outputPath, 'components/months/February.ts'),
       {
         encoding: 'utf8',
       },
     );
 
     const expectedFebruarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "../components.schemas/Answer";
+      import componentsSchemasAnswer from "../schemas/Answer";
 
       export default {
         description: "February description",

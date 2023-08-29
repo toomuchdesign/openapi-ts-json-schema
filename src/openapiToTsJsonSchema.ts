@@ -121,7 +121,7 @@ export async function openapiToTsJsonSchema({
     for (const schemaName in schemas) {
       addSchemaToGenerationMap({
         schemasToGenerate,
-        schemaRelativeDirName: definitionPath,
+        schemaRelativeDirName: definitionPath.replaceAll('.', '/'),
         schemaName,
         schema: schemas[schemaName],
         outputPath,
