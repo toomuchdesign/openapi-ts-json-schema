@@ -64,7 +64,6 @@ Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more
 
 ## Todo
 
-- Explore ability to import dereferenced schemas instead of inlining
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 - Handle circular references

@@ -64,24 +64,25 @@ export async function openapiToTsJsonSchema({
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
-          if (experimentalImportRefs) {
-            // Mark inlined refs with a "REF_SYMBOL" prop
-            inlinedSchema[REF_SYMBOL] = ref;
+          /**
+           * Mark inlined refs with a "REF_SYMBOL" prop to replace them
+           * in case experimentalImportRefs option is true
+           */
+          inlinedSchema[REF_SYMBOL] = ref;
 
-            // Keep track of inline refs
-            inlinedRefs.set(ref, inlinedSchema);
-          } else {
-            /**
-             * Add a $ref comment to each inlined schema with the original ref value. Using:
-             * https://github.com/kaelzhang/node-comment-json
-             */
-            inlinedSchema[Symbol.for('before')] = [
-              {
-                type: 'LineComment',
-                value: ` $ref: "${ref}"`,
-              },
-            ];
-          }
+          /**
+           * Add a $ref comment to each inlined schema with the original ref value. Using:
+           * https://github.com/kaelzhang/node-comment-json
+           */
+          inlinedSchema[Symbol.for('before')] = [
+            {
+              type: 'LineComment',
+              value: ` $ref: "${ref}"`,
+            },
+          ];
+
+          // Keep track of inline refs
+          inlinedRefs.set(ref, inlinedSchema);
         },
       },
     },

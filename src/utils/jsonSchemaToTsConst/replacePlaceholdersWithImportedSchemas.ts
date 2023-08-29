@@ -15,7 +15,7 @@ export function replacePlaceholdersWithImportedSchemas({
 }): string {
   const importStatements = new Set<string>();
 
-  let schemaWithReplacedPlaceholders = replacePlaceholdersWith({
+  let schema = replacePlaceholdersWith({
     text: schemaAsText,
     replacer: (ref) => {
       const { schemaRelativePath } = refToPath(ref);
@@ -49,13 +49,12 @@ export function replacePlaceholdersWithImportedSchemas({
 
   if (importStatements.size > 0) {
     // Empty line between imports and schema 💅
-    schemaWithReplacedPlaceholders = '\n' + schemaWithReplacedPlaceholders;
+    schema = '\n' + schema;
 
     importStatements.forEach((entry) => {
-      schemaWithReplacedPlaceholders =
-        entry + '\n' + schemaWithReplacedPlaceholders;
+      schema = entry + '\n' + schema;
     });
   }
 
-  return schemaWithReplacedPlaceholders;
+  return schema;
 }
