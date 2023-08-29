@@ -1,5 +1,13 @@
 # openapi-ts-json-schema
 
+## 0.3.0
+
+### Minor Changes
+
+- 409c154: Handle circular `$ref` values.
+- 8513db4: Add `experimentalImportRefs` option to generate and import `$ref` schema files istead of inlining.
+- 7c61c0f: Generate nested folders instead of dotted path folders
+
 ## 0.2.0
 
 ### Minor Changes
