@@ -1,17 +1,17 @@
 import prettier from 'prettier';
 import { stringify } from 'comment-json';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
-import type { SchemaMetaInfoMap } from '../';
+import type { SchemaMetaInfoMap, SchemaMetaInfo } from '../';
 
 export async function jsonSchemaToTsConst({
-  schema,
-  schemaAbsoluteDirName,
+  schemaMetaInfo,
   schemasToGenerate,
 }: {
-  schema: unknown;
-  schemaAbsoluteDirName: string;
+  schemaMetaInfo: SchemaMetaInfo;
   schemasToGenerate: SchemaMetaInfoMap;
 }): Promise<string> {
+  const { schema, schemaAbsoluteDirName } = schemaMetaInfo;
+
   // Stringify schema with "node-comment-json" to generate inline comments
   const stringifiedSchema = stringify(schema, null, 2);
   let tsSchema = `export default ` + stringifiedSchema + 'as const';

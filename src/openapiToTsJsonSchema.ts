@@ -97,9 +97,10 @@ export async function openapiToTsJsonSchema({
       addSchemaToGenerationMap({
         schemasToGenerate,
         schemaRelativeDirName,
-        outputPath,
         schemaName,
         schema,
+        outputPath,
+        schemaPatcher,
         experimentalImportRefs,
       });
     }
@@ -112,9 +113,10 @@ export async function openapiToTsJsonSchema({
       addSchemaToGenerationMap({
         schemasToGenerate,
         schemaRelativeDirName: definitionPath,
-        outputPath,
         schemaName,
         schema: schemas[schemaName],
+        outputPath,
+        schemaPatcher,
         experimentalImportRefs,
       });
     }
@@ -122,7 +124,6 @@ export async function openapiToTsJsonSchema({
 
   await makeJsonSchemaFiles({
     schemasToGenerate,
-    schemaPatcher,
   });
 
   if (!silent) {

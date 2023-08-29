@@ -3,6 +3,8 @@ import {
   SchemaMetaInfoMap,
   JSONSchema,
   replaceInlinedRefsWithStringPlaceholder,
+  patchJsonSchema,
+  SchemaPatcher,
 } from './';
 
 /*
@@ -12,27 +14,33 @@ import {
 export function addSchemaToGenerationMap({
   schemasToGenerate,
   schemaRelativeDirName,
-  outputPath,
   schemaName,
   schema,
+  // Options
+  outputPath,
+  schemaPatcher,
   experimentalImportRefs,
 }: {
   schemasToGenerate: SchemaMetaInfoMap;
   schemaRelativeDirName: string;
-  outputPath: string;
   schemaName: string;
   schema: JSONSchema;
+  outputPath: string;
+  schemaPatcher?: SchemaPatcher;
   experimentalImportRefs: boolean;
 }): void {
   const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
   // Do not override existing meta info of inlined schemas
   if (schemasToGenerate.has(schemaRelativePath) === false) {
+    const originalSchema = experimentalImportRefs
+      ? replaceInlinedRefsWithStringPlaceholder(schema)
+      : schema;
+    const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
+
     schemasToGenerate.set(schemaRelativePath, {
       schemaAbsoluteDirName: path.join(outputPath, schemaRelativeDirName),
       schemaName,
-      schema: experimentalImportRefs
-        ? replaceInlinedRefsWithStringPlaceholder(schema)
-        : schema,
+      schema: patchedSchema,
     });
   }
 }
