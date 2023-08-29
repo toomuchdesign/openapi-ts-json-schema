@@ -19,10 +19,10 @@ describe('openapiToTsJsonSchema', () => {
     );
 
     const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components.months/January'),
+      path.resolve(outputPath, 'components/months/January'),
     );
     const februarySchema = await importFresh(
-      path.resolve(outputPath, 'components.months/February'),
+      path.resolve(outputPath, 'components/months/February'),
     );
 
     // definition paths get escaped
@@ -98,7 +98,7 @@ describe('openapiToTsJsonSchema', () => {
 
     const previouslyGeneratedSchematPath = path.resolve(
       outputPath,
-      'components.schemas',
+      'components/schemas',
       'Answer.ts',
     );
 

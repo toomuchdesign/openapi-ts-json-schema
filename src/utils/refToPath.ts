@@ -18,7 +18,7 @@ export function refToPath(ref: string): {
 
   const refPath = ref.replace('#/', '');
   const schemaName = path.basename(refPath);
-  const schemaRelativeDirName = path.dirname(refPath).replaceAll('/', '.');
+  const schemaRelativeDirName = path.dirname(refPath);
 
   return {
     schemaName,

@@ -14,7 +14,7 @@ describe('JSON OpenAPI input', async () => {
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components.months/January'),
+      path.resolve(outputPath, 'components/months/January'),
     );
 
     expect(januarySchema.default).toEqual({

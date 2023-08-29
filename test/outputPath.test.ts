@@ -24,7 +24,7 @@ describe('"outputPath" option', async () => {
 
     const expectedGeneratedSchemaPath = path.resolve(
       outputPath,
-      'components.schemas',
+      'components/schemas',
       'Answer.ts',
     );
     expect(fs.existsSync(expectedGeneratedSchemaPath)).toBe(true);

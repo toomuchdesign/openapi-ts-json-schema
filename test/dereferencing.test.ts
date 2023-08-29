@@ -15,7 +15,7 @@ describe('Deferencing', () => {
     });
 
     const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components.months/January'),
+      path.resolve(outputPath, 'components/months/January'),
     );
 
     expect(januarySchema.default).toEqual({
@@ -60,7 +60,7 @@ describe('Deferencing', () => {
     });
 
     const januarySchemaAsText = await fs.readFile(
-      path.resolve(outputPath, 'components.months/January.ts'),
+      path.resolve(outputPath, 'components/months/January.ts'),
       {
         encoding: 'utf8',
       },
