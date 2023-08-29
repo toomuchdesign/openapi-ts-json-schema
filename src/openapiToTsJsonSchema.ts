@@ -26,7 +26,7 @@ export async function openapiToTsJsonSchema({
   experimentalImportRefs = false,
 }: {
   openApiSchema: string;
-  definitionPathsToGenerateFrom: string[]; // @TODO validate to be relative paths
+  definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
@@ -38,10 +38,18 @@ export async function openapiToTsJsonSchema({
     );
   }
 
+  definitionPathsToGenerateFrom.forEach((defPath) => {
+    if (path.isAbsolute(defPath)) {
+      throw new Error(
+        `[openapi-ts-json-schema] "definitionPathsToGenerateFrom" must be an array of relative paths. "${defPath}" found.`,
+      );
+    }
+  });
+
   const openApiSchemaPath = path.resolve(openApiSchemaRelative);
   if (!existsSync(openApiSchemaPath)) {
     throw new Error(
-      `Provided OpenAPI definition path doesn't exist: ${openApiSchemaPath}`,
+      `[openapi-ts-json-schema] Provided OpenAPI definition path doesn't exist: ${openApiSchemaPath}`,
     );
   }
 
