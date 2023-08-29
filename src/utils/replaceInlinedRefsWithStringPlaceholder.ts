@@ -41,7 +41,6 @@ function replaceInlinedSchemaWithPlaceholder<Entry extends unknown>(
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,
-  deep = true,
 ): JSONSchema {
   return mapObject(
     schema,
@@ -55,6 +54,6 @@ export function replaceInlinedRefsWithStringPlaceholder(
 
       return [key, replaceInlinedSchemaWithPlaceholder(value)];
     },
-    { deep },
+    { deep: true },
   );
 }
