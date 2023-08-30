@@ -7,6 +7,7 @@ export type SchemaMetaInfo = {
   schemaFileName: string;
   schemaUniqueName: string;
   schemaAbsoluteDirName: string;
+  schemaAbsolutePath: string;
   schema: JSONSchema;
 };
 export type SchemaMetaInfoMap = Map<

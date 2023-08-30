@@ -39,11 +39,14 @@ export function addSchemaToGenerationMap({
       ? replaceInlinedRefsWithStringPlaceholder(schema)
       : schema;
     const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
+    const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
+    const schemaFileName = filenamify(schemaName, { replacement: '|' });
 
     schemasToGenerate.set(schemaRelativePath, {
-      schemaAbsoluteDirName: path.join(outputPath, schemaRelativeDirName),
+      schemaAbsoluteDirName,
+      schemaAbsolutePath: path.join(schemaAbsoluteDirName, schemaFileName),
       schemaName,
-      schemaFileName: filenamify(schemaName, { replacement: '|' }),
+      schemaFileName,
       schemaUniqueName: namify(schemaRelativePath),
       schema: patchedSchema,
     });

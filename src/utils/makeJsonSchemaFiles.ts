@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import path from 'path';
 import { jsonSchemaToTsConst, SchemaMetaInfoMap } from '.';
 
 /**
@@ -16,12 +15,8 @@ export async function makeJsonSchemaFiles({
       schemasToGenerate,
     });
 
-    const { schemaFileName, schemaAbsoluteDirName } = schemaMetaInfo;
-
+    const { schemaAbsoluteDirName, schemaAbsolutePath } = schemaMetaInfo;
     await fs.mkdir(schemaAbsoluteDirName, { recursive: true });
-    await fs.writeFile(
-      path.resolve(schemaAbsoluteDirName, `${schemaFileName}.ts`),
-      tsSchema,
-    );
+    await fs.writeFile(`${schemaAbsolutePath}.ts`, tsSchema);
   }
 }
