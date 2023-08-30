@@ -8,14 +8,14 @@ import {
   replaceInlinedRefsWithStringPlaceholder,
   patchJsonSchema,
   SchemaPatcher,
-} from './';
+} from '.';
 
 /*
  * Just an utility function to add entries to SchemaMetaInfoMap Map
  * It could become a class, actually
  */
-export function addSchemaToGenerationMap({
-  schemasToGenerate,
+export function addSchemaMetaInfo({
+  schemas,
   schemaRelativeDirName,
   schemaName,
   schema,
@@ -24,7 +24,7 @@ export function addSchemaToGenerationMap({
   schemaPatcher,
   experimentalImportRefs,
 }: {
-  schemasToGenerate: SchemaMetaInfoMap;
+  schemas: SchemaMetaInfoMap;
   schemaRelativeDirName: string;
   schemaName: string;
   schema: JSONSchema;
@@ -34,7 +34,7 @@ export function addSchemaToGenerationMap({
 }): void {
   const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
   // Do not override existing meta info of inlined schemas
-  if (schemasToGenerate.has(schemaRelativePath) === false) {
+  if (schemas.has(schemaRelativePath) === false) {
     const originalSchema = experimentalImportRefs
       ? replaceInlinedRefsWithStringPlaceholder(schema)
       : schema;
@@ -42,7 +42,7 @@ export function addSchemaToGenerationMap({
     const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName, { replacement: '|' });
 
-    schemasToGenerate.set(schemaRelativePath, {
+    schemas.set(schemaRelativePath, {
       schemaAbsoluteDirName,
       schemaAbsolutePath: path.join(schemaAbsoluteDirName, schemaFileName),
       schemaName,

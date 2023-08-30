@@ -26,7 +26,7 @@ At the time of writing the implementation is build around `@apidevtools/json-sch
 
 ```ts
 {
-  bar: '_REF_MARKER_START_#/foo/Bar_REF_MARKER_END_';
+  bar: '_OTJS-START_#/foo/Bar_OTJS-END_';
 }
 ```
 

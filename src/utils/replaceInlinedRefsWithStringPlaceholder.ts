@@ -8,36 +8,36 @@ function isObject(value: unknown): value is Record<string | symbol, unknown> {
 /**
  * Retrieve REF_SYMBOL prop value
  */
-function getRef(schema: unknown): string | undefined {
+function getRef(node: unknown): string | undefined {
   if (
-    isObject(schema) &&
-    REF_SYMBOL in schema &&
-    typeof schema[REF_SYMBOL] === 'string'
+    isObject(node) &&
+    REF_SYMBOL in node &&
+    typeof node[REF_SYMBOL] === 'string'
   ) {
-    return schema[REF_SYMBOL];
+    return node[REF_SYMBOL];
   }
   return undefined;
 }
 
 /**
- * Get any entity and:
- * - Return ref placeholder is the entity is an object with REF_SYMBOL prop
- * - Return provided entity in al other cased
+ * Get any JSON schema node and:
+ * - Return ref placeholder is the entity is an inlined ref schema objects (with REF_SYMBOL prop)
+ * - Return provided node in all other cases
  */
-function replaceInlinedSchemaWithPlaceholder<Entry extends unknown>(
-  entry: Entry,
-): Entry | string {
-  const ref = getRef(entry);
+function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
+  node: Node,
+): Node | string {
+  const ref = getRef(node);
   if (ref === undefined) {
-    return entry;
+    return node;
   }
   return refToPlaceholder(ref);
 }
 
 /**
- * Iterate a JSON schema to find inlined ref schema objects.
- * Inlined ref schemas objects are marked with a property key set as REF_SYMBOL.
- * Replace the object with a string placeholder with a reference to the $ref value
+ * Iterate a JSON schema to replace inlined ref schema objects
+ * (marked with a REF_SYMBOL property holding the original $ref value)
+ * with a string placeholder with a reference to the original $ref value
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,
