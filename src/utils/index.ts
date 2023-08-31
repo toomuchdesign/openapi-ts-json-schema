@@ -7,7 +7,7 @@ export { makeJsonSchemaFiles } from './makeJsonSchemaFiles';
 export { refToPath } from './refToPath';
 export {
   REF_SYMBOL,
-  replacePlaceholdersWith,
+  PLACEHOLDER_REGEX,
   refToPlaceholder,
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
@@ -19,5 +19,5 @@ export type {
   SchemaMetaInfo,
   SchemaMetaInfoMap,
 } from './types';
-export { addSchemaToGenerationMap } from './addSchemaToGenerationMap';
+export { addSchemaMetaInfo } from './addSchemaMetaInfo';
 export { makeRelativePath } from './makeRelativePath';

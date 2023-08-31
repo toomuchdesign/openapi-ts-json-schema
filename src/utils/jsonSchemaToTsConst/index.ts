@@ -5,10 +5,10 @@ import type { SchemaMetaInfoMap, SchemaMetaInfo } from '../';
 
 export async function jsonSchemaToTsConst({
   schemaMetaInfo,
-  schemasToGenerate,
+  schemas,
 }: {
   schemaMetaInfo: SchemaMetaInfo;
-  schemasToGenerate: SchemaMetaInfoMap;
+  schemas: SchemaMetaInfoMap;
 }): Promise<string> {
   const { schema, schemaAbsoluteDirName } = schemaMetaInfo;
 
@@ -20,7 +20,7 @@ export async function jsonSchemaToTsConst({
   tsSchema = replacePlaceholdersWithImportedSchemas({
     schemaAsText: tsSchema,
     schemaAbsoluteDirName,
-    schemasToGenerate,
+    schemas,
   });
 
   const formattedSchema = await prettier.format(tsSchema, {

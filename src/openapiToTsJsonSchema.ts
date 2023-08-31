@@ -14,7 +14,7 @@ import {
   refToPath,
   SchemaMetaInfoMap,
   JSONSchema,
-  addSchemaToGenerationMap,
+  addSchemaMetaInfo,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -97,14 +97,14 @@ export async function openapiToTsJsonSchema({
   );
 
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
-  const schemasToGenerate: SchemaMetaInfoMap = new Map();
+  const schemas: SchemaMetaInfoMap = new Map();
 
   // Generate schema meta info for inlined refs, first
   if (experimentalImportRefs) {
     for (const [ref, schema] of inlinedRefs) {
       const { schemaRelativeDirName, schemaName } = refToPath(ref);
-      addSchemaToGenerationMap({
-        schemasToGenerate,
+      addSchemaMetaInfo({
+        schemas,
         schemaRelativeDirName,
         schemaName,
         schema,
@@ -117,13 +117,13 @@ export async function openapiToTsJsonSchema({
 
   // Generate schema meta info for user requested schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
-    const schemas = get(jsonSchema, definitionPath);
-    for (const schemaName in schemas) {
-      addSchemaToGenerationMap({
-        schemasToGenerate,
+    const definitionSchemas = get(jsonSchema, definitionPath);
+    for (const schemaName in definitionSchemas) {
+      addSchemaMetaInfo({
+        schemas,
         schemaRelativeDirName: definitionPath.replaceAll('.', '/'),
         schemaName,
-        schema: schemas[schemaName],
+        schema: definitionSchemas[schemaName],
         outputPath,
         schemaPatcher,
         experimentalImportRefs,
@@ -132,7 +132,7 @@ export async function openapiToTsJsonSchema({
   }
 
   await makeJsonSchemaFiles({
-    schemasToGenerate,
+    schemas,
   });
 
   if (!silent) {

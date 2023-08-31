@@ -1,27 +1,22 @@
 import fs from 'fs/promises';
-import path from 'path';
 import { jsonSchemaToTsConst, SchemaMetaInfoMap } from '.';
 
 /**
  * Save TS JSON schema with the expected naming conventions
  */
 export async function makeJsonSchemaFiles({
-  schemasToGenerate,
+  schemas,
 }: {
-  schemasToGenerate: SchemaMetaInfoMap;
+  schemas: SchemaMetaInfoMap;
 }) {
-  for (const [_, schemaMetaInfo] of schemasToGenerate) {
+  for (const [_, schemaMetaInfo] of schemas) {
     const tsSchema = await jsonSchemaToTsConst({
       schemaMetaInfo,
-      schemasToGenerate,
+      schemas,
     });
 
-    const { schemaFileName, schemaAbsoluteDirName } = schemaMetaInfo;
-
+    const { schemaAbsoluteDirName, schemaAbsolutePath } = schemaMetaInfo;
     await fs.mkdir(schemaAbsoluteDirName, { recursive: true });
-    await fs.writeFile(
-      path.resolve(schemaAbsoluteDirName, `${schemaFileName}.ts`),
-      tsSchema,
-    );
+    await fs.writeFile(`${schemaAbsolutePath}.ts`, tsSchema);
   }
 }
