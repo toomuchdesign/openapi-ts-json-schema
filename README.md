@@ -69,6 +69,8 @@ Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 - Consider adding a way to keep specific `$ref` values in case of recursion
+- Considering adding an `$id` prop to the generated JSON schemas
+- Explore how to preserve `$ref` values and rely on [`json-schema-to-ts` references generic to](https://www.npmjs.com/package/json-schema-to-ts#references) infer types
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
