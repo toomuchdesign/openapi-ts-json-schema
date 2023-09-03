@@ -11,10 +11,10 @@ import {
   SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
-  refToPath,
   SchemaMetaInfoMap,
   JSONSchema,
   addSchemaMetaInfo,
+  pathToRef,
 } from './utils';
 
 export async function openapiToTsJsonSchema({
@@ -61,7 +61,7 @@ export async function openapiToTsJsonSchema({
 
   const openApiSchema = await fs.readFile(openApiSchemaPath, 'utf-8');
   const jsonOpenApiSchema: Record<string, any> = YAML.parse(openApiSchema);
-  // Resolve external/remote references (keeping $refs)
+  // Resolve/inline remote and URL $ref's (keeping local ones "#/...")
   const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
@@ -102,15 +102,14 @@ export async function openapiToTsJsonSchema({
   // Generate schema meta info for inlined refs, first
   if (experimentalImportRefs) {
     for (const [ref, schema] of inlinedRefs) {
-      const { schemaRelativeDirName, schemaName } = refToPath(ref);
       addSchemaMetaInfo({
+        id: ref,
         schemas,
-        schemaRelativeDirName,
-        schemaName,
         schema,
         outputPath,
         schemaPatcher,
         experimentalImportRefs,
+        isRef: true,
       });
     }
   }
@@ -119,14 +118,20 @@ export async function openapiToTsJsonSchema({
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const definitionSchemas = get(jsonSchema, definitionPath);
     for (const schemaName in definitionSchemas) {
-      addSchemaMetaInfo({
-        schemas,
-        schemaRelativeDirName: definitionPath.replaceAll('.', '/'),
+      // Create expected OpenAPI ref
+      const id = pathToRef({
+        schemaRelativeDirName: definitionPath,
         schemaName,
+      });
+
+      addSchemaMetaInfo({
+        id,
+        schemas,
         schema: definitionSchemas[schemaName],
         outputPath,
         schemaPatcher,
         experimentalImportRefs,
+        isRef: false,
       });
     }
   }

@@ -1,9 +1,4 @@
-import {
-  refToPath,
-  SchemaMetaInfoMap,
-  makeRelativePath,
-  PLACEHOLDER_REGEX,
-} from '..';
+import { SchemaMetaInfoMap, makeRelativePath, PLACEHOLDER_REGEX } from '..';
 
 /**
  * Replace Refs placeholders with imported schemas
@@ -21,8 +16,7 @@ export function replacePlaceholdersWithImportedSchemas({
 
   // Replace placeholder occurrences with the relevant imported schema name
   let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, ref) => {
-    const { schemaRelativePath } = refToPath(ref);
-    const importedSchema = schemas.get(schemaRelativePath);
+    const importedSchema = schemas.get(ref);
 
     /* istanbul ignore if: It should not be possible to hit this condition -- @preserve */
     if (!importedSchema) {
@@ -34,7 +28,7 @@ export function replacePlaceholdersWithImportedSchemas({
     // Evaluate imported schema relative path from current schema file
     const importedSchemaRelativePath = makeRelativePath({
       fromDirectory: schemaAbsoluteDirName,
-      to: importedSchema.schemaAbsolutePath,
+      to: importedSchema.schemaAbsoluteImportPath,
     });
 
     const { schemaUniqueName } = importedSchema;
