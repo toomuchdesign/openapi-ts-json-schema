@@ -5,6 +5,7 @@ export { convertOpenApiParameters } from './convertOpenApiParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeJsonSchemaFiles } from './makeJsonSchemaFiles';
 export { refToPath } from './refToPath';
+export { pathToRef } from './pathToRef';
 export {
   REF_SYMBOL,
   PLACEHOLDER_REGEX,

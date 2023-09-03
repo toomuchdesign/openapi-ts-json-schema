@@ -1,15 +1,14 @@
 import path from 'node:path';
 
 /**
- * Parses OpenAPI refs (#/components/schema/Foo) to the derive the expected schema output path
+ * Parses OpenAPI local refs (#/components/schema/Foo) to the derive the expected schema output path
  * this library saves generated JSON schemas to (...outputPath/components.schema/Foo)
  *
- * @NOTE We are just supporting `/#` like refs as initial implementation
+ * @NOTE Remote and url refs should have been already resolved and inlined
  */
 export function refToPath(ref: string): {
-  schemaName: string;
   schemaRelativeDirName: string;
-  schemaRelativePath: string;
+  schemaName: string;
 } {
   /* istanbul ignore if: if this condition was true the execution would break before getting to this line -- @preserve */
   if (!ref.startsWith('#/')) {
@@ -21,8 +20,7 @@ export function refToPath(ref: string): {
   const schemaRelativeDirName = path.dirname(refPath);
 
   return {
-    schemaName,
     schemaRelativeDirName,
-    schemaRelativePath: path.join(schemaRelativeDirName, schemaName),
+    schemaName,
   };
 }

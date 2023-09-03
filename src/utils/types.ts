@@ -4,7 +4,6 @@ export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 
 /**
- * @prop `schemaName` - MySchema
  * @prop `schemaFileName` - Valid filename for given schema (without extension). Eg: `"MySchema"`
  * @prop `schemaAbsoluteDirName` - Absolute path pointing to schema folder. Eg: `"/output/path/components/schemas"`
  * @prop `schemaAbsolutePath` - Absolute path pointing to schema file. Eg: `"/output/path/components/schemas/MySchema.ts"`
@@ -14,7 +13,6 @@ export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
  * @prop `isRef` - Mark schemas used as `$ref`
  */
 export type SchemaMetaInfo = {
-  schemaName: string;
   schemaFileName: string;
   schemaAbsoluteDirName: string;
   schemaAbsolutePath: string;
