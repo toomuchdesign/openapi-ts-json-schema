@@ -111,6 +111,7 @@ export async function openapiToTsJsonSchema({
         outputPath,
         schemaPatcher,
         experimentalImportRefs,
+        isRef: true,
       });
     }
   }
@@ -127,6 +128,7 @@ export async function openapiToTsJsonSchema({
         outputPath,
         schemaPatcher,
         experimentalImportRefs,
+        isRef: false,
       });
     }
   }

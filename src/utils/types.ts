@@ -9,6 +9,7 @@ export type SchemaMetaInfo = {
   schemaAbsoluteDirName: string;
   schemaAbsolutePath: string;
   schema: JSONSchema;
+  isRef: boolean;
 };
 export type SchemaMetaInfoMap = Map<
   string, // Schema file relative path

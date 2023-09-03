@@ -23,6 +23,7 @@ export function addSchemaMetaInfo({
   outputPath,
   schemaPatcher,
   experimentalImportRefs,
+  isRef,
 }: {
   schemas: SchemaMetaInfoMap;
   schemaRelativeDirName: string;
@@ -31,6 +32,7 @@ export function addSchemaMetaInfo({
   outputPath: string;
   schemaPatcher?: SchemaPatcher;
   experimentalImportRefs: boolean;
+  isRef: boolean;
 }): void {
   const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
   // Do not override existing meta info of inlined schemas
@@ -49,6 +51,7 @@ export function addSchemaMetaInfo({
       schemaFileName,
       schemaUniqueName: namify(schemaRelativePath),
       schema: patchedSchema,
+      isRef,
     });
   }
 }
