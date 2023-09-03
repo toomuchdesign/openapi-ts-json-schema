@@ -4,6 +4,7 @@ import namify from 'namify';
 import filenamify from 'filenamify';
 import {
   SchemaMetaInfoMap,
+  SchemaMetaInfo,
   JSONSchema,
   replaceInlinedRefsWithStringPlaceholder,
   patchJsonSchema,
@@ -43,15 +44,21 @@ export function addSchemaMetaInfo({
     const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
     const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName, { replacement: '|' });
-
-    schemas.set(schemaRelativePath, {
+    const schemaAbsoluteImportPath = path.join(
       schemaAbsoluteDirName,
-      schemaAbsolutePath: path.join(schemaAbsoluteDirName, schemaFileName),
+      schemaFileName,
+    );
+
+    const metaInfo: SchemaMetaInfo = {
       schemaName,
       schemaFileName,
+      schemaAbsoluteDirName,
+      schemaAbsoluteImportPath,
+      schemaAbsolutePath: schemaAbsoluteImportPath + '.ts',
       schemaUniqueName: namify(schemaRelativePath),
       schema: patchedSchema,
       isRef,
-    });
+    };
+    schemas.set(schemaRelativePath, metaInfo);
   }
 }

@@ -34,7 +34,7 @@ export function replacePlaceholdersWithImportedSchemas({
     // Evaluate imported schema relative path from current schema file
     const importedSchemaRelativePath = makeRelativePath({
       fromDirectory: schemaAbsoluteDirName,
-      to: importedSchema.schemaAbsolutePath,
+      to: importedSchema.schemaAbsoluteImportPath,
     });
 
     const { schemaUniqueName } = importedSchema;

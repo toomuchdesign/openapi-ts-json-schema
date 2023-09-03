@@ -17,6 +17,6 @@ export async function makeJsonSchemaFiles({
 
     const { schemaAbsoluteDirName, schemaAbsolutePath } = schemaMetaInfo;
     await fs.mkdir(schemaAbsoluteDirName, { recursive: true });
-    await fs.writeFile(`${schemaAbsolutePath}.ts`, tsSchema);
+    await fs.writeFile(schemaAbsolutePath, tsSchema);
   }
 }
