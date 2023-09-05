@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    Foo:
+      description: Foo description
+      type: object
+      properties:
+        one:
+          type: 'string'
+          pattern1: '([a-zA-Z\s\-'']){1,50}'
+          pattern2: ([a-zA-Z\s\-']){1,50}
