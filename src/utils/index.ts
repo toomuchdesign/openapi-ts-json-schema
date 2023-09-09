@@ -17,8 +17,8 @@ export type {
   JSONSchema,
   OpenApiSchema,
   SchemaPatcher,
-  SchemaMetaInfo,
-  SchemaMetaInfoMap,
+  SchemaMetaData,
+  SchemaMetaDataMap,
 } from './types';
-export { addSchemaMetaInfo } from './addSchemaMetaInfo';
+export { addSchemaToMetaData } from './addSchemaToMetaData';
 export { makeRelativePath } from './makeRelativePath';

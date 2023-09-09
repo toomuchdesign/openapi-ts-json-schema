@@ -3,8 +3,8 @@ import path from 'path';
 import namify from 'namify';
 import filenamify from 'filenamify';
 import {
-  SchemaMetaInfoMap,
-  SchemaMetaInfo,
+  SchemaMetaDataMap,
+  SchemaMetaData,
   JSONSchema,
   replaceInlinedRefsWithStringPlaceholder,
   patchJsonSchema,
@@ -13,11 +13,11 @@ import {
 } from '.';
 
 /*
- * Just an utility function to add entries to SchemaMetaInfoMap Map keyed by ref
+ * Just an utility function to add entries to SchemaMetaDataMap Map keyed by ref
  */
-export function addSchemaMetaInfo({
+export function addSchemaToMetaData({
   id,
-  schemas,
+  schemaMetaDataMap,
   schema,
   isRef,
   // Options
@@ -26,7 +26,7 @@ export function addSchemaMetaInfo({
   experimentalImportRefs,
 }: {
   id: string;
-  schemas: SchemaMetaInfoMap;
+  schemaMetaDataMap: SchemaMetaDataMap;
   schema: JSONSchema;
   isRef: boolean;
   outputPath: string;
@@ -34,7 +34,7 @@ export function addSchemaMetaInfo({
   experimentalImportRefs: boolean;
 }): void {
   // Do not override existing meta info of inlined schemas
-  if (schemas.has(id) === false) {
+  if (schemaMetaDataMap.has(id) === false) {
     const { schemaRelativeDirName, schemaName } = refToPath(id);
     const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
     const originalSchema = experimentalImportRefs
@@ -49,7 +49,7 @@ export function addSchemaMetaInfo({
       schemaFileName,
     );
 
-    const metaInfo: SchemaMetaInfo = {
+    const metaInfo: SchemaMetaData = {
       schemaFileName,
       schemaAbsoluteDirName,
       schemaAbsoluteImportPath,
@@ -58,6 +58,6 @@ export function addSchemaMetaInfo({
       schema: patchedSchema,
       isRef,
     };
-    schemas.set(id, metaInfo);
+    schemaMetaDataMap.set(id, metaInfo);
   }
 }
