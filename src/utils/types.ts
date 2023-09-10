@@ -12,7 +12,7 @@ export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
  * @prop `schema` - The actual JSON schema
  * @prop `isRef` - Mark schemas used as `$ref`
  */
-export type SchemaMetaInfo = {
+export type SchemaMetaData = {
   schemaFileName: string;
   schemaAbsoluteDirName: string;
   schemaAbsolutePath: string;
@@ -21,7 +21,7 @@ export type SchemaMetaInfo = {
   schema: JSONSchema;
   isRef: boolean;
 };
-export type SchemaMetaInfoMap = Map<
+export type SchemaMetaDataMap = Map<
   string, // Schema file relative path
-  SchemaMetaInfo
+  SchemaMetaData
 >;

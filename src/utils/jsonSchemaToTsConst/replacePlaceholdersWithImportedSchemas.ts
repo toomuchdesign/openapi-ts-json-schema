@@ -1,4 +1,4 @@
-import { SchemaMetaInfoMap, makeRelativePath, PLACEHOLDER_REGEX } from '..';
+import { SchemaMetaDataMap, makeRelativePath, PLACEHOLDER_REGEX } from '..';
 
 /**
  * Replace Refs placeholders with imported schemas
@@ -6,22 +6,22 @@ import { SchemaMetaInfoMap, makeRelativePath, PLACEHOLDER_REGEX } from '..';
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
   schemaAbsoluteDirName,
-  schemas,
+  schemaMetaDataMap,
 }: {
   schemaAsText: string;
   schemaAbsoluteDirName: string;
-  schemas: SchemaMetaInfoMap;
+  schemaMetaDataMap: SchemaMetaDataMap;
 }): string {
   const importStatements = new Set<string>();
 
   // Replace placeholder occurrences with the relevant imported schema name
   let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, ref) => {
-    const importedSchema = schemas.get(ref);
+    const importedSchema = schemaMetaDataMap.get(ref);
 
     /* istanbul ignore if: It should not be possible to hit this condition -- @preserve */
     if (!importedSchema) {
       throw new Error(
-        '[openapi-ts-json-schema] No matching schema found in "schemas"',
+        '[openapi-ts-json-schema] No matching schema found in "schemaMetaDataMap"',
       );
     }
 

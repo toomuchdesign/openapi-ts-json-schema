@@ -64,6 +64,39 @@ Circular `$ref`s can be technically resolved with `experimentalImportRefs` optio
 
 Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
 
+## Return values
+
+Beside generating the expected schema files under `outputPath`, `openapiToTsJsonSchema` returns the following data:
+
+```ts
+{
+  // The path where the schemas are generated
+  outputPath: string;
+  metaData: {
+    // Meta data of the generated schemas
+    schemas: Map<
+      string,
+      {
+        // Valid filename for given schema (without extension).
+        schemaFileName: string;
+        // Absolute path pointing to schema folder
+        schemaAbsoluteDirName: string;
+        // Absolute path pointing to schema file
+        schemaAbsolutePath: string;
+        // Absolute import path (without extension)
+        schemaAbsoluteImportPath: string;
+        // Unique JavaScript identifier used as import name
+        schemaUniqueName: string;
+        // The actual JSON schema
+        schema: JSONSchema;
+        // True is schemas is used as a `$ref`
+        isRef: boolean;
+      }
+    >;
+  }
+}
+```
+
 ## Todo
 
 - Consider merging "operation" and "path" parameters definition
