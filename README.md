@@ -77,20 +77,21 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
     schemas: Map<
       string,
       {
-        // Valid filename for given schema (without extension).
+        schemaId: string;
         schemaFileName: string;
-        // Absolute path pointing to schema folder
+        // Valid filename for given schema (without extension).
         schemaAbsoluteDirName: string;
-        // Absolute path pointing to schema file
+        // Absolute path pointing to schema folder
         schemaAbsolutePath: string;
-        // Absolute import path (without extension)
+        // Absolute path pointing to schema file
         schemaAbsoluteImportPath: string;
-        // Unique JavaScript identifier used as import name
+        // Absolute import path (without extension)
         schemaUniqueName: string;
-        // The actual JSON schema
+        // Unique JavaScript identifier used as import name
         schema: JSONSchema;
-        // True is schemas is used as a `$ref`
+        // The actual JSON schema
         isRef: boolean;
+        // True is schemas is used as a `$ref`
       }
     >;
   }

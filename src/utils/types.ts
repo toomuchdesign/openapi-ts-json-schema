@@ -9,6 +9,7 @@ export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
  * @prop `schemaAbsolutePath` - Absolute path pointing to schema file. Eg: `"/output/path/components/schemas/MySchema.ts"`
  * @prop `schemaAbsoluteImportPath` - Absolute import path (without extension). Eg: `"/output/path/components/schemas/MySchema"`
  * @prop `schemaUniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
+ * @prop `schemaId`
  * @prop `schema` - The actual JSON schema
  * @prop `isRef` - Mark schemas used as `$ref`
  */
@@ -18,6 +19,7 @@ export type SchemaMetaData = {
   schemaAbsolutePath: string;
   schemaAbsoluteImportPath: string;
   schemaUniqueName: string;
+  schemaId: string;
   schema: JSONSchema;
   isRef: boolean;
 };

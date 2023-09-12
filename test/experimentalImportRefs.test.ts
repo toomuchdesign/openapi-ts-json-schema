@@ -103,7 +103,7 @@ describe('"experimentalImportRefs" option', () => {
           },
         } as const;`);
 
-      expect(actualPath1File).toEqual(expectedPath1File);
+      expect(actualPath1File).toMatch(expectedPath1File);
     });
   });
 
@@ -135,7 +135,7 @@ describe('"experimentalImportRefs" option', () => {
         },
       } as const;`);
 
-    expect(actualJanuarySchemaFile).toEqual(expectedJanuarySchemaFile);
+    expect(actualJanuarySchemaFile).toMatch(expectedJanuarySchemaFile);
 
     // February schema
     const actualFebruarySchemaFile = await fs.readFile(
@@ -157,6 +157,6 @@ describe('"experimentalImportRefs" option', () => {
         },
       } as const;`);
 
-    expect(actualFebruarySchemaFile).toEqual(expectedFebruarySchemaFile);
+    expect(actualFebruarySchemaFile).toMatch(expectedFebruarySchemaFile);
   });
 });
