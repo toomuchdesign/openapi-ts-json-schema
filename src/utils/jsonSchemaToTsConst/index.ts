@@ -14,14 +14,16 @@ export async function jsonSchemaToTsConst({
 
   // Stringify schema with "node-comment-json" to generate inline comments
   const stringifiedSchema = stringify(schema, null, 2);
-  let tsSchema = `export default ` + stringifiedSchema + 'as const';
+  let tsSchema = `export default ` + stringifiedSchema + 'as const;';
 
-  // Related to experimentalImportRefs option
+  // Enabled with experimentalImportRefs option
   tsSchema = replacePlaceholdersWithImportedSchemas({
     schemaAsText: tsSchema,
     schemaAbsoluteDirName,
     schemaMetaDataMap,
   });
+
+  tsSchema = tsSchema + `\n\nexport const $id = "${metaData.schemaId}";`;
 
   const formattedSchema = await prettier.format(tsSchema, {
     parser: 'typescript',

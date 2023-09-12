@@ -50,6 +50,7 @@ export function addSchemaToMetaData({
     );
 
     const metaInfo: SchemaMetaData = {
+      schemaId: id,
       schemaFileName,
       schemaAbsoluteDirName,
       schemaAbsoluteImportPath,
