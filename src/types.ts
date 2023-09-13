@@ -27,3 +27,8 @@ export type SchemaMetaDataMap = Map<
   string, // Schema file relative path
   SchemaMetaData
 >;
+
+export type Plugin = (args: {
+  outputPath: string;
+  metaData: { schemas: SchemaMetaDataMap };
+}) => Promise<void>;
