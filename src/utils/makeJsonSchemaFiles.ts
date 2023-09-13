@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
-import { jsonSchemaToTsConst, SchemaMetaDataMap } from '.';
+import { jsonSchemaToTsConst } from '.';
+import type { SchemaMetaDataMap } from '../types';
 
 /**
  * Save TS JSON schema with the expected naming conventions

@@ -8,14 +8,12 @@ import {
   clearFolder,
   makeJsonSchemaFiles,
   REF_SYMBOL,
-  SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
-  SchemaMetaDataMap,
-  JSONSchema,
   addSchemaToMetaData,
   pathToRef,
 } from './utils';
+import type { SchemaPatcher, SchemaMetaDataMap, JSONSchema } from './types';
 
 export async function openapiToTsJsonSchema({
   openApiSchema: openApiSchemaRelative,

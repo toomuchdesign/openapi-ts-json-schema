@@ -1,7 +1,7 @@
 import prettier from 'prettier';
 import { stringify } from 'comment-json';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
-import type { SchemaMetaDataMap, SchemaMetaData } from '../';
+import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
 
 export async function jsonSchemaToTsConst({
   metaData,

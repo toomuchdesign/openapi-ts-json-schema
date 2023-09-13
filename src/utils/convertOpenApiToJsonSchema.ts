@@ -1,5 +1,5 @@
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import { OpenApiSchema } from '.';
+import type { OpenApiSchema } from '../types';
 
 export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
   /**
