@@ -7,7 +7,7 @@ import { formatTypeScript } from '../src/utils';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('"experimentalImportRefs" option', () => {
+describe('"refHandling" import option', () => {
   describe.each([
     {
       description: 'Generating only root schema',
@@ -27,7 +27,7 @@ describe('"experimentalImportRefs" option', () => {
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
         definitionPathsToGenerateFrom,
         silent: true,
-        experimentalImportRefs: true,
+        refHandling: 'import',
       });
 
       const path1 = await importFresh(
@@ -113,7 +113,7 @@ describe('"experimentalImportRefs" option', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      experimentalImportRefs: true,
+      refHandling: 'import',
     });
 
     // January schema

@@ -10,7 +10,7 @@ describe('Circular reference', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'circular-reference/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.schemas'],
-      experimentalImportRefs: true,
+      refHandling: 'import',
       silent: true,
     });
 
