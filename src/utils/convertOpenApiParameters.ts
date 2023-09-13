@@ -1,5 +1,5 @@
 import { convertParametersToJSONSchema } from 'openapi-jsonschema-parameters';
-import type { JSONSchema } from '.';
+import type { JSONSchema } from '../types';
 
 /**
  * Parameters field can only be found in:

@@ -1,4 +1,5 @@
-import { SchemaMetaDataMap, makeRelativePath, PLACEHOLDER_REGEX } from '..';
+import { makeRelativePath, PLACEHOLDER_REGEX } from '..';
+import type { SchemaMetaDataMap } from '../../types';
 
 /**
  * Replace Refs placeholders with imported schemas

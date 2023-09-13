@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
-import path from 'path';
+import path from 'node:path';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 import YAML from 'yaml';
 import get from 'lodash.get';
@@ -8,14 +8,12 @@ import {
   clearFolder,
   makeJsonSchemaFiles,
   REF_SYMBOL,
-  SchemaPatcher,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
-  SchemaMetaDataMap,
-  JSONSchema,
   addSchemaToMetaData,
   pathToRef,
 } from './utils';
+import type { SchemaPatcher, SchemaMetaDataMap, JSONSchema } from './types';
 
 export async function openapiToTsJsonSchema({
   openApiSchema: openApiSchemaRelative,

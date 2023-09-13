@@ -1,8 +1,9 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
-import { importFresh, formatTypeScript } from './test-utils';
+import { importFresh } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
+import { formatTypeScript } from '../src/utils';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 

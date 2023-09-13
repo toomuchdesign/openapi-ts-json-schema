@@ -1,5 +1,6 @@
 import mapObject from 'map-obj';
-import { JSONSchema, refToPlaceholder, REF_SYMBOL } from '.';
+import { refToPlaceholder, REF_SYMBOL } from '.';
+import type { JSONSchema } from '../types';
 
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);

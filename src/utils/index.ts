@@ -1,5 +1,4 @@
 export { patchJsonSchema } from './patchJsonSchema';
-export { clearFolder } from './clearFolder';
 export { jsonSchemaToTsConst } from './jsonSchemaToTsConst';
 export { convertOpenApiParameters } from './convertOpenApiParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
@@ -13,12 +12,9 @@ export {
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
 export { replacePlaceholdersWithImportedSchemas } from './jsonSchemaToTsConst/replacePlaceholdersWithImportedSchemas';
-export type {
-  JSONSchema,
-  OpenApiSchema,
-  SchemaPatcher,
-  SchemaMetaData,
-  SchemaMetaDataMap,
-} from './types';
 export { addSchemaToMetaData } from './addSchemaToMetaData';
+
+export { clearFolder } from './clearFolder';
 export { makeRelativePath } from './makeRelativePath';
+export { formatTypeScript } from './formatTypeScript';
+export { saveFile } from './saveFile';

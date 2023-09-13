@@ -1,16 +1,18 @@
-import path from 'path';
+import path from 'node:path';
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
 import filenamify from 'filenamify';
 import {
+  replaceInlinedRefsWithStringPlaceholder,
+  patchJsonSchema,
+  refToPath,
+} from '.';
+import type {
   SchemaMetaDataMap,
   SchemaMetaData,
   JSONSchema,
-  replaceInlinedRefsWithStringPlaceholder,
-  patchJsonSchema,
   SchemaPatcher,
-  refToPath,
-} from '.';
+} from '../types';
 
 /*
  * Just an utility function to add entries to SchemaMetaDataMap Map keyed by ref
