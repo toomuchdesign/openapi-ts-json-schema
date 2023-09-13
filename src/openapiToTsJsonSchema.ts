@@ -21,14 +21,14 @@ export async function openapiToTsJsonSchema({
   schemaPatcher,
   outputPath: providedOutputPath,
   silent,
-  experimentalImportRefs = false,
+  refHandling = 'inline',
 }: {
   openApiSchema: string;
   definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
-  experimentalImportRefs?: boolean;
+  refHandling?: 'inline' | 'import';
 }): Promise<{ outputPath: string; metaData: { schemas: SchemaMetaDataMap } }> {
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
@@ -71,14 +71,15 @@ export async function openapiToTsJsonSchema({
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
           /**
-           * Mark inlined refs with a "REF_SYMBOL" prop to replace them
-           * in case experimentalImportRefs option is true
+           * "import" refHandling support:
+           * mark inlined ref objects with a "REF_SYMBOL" prop to replace them later on
            */
           inlinedSchema[REF_SYMBOL] = ref;
 
           /**
-           * Add a $ref comment to each inlined schema with the original ref value. Using:
-           * https://github.com/kaelzhang/node-comment-json
+           * "inline" refHandling support:
+           * add a $ref comment to each inlined schema with the original ref value.
+           * See: https://github.com/kaelzhang/node-comment-json
            */
           inlinedSchema[Symbol.for('before')] = [
             {
@@ -87,7 +88,7 @@ export async function openapiToTsJsonSchema({
             },
           ];
 
-          // Keep track of inline refs
+          // Keep track of inlined refs
           inlinedRefs.set(ref, inlinedSchema);
         },
       },
@@ -97,8 +98,11 @@ export async function openapiToTsJsonSchema({
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
-  // Generate schema meta info for inlined refs, first
-  if (experimentalImportRefs) {
+  /**
+   * If refs should be imported, generate meta data for schemas which have been inlined
+   * so that refs get generated as single schemas
+   */
+  if (refHandling === 'import') {
     for (const [ref, schema] of inlinedRefs) {
       addSchemaToMetaData({
         id: ref,
@@ -106,7 +110,7 @@ export async function openapiToTsJsonSchema({
         schema,
         outputPath,
         schemaPatcher,
-        experimentalImportRefs,
+        refHandling,
         isRef: true,
       });
     }
@@ -128,7 +132,7 @@ export async function openapiToTsJsonSchema({
         schema: definitionSchemas[schemaName],
         outputPath,
         schemaPatcher,
-        experimentalImportRefs,
+        refHandling,
         isRef: false,
       });
     }

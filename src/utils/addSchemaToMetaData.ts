@@ -25,7 +25,7 @@ export function addSchemaToMetaData({
   // Options
   outputPath,
   schemaPatcher,
-  experimentalImportRefs,
+  refHandling,
 }: {
   id: string;
   schemaMetaDataMap: SchemaMetaDataMap;
@@ -33,16 +33,16 @@ export function addSchemaToMetaData({
   isRef: boolean;
   outputPath: string;
   schemaPatcher?: SchemaPatcher;
-  experimentalImportRefs: boolean;
+  refHandling: 'inline' | 'import';
 }): void {
   // Do not override existing meta info of inlined schemas
   if (schemaMetaDataMap.has(id) === false) {
     const { schemaRelativeDirName, schemaName } = refToPath(id);
     const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
-    const originalSchema = experimentalImportRefs
-      ? replaceInlinedRefsWithStringPlaceholder(schema)
-      : schema;
-
+    const originalSchema =
+      refHandling === 'import'
+        ? replaceInlinedRefsWithStringPlaceholder(schema)
+        : schema;
     const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
     const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName, { replacement: '|' });

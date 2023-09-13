@@ -10,7 +10,7 @@ describe('Returned "metaData"', async () => {
     const { metaData } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],
-      experimentalImportRefs: true,
+      refHandling: 'import',
       silent: false,
     });
 

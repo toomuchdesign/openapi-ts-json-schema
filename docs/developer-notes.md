@@ -4,9 +4,9 @@
 
 Remote/external `$ref`s (`Pet.yaml`, `definitions.json#/Pet`) get always immediately dereferenced by fetching the specs and inlining the relevant schemas.
 
-## $ref imports
+## `refHandling`: import
 
-`experimentalImportRefs` option introduces the ability to generate NOT inline `$ref` schemas, but to generate the relevant import statement and reference them as external schema file.
+**import** `refHandling` option introduces the ability NOT to inline `$ref` schemas, but to generate the relevant import statements and reference them as external schema files.
 
 At the time of writing the implementation is build around `@apidevtools/json-schema-ref-parser`'s `dereference` method options and works as follows:
 

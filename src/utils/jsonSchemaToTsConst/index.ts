@@ -12,17 +12,21 @@ export async function jsonSchemaToTsConst({
 }): Promise<string> {
   const { schema, schemaAbsoluteDirName } = metaData;
 
-  // Stringify schema with "node-comment-json" to generate inline comments
+  /**
+   * Stringifying schema with "comment-json" instead of JSON.stringify
+   * to generate inline comments
+   */
   const stringifiedSchema = stringify(schema, null, 2);
   let tsSchema = `export default ` + stringifiedSchema + 'as const;';
 
-  // Enabled with experimentalImportRefs option
+  // Placeholder will be found only on "import" refHandling
   tsSchema = replacePlaceholdersWithImportedSchemas({
     schemaAsText: tsSchema,
     schemaAbsoluteDirName,
     schemaMetaDataMap,
   });
 
+  // Add $id named export
   tsSchema = tsSchema + `\n\nexport const $id = "${metaData.schemaId}";`;
 
   const formattedSchema = await formatTypeScript(tsSchema);

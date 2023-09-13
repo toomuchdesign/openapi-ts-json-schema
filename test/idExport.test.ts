@@ -1,5 +1,4 @@
 import path from 'path';
-import fs from 'fs';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
 import { importFresh } from './test-utils';
