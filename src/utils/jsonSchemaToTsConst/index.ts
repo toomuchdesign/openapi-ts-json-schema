@@ -1,6 +1,6 @@
-import prettier from 'prettier';
 import { stringify } from 'comment-json';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
+import { formatTypeScript } from '../';
 import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
 
 export async function jsonSchemaToTsConst({
@@ -25,9 +25,6 @@ export async function jsonSchemaToTsConst({
 
   tsSchema = tsSchema + `\n\nexport const $id = "${metaData.schemaId}";`;
 
-  const formattedSchema = await prettier.format(tsSchema, {
-    parser: 'typescript',
-  });
-
+  const formattedSchema = await formatTypeScript(tsSchema);
   return formattedSchema;
 }

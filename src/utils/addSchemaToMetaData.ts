@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
 import filenamify from 'filenamify';

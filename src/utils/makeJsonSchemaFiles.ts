@@ -1,5 +1,4 @@
-import fs from 'fs/promises';
-import { jsonSchemaToTsConst } from '.';
+import { jsonSchemaToTsConst, saveFile } from '.';
 import type { SchemaMetaDataMap } from '../types';
 
 /**
@@ -16,8 +15,7 @@ export async function makeJsonSchemaFiles({
       schemaMetaDataMap,
     });
 
-    const { schemaAbsoluteDirName, schemaAbsolutePath } = metaData;
-    await fs.mkdir(schemaAbsoluteDirName, { recursive: true });
-    await fs.writeFile(schemaAbsolutePath, tsSchema);
+    const { schemaAbsolutePath } = metaData;
+    await saveFile({ path: [schemaAbsolutePath], data: tsSchema });
   }
 }
