@@ -7,14 +7,14 @@ import { formatTypeScript } from '../src/utils';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('"refHandling" import option', () => {
+describe('refHandling option === "import"', () => {
   describe.each([
     {
       description: 'Generating only root schema',
       definitionPathsToGenerateFrom: ['paths'],
     },
     {
-      description: 'Generating also $ref schema',
+      description: 'Generating $ref schemas, too',
       definitionPathsToGenerateFrom: [
         'paths',
         'components.months',
@@ -75,7 +75,7 @@ describe('"refHandling" import option', () => {
         },
       });
 
-      // Expectations against actual root schema file
+      // Expectations against actual root schema file (make sure it actually imports refs :))
       const actualPath1File = await fs.readFile(
         path.resolve(outputPath, 'paths/v1|path-1.ts'),
         {

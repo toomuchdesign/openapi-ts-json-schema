@@ -44,6 +44,14 @@ import Bar from '../foo/Bar';
 
 This process could be definitely shorter if `@apidevtools/json-schema-ref-parser`'s `dereference` method allowed to access the parent object holding the `$ref` value to be replaced. In that case step 2 could be skipped and the ref object could be immediately replaced with the relevant **string placeholder**.
 
+## `refHandling`: keep
+
+`keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the original `$ref` object `{$ref: "#/foo/bar" }`.
+
+It's quite counterintuitive since refs gets dereferenced to be later re-referenced. The reason is that the dereferencing process is mis-used here as a way to detect `$ref`s all around the schemas and generate the relevant meta data for schema generation.
+
+In a future refactoring we might consider skipping dereferencing for this `refHandling` option.
+
 ## TypeScript cannot import json as const
 
 We are currently forced to generate `.ts` files with `as const` assertions since [TypeScript cannot import JSON or any other file as const](https://github.com/ThomasAribart/json-schema-to-ts/blob/v2.10.0/documentation/FAQs/does-json-schema-to-ts-work-on-json-file-schemas.md).

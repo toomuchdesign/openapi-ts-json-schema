@@ -6,13 +6,16 @@ import type { SchemaMetaDataMap } from '../types';
  */
 export async function makeJsonSchemaFiles({
   schemaMetaDataMap,
+  refHandling,
 }: {
   schemaMetaDataMap: SchemaMetaDataMap;
+  refHandling: 'inline' | 'import' | 'keep';
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
     const tsSchema = await jsonSchemaToTsConst({
       metaData,
       schemaMetaDataMap,
+      refHandling,
     });
 
     const { schemaAbsolutePath } = metaData;

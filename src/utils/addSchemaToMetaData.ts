@@ -33,14 +33,14 @@ export function addSchemaToMetaData({
   isRef: boolean;
   outputPath: string;
   schemaPatcher?: SchemaPatcher;
-  refHandling: 'inline' | 'import';
+  refHandling: 'inline' | 'import' | 'keep';
 }): void {
   // Do not override existing meta info of inlined schemas
   if (schemaMetaDataMap.has(id) === false) {
     const { schemaRelativeDirName, schemaName } = refToPath(id);
     const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
     const originalSchema =
-      refHandling === 'import'
+      refHandling === 'import' || refHandling === 'keep'
         ? replaceInlinedRefsWithStringPlaceholder(schema)
         : schema;
     const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
