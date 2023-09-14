@@ -5,7 +5,7 @@ import { openapiToTsJsonSchema } from '../src';
 
 const fixtures = path.resolve(__dirname, 'fixtures');
 
-describe('"refHandling" inline option', () => {
+describe('refHandling option === "inline"', () => {
   it('Preserves original "$ref" information as a commented prop', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),

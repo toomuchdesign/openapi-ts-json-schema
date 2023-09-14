@@ -28,7 +28,7 @@ export async function openapiToTsJsonSchema({
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   silent?: boolean;
-  refHandling?: 'inline' | 'import';
+  refHandling?: 'inline' | 'import' | 'keep';
 }): Promise<{ outputPath: string; metaData: { schemas: SchemaMetaDataMap } }> {
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
@@ -99,10 +99,11 @@ export async function openapiToTsJsonSchema({
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**
-   * If refs should be imported, generate meta data for schemas which have been inlined
-   * so that refs get generated as single schemas
+   * Generate meta data for schemas which have been previously dereferenced.
+   * It happens for "import" and "keep" refHandling since they expect to find
+   * $ref schemas generated as standalone schemas
    */
-  if (refHandling === 'import') {
+  if (refHandling === 'import' || refHandling === 'keep') {
     for (const [ref, schema] of inlinedRefs) {
       addSchemaToMetaData({
         id: ref,
@@ -139,6 +140,7 @@ export async function openapiToTsJsonSchema({
   }
 
   await makeJsonSchemaFiles({
+    refHandling,
     schemaMetaDataMap,
   });
 
