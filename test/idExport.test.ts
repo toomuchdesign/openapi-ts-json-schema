@@ -10,7 +10,7 @@ describe('$id export', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],
-      silent: false,
+      silent: true,
     });
 
     const januarySchema = await importFresh(

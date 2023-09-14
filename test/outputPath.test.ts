@@ -17,7 +17,7 @@ describe('"outputPath" option', async () => {
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       outputPath: customOutputPath,
-      silent: false,
+      silent: true,
     });
 
     expect(outputPath).toBe(customOutputPath);
