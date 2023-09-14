@@ -1,20 +1,17 @@
 import { makeRelativePath, formatTypeScript, saveFile } from '../utils';
 import type { Plugin, SchemaMetaData } from '../types';
 
-const FILE_NAME = 'refTypesAsArray.ts';
+const FILE_NAME = 'fastifyTypeProvider.ts';
 
-const generateRefTypesAsArrayPlugin: Plugin = async ({
-  outputPath,
-  metaData,
-}) => {
-  const refs: SchemaMetaData[] = [];
+const fastifyTypeProviderPlugin: Plugin = async ({ outputPath, metaData }) => {
+  const refSchemaMetaData: SchemaMetaData[] = [];
   metaData.schemas.forEach((schema) => {
     if (schema.isRef) {
-      refs.push(schema);
+      refSchemaMetaData.push(schema);
     }
   });
 
-  const schemas = refs.map(
+  const schemas = refSchemaMetaData.map(
     ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId }) => {
       return {
         importPath: makeRelativePath({
@@ -39,14 +36,20 @@ const generateRefTypesAsArrayPlugin: Plugin = async ({
     output += `\n const ${schema.schemaUniqueName}WithId = {...${schema.schemaUniqueName}, $id: "${schema.schemaId}"} as const;`;
   });
 
+  // Generate a TS tuple type containing the types of all $ref schema found
   output += `\n\n
-    type RefTypes = [
+    export type References = [
       ${schemas
         .map((schema) => `typeof ${schema.schemaUniqueName}WithId`)
         .join(',')}
   ];`;
 
-  output += '\n\nexport default RefTypes';
+  // Generate an array af all $ref schema
+  // @TODO make selected schemas configurable
+  output += `\n\n
+    export const referenceSchemas = [
+      ${schemas.map((schema) => `${schema.schemaUniqueName}WithId`).join(',')}
+  ];`;
 
   const formattedOutput = await formatTypeScript(output);
   await saveFile({
@@ -55,4 +58,4 @@ const generateRefTypesAsArrayPlugin: Plugin = async ({
   });
 };
 
-export default generateRefTypesAsArrayPlugin;
+export default fastifyTypeProviderPlugin;

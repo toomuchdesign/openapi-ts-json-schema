@@ -99,11 +99,18 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
 }
 ```
 
+## Plugins
+
+`metaData` output can be used to dynamically generate extra custom output based on the generated schemas.
+
+`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/).
+
+Read more about plugins in the [dedicated readme](./docs/plugins.md).
+
 ## Todo
 
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
-- Explore how to preserve `$ref` values and rely on [`json-schema-to-ts` references generic to](https://www.npmjs.com/package/json-schema-to-ts#references) infer types
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
