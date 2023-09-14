@@ -11,7 +11,7 @@ describe('Returned "metaData"', async () => {
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.months'],
       refHandling: 'import',
-      silent: false,
+      silent: true,
     });
 
     const answerMeta = metaData.schemas.get('#/components/schemas/Answer');
