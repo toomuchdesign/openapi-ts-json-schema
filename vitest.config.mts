@@ -7,6 +7,7 @@ export default defineConfig({
     sequence: {
       hooks: 'stack',
       concurrent: false,
+      shuffle: true,
     },
     coverage: {
       provider: 'istanbul',
