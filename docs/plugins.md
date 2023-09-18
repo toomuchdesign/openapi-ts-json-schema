@@ -88,8 +88,8 @@ import type { Plugin } from 'openapi-ts-json-schema';
 // An `openapi-ts-json-schema` consists of a factory function returning an async function
 const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
   ({ optionOne, optionTwo }) =>
-  async ({ outputPath, metaData }) => {
-    // You custom implementation
+  async ({ outputPath, metaData, utils }) => {
+    // Your custom implementation...
   };
 
 export myPlugin;
