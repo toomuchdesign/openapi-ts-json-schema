@@ -1,21 +1,22 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
-import { importFresh, fixtures } from './test-utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('$id export', async () => {
   it('exposes schema id as $id named export', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      outputPath: makeTestOutputPath('id-export'),
       definitionPathsToGenerateFrom: ['components.months'],
       silent: true,
     });
 
-    const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components/months/January'),
+    const januarySchema = await import(
+      path.resolve(outputPath, 'components/months/January')
     );
-    const februarySchema = await importFresh(
-      path.resolve(outputPath, 'components/months/February'),
+    const februarySchema = await import(
+      path.resolve(outputPath, 'components/months/February')
     );
 
     expect(januarySchema['$id']).toBe('#/components/months/January');

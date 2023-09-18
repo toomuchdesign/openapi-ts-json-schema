@@ -1,12 +1,13 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
-import { importFresh, fixtures } from './test-utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 describe('"schemaPatcher" option', () => {
   it('transforms generated JSON schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      outputPath: makeTestOutputPath('schema-patcher'),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
       schemaPatcher: ({ schema }) => {
         if (schema.description === 'January description') {
@@ -16,8 +17,8 @@ describe('"schemaPatcher" option', () => {
       silent: true,
     });
 
-    const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components/months/January'),
+    const januarySchema = await import(
+      path.resolve(outputPath, 'components/months/January')
     );
 
     expect(januarySchema.default).toEqual({
@@ -30,8 +31,8 @@ describe('"schemaPatcher" option', () => {
     });
 
     // Testing deep nested props being patched, too
-    const pathSchema = await importFresh(
-      path.resolve(outputPath, 'paths/v1|path-1'),
+    const pathSchema = await import(
+      path.resolve(outputPath, 'paths/v1|path-1')
     );
 
     expect(

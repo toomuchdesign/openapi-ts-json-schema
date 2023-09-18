@@ -1,18 +1,19 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
-import { importFresh, fixtures } from './test-utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 describe('OpenAPI parameters', () => {
   it('Transforms parameters array into a JSON schema record', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'parameters/specs.yaml'),
+      outputPath: makeTestOutputPath('parameters'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });
 
-    const pathSchema = await importFresh(
-      path.resolve(outputPath, 'paths/v1|path-1'),
+    const pathSchema = await import(
+      path.resolve(outputPath, 'paths/v1|path-1')
     );
 
     expect(pathSchema.default).toEqual({

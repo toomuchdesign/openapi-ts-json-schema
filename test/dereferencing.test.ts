@@ -1,18 +1,19 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
-import { importFresh, fixtures } from './test-utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
-describe('Deferencing', () => {
+describe('Dereferencing', () => {
   it('Dereferences and transforms even from paths not marked for generation', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      outputPath: makeTestOutputPath('dereferencing'),
       definitionPathsToGenerateFrom: ['components.months'],
       silent: true,
     });
 
-    const januarySchema = await importFresh(
-      path.resolve(outputPath, 'components/months/January'),
+    const januarySchema = await import(
+      path.resolve(outputPath, 'components/months/January')
     );
 
     expect(januarySchema.default).toEqual({
@@ -28,12 +29,13 @@ describe('Deferencing', () => {
   it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      outputPath: makeTestOutputPath('dereferencing'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });
 
-    const pathsSchema = await importFresh(
-      path.resolve(outputPath, 'paths/v1|path-1'),
+    const pathsSchema = await import(
+      path.resolve(outputPath, 'paths/v1|path-1')
     );
 
     expect(
