@@ -157,7 +157,7 @@ export async function openapiToTsJsonSchema({
     metaData: { schemas: schemaMetaDataMap },
   };
 
-  // Process plugins
+  // Execute plugins
   for (const plugin of plugins) {
     await plugin(returnPayload);
   }

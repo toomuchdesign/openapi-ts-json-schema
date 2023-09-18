@@ -2,4 +2,4 @@
 'openapi-ts-json-schema': minor
 ---
 
-Add "keep" refHandling option, to preserve $ref objects
+Add "keep" `refHandling` option, to preserve $ref objects

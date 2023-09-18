@@ -1,5 +1,10 @@
 # Plugins
 
+`openapi-ts-json-schema` plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
+
+- [Fastify type provider plugin](#fastify-type-provider-plugin)
+- [Write your own plugin](#write-your-own-plugin)
+
 ## Fastify type provider plugin
 
 This plugin generate the necessary connective tissue to optimally integrate `openapi-ts-json-schema` output with Fastify's [`json-schema-to-ts` type provider](https://github.com/fastify/fastify-type-provider-json-schema-to-ts) preserving JSON schemas `$ref`s.
@@ -17,7 +22,7 @@ import {
   fastifyTypeProviderPlugin,
 } from 'openapi-ts-json-schema';
 
-const { outputPath, metaData } = await openapiToTsJsonSchema({
+await openapiToTsJsonSchema({
   openApiSchema: path.resolve(fixtures, 'path/to/open-api-spec.yaml'),
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
@@ -71,4 +76,34 @@ fastify.get(
     const { givenName, familyName } = req.body.user;
   },
 );
+```
+
+## Write your own plugin
+
+`openapi-ts-json-schema` exposes a TS type to support plugins implementation:
+
+```ts
+import type { Plugin } from 'openapi-ts-json-schema';
+
+// An `openapi-ts-json-schema` consists of a factory function returning an async function
+const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
+  ({ optionOne, optionTwo }) =>
+  async ({ outputPath, metaData }) => {
+    // You custom implementation
+  };
+
+export myPlugin;
+```
+
+...import and instantiate your plugin:
+
+```ts
+import { openapiToTsJsonSchema } from 'openapi-ts-json-schema';
+import { myPlugin } from '../myPlugin';
+
+await openapiToTsJsonSchema({
+  openApiSchema: 'path/to/open-api-specs.yaml',
+  definitionPathsToGenerateFrom: ['components.schemas'],
+  plugins: [myPlugin({ optionOne: 'foo', optionTwo: 'bar' })],
+});
 ```

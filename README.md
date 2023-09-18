@@ -102,16 +102,17 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
 
 ## Plugins
 
-`metaData` output can be used to dynamically generate extra custom output based on the generated schemas.
+`openapi-ts-json-schema` plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
 
-`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/).
+`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/), and you can write your owns.
 
-Read more about plugins in the [dedicated readme](./docs/plugins.md).
+Read [plugins documentation 📖](./docs/plugins.md).
 
 ## Todo
 
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
+- Consider adding a way to customize the values of the generated JSON schema ids. This could be beneficial even in case of multiple schemas being merged with plugins
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
