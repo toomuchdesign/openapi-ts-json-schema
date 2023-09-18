@@ -142,7 +142,7 @@ export async function openapiToTsJsonSchema({
         outputPath,
         schemaPatcher,
         refHandling,
-        isRef: false,
+        isRef: inlinedRefs.has(id),
       });
     }
   }
