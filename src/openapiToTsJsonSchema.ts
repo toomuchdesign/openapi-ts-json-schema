@@ -13,13 +13,20 @@ import {
   addSchemaToMetaData,
   pathToRef,
 } from './utils';
-import type { SchemaPatcher, SchemaMetaDataMap, JSONSchema } from './types';
+import type {
+  SchemaPatcher,
+  SchemaMetaDataMap,
+  JSONSchema,
+  ReturnPayload,
+  Plugin,
+} from './types';
 
 export async function openapiToTsJsonSchema({
   openApiSchema: openApiSchemaRelative,
   definitionPathsToGenerateFrom,
   schemaPatcher,
   outputPath: providedOutputPath,
+  plugins = [],
   silent,
   refHandling = 'inline',
 }: {
@@ -27,9 +34,10 @@ export async function openapiToTsJsonSchema({
   definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
+  plugins?: ReturnType<Plugin>[];
   silent?: boolean;
   refHandling?: 'inline' | 'import' | 'keep';
-}): Promise<{ outputPath: string; metaData: { schemas: SchemaMetaDataMap } }> {
+}): Promise<ReturnPayload> {
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
       `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
@@ -144,11 +152,21 @@ export async function openapiToTsJsonSchema({
     schemaMetaDataMap,
   });
 
+  const returnPayload: ReturnPayload = {
+    outputPath,
+    metaData: { schemas: schemaMetaDataMap },
+  };
+
+  // Process plugins
+  for (const plugin of plugins) {
+    await plugin(returnPayload);
+  }
+
   if (!silent) {
     console.log(
       `[openapi-ts-json-schema] ✅ JSON schema models generated at ${outputPath}`,
     );
   }
 
-  return { outputPath, metaData: { schemas: schemaMetaDataMap } };
+  return returnPayload;
 }

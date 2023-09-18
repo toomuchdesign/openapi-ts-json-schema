@@ -10,7 +10,7 @@ const fixtures = path.resolve(__dirname, '../fixtures');
 
 describe('fastifyTypeProviderPlugin plugin', () => {
   it('generates expected file', async () => {
-    const { outputPath, metaData } = await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: path.resolve(
         fixtures,
@@ -18,10 +18,9 @@ describe('fastifyTypeProviderPlugin plugin', () => {
       ),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
       refHandling: 'keep',
+      plugins: [fastifyTypeProviderPlugin()],
       silent: true,
     });
-
-    await fastifyTypeProviderPlugin({ outputPath, metaData });
 
     const actualAsText = await fs.readFile(
       path.resolve(outputPath, 'fastifyTypeProvider.ts'),
