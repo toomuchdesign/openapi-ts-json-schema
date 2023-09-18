@@ -2,8 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
-
-const fixtures = path.resolve(__dirname, 'fixtures');
+import { fixtures } from './test-utils';
 
 describe('refHandling option === "inline"', () => {
   it('Preserves original "$ref" information as a commented prop', async () => {

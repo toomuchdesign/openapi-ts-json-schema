@@ -1,9 +1,7 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
-import { importFresh } from './test-utils';
-
-const fixtures = path.resolve(__dirname, 'fixtures');
+import { importFresh, fixtures } from './test-utils';
 
 describe('$id export', async () => {
   it('exposes schema id as $id named export', async () => {

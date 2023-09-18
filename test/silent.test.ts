@@ -1,8 +1,7 @@
 import path from 'path';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
-
-const fixtures = path.resolve(__dirname, 'fixtures');
+import { fixtures } from './test-utils';
 
 beforeEach(() => {
   vi.spyOn(console, 'log').mockImplementationOnce(() => undefined);

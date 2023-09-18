@@ -3,10 +3,8 @@ import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../../src';
 import { fastifyTypeProviderPlugin } from '../../src';
-import { importFresh } from '../test-utils';
+import { importFresh, fixtures } from '../test-utils';
 import { formatTypeScript } from '../../src/utils';
-
-const fixtures = path.resolve(__dirname, '../fixtures');
 
 describe('fastifyTypeProviderPlugin plugin', () => {
   it('generates expected file', async () => {

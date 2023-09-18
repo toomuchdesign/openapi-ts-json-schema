@@ -1,9 +1,7 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
-import { importFresh } from './test-utils';
+import { importFresh, fixtures } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
-
-const fixtures = path.resolve(__dirname, 'fixtures');
 
 describe('JSON OpenAPI input', async () => {
   it('generates expected schemas', async () => {
