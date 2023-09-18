@@ -2,13 +2,13 @@ import path from 'path';
 import fs from 'fs';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
-
-const fixtures = path.resolve(__dirname, 'fixtures');
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
     const { metaData } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      outputPath: makeTestOutputPath('meta-data'),
       definitionPathsToGenerateFrom: ['components.months'],
       refHandling: 'import',
       silent: true,

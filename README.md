@@ -62,7 +62,7 @@ type MyModel = FromSchema<typeof myModelSchema>;
 
 Generated JSON schema path names get escaped in order to be valid file system names.
 
-Circular `$ref`s can be technically resolved with "import" `refHandling` option. But TS will stop the type recursion and type the schema as `any`. See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
+Circular `$ref`s can be technically resolved with "import" `refHandling` option. But TS will stop the type recursion and type the schema as `any` (error `ts(7022)`). See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
 
 Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
 
