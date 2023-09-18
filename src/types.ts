@@ -23,12 +23,17 @@ export type SchemaMetaData = {
   schema: JSONSchema;
   isRef: boolean;
 };
+
 export type SchemaMetaDataMap = Map<
   string, // Schema file relative path
   SchemaMetaData
 >;
 
-export type Plugin = (args: {
+export type ReturnPayload = {
   outputPath: string;
   metaData: { schemas: SchemaMetaDataMap };
-}) => Promise<void>;
+};
+
+export type Plugin<Options = void> = (
+  options: Options,
+) => (args: ReturnPayload) => Promise<void>;

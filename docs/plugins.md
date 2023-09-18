@@ -22,9 +22,8 @@ const { outputPath, metaData } = await openapiToTsJsonSchema({
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   refHandling: 'keep',
+  plugins: [fastifyTypeProviderPlugin()],
 });
-
-await fastifyTypeProviderPlugin({ outputPath, metaData });
 ```
 
 Setup `Fastify` and `json-schema-to-ts` type provider:
