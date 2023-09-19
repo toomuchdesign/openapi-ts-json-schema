@@ -12,6 +12,9 @@ import {
   convertOpenApiParameters,
   addSchemaToMetaData,
   pathToRef,
+  formatTypeScript,
+  saveFile,
+  makeRelativePath,
 } from './utils';
 import type {
   SchemaPatcher,
@@ -157,9 +160,12 @@ export async function openapiToTsJsonSchema({
     metaData: { schemas: schemaMetaDataMap },
   };
 
-  // Process plugins
+  // Execute plugins
   for (const plugin of plugins) {
-    await plugin(returnPayload);
+    await plugin({
+      ...returnPayload,
+      utils: { makeRelativePath, formatTypeScript, saveFile },
+    });
   }
 
   if (!silent) {

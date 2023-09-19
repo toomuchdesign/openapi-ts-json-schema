@@ -2,6 +2,7 @@ import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
+import type { makeRelativePath, formatTypeScript, saveFile } from './utils';
 
 /**
  * @prop `schemaFileName` - Valid filename for given schema (without extension). Eg: `"MySchema"`
@@ -34,6 +35,14 @@ export type ReturnPayload = {
   metaData: { schemas: SchemaMetaDataMap };
 };
 
+type PluginInput = ReturnPayload & {
+  utils: {
+    makeRelativePath: typeof makeRelativePath;
+    formatTypeScript: typeof formatTypeScript;
+    saveFile: typeof saveFile;
+  };
+};
+
 export type Plugin<Options = void> = (
   options: Options,
-) => (args: ReturnPayload) => Promise<void>;
+) => (input: PluginInput) => Promise<void>;

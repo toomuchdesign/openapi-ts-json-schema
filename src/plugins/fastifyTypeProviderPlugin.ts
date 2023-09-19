@@ -1,11 +1,10 @@
-import { makeRelativePath, formatTypeScript, saveFile } from '../utils';
 import type { Plugin, SchemaMetaData } from '../types';
 
 const FILE_NAME = 'fastifyTypeProvider.ts';
 
 const fastifyTypeProviderPlugin: Plugin =
   () =>
-  async ({ outputPath, metaData }) => {
+  async ({ outputPath, metaData, utils }) => {
     const refSchemaMetaData: SchemaMetaData[] = [];
     metaData.schemas.forEach((schema) => {
       if (schema.isRef) {
@@ -16,7 +15,7 @@ const fastifyTypeProviderPlugin: Plugin =
     const schemas = refSchemaMetaData.map(
       ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId }) => {
         return {
-          importPath: makeRelativePath({
+          importPath: utils.makeRelativePath({
             fromDirectory: outputPath,
             to: schemaAbsoluteImportPath,
           }),
@@ -40,7 +39,7 @@ const fastifyTypeProviderPlugin: Plugin =
 
     // Generate a TS tuple type containing the types of all $ref schema found
     output += `\n\n
-    export type References = [
+    export type RefSchemas = [
       ${schemas
         .map((schema) => `typeof ${schema.schemaUniqueName}WithId`)
         .join(',')}
@@ -49,12 +48,12 @@ const fastifyTypeProviderPlugin: Plugin =
     // Generate an array af all $ref schema
     // @TODO make selected schemas configurable
     output += `\n\n
-    export const referenceSchemas = [
+    export const refSchemas = [
       ${schemas.map((schema) => `${schema.schemaUniqueName}WithId`).join(',')}
   ];`;
 
-    const formattedOutput = await formatTypeScript(output);
-    await saveFile({
+    const formattedOutput = await utils.formatTypeScript(output);
+    await utils.saveFile({
       path: [outputPath, FILE_NAME],
       data: formattedOutput,
     });
