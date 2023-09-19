@@ -39,7 +39,7 @@ const fastifyTypeProviderPlugin: Plugin =
 
     // Generate a TS tuple type containing the types of all $ref schema found
     output += `\n\n
-    export type References = [
+    export type RefSchemas = [
       ${schemas
         .map((schema) => `typeof ${schema.schemaUniqueName}WithId`)
         .join(',')}
@@ -48,7 +48,7 @@ const fastifyTypeProviderPlugin: Plugin =
     // Generate an array af all $ref schema
     // @TODO make selected schemas configurable
     output += `\n\n
-    export const referenceSchemas = [
+    export const refSchemas = [
       ${schemas.map((schema) => `${schema.schemaUniqueName}WithId`).join(',')}
   ];`;
 

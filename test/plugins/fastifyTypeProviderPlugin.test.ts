@@ -43,13 +43,13 @@ describe('fastifyTypeProviderPlugin plugin', () => {
         $id: "#/components/months/February",
       } as const;
 
-      export type References = [
+      export type RefSchemas = [
         typeof componentsSchemasAnswerWithId,
         typeof componentsMonthsJanuaryWithId,
         typeof componentsMonthsFebruaryWithId,
       ];
 
-      export const referenceSchemas = [
+      export const refSchemas = [
         componentsSchemasAnswerWithId,
         componentsMonthsJanuaryWithId,
         componentsMonthsFebruaryWithId,
@@ -71,7 +71,7 @@ describe('fastifyTypeProviderPlugin plugin', () => {
       path.resolve(outputPath, 'fastifyTypeProvider')
     );
 
-    expect(actualParsed.referenceSchemas).toEqual([
+    expect(actualParsed.refSchemas).toEqual([
       { ...answerSchema.default, $id: '#/components/schemas/Answer' },
       { ...januarySchema.default, $id: '#/components/months/January' },
       { ...februarySchema.default, $id: '#/components/months/February' },
