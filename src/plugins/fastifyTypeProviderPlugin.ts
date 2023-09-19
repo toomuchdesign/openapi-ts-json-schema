@@ -5,14 +5,12 @@ const FILE_NAME = 'fastifyTypeProvider.ts';
 const fastifyTypeProviderPlugin: Plugin =
   () =>
   async ({ outputPath, metaData, utils }) => {
-    const refSchemaMetaData: SchemaMetaData[] = [];
-    metaData.schemas.forEach((schema) => {
-      if (schema.isRef) {
-        refSchemaMetaData.push(schema);
-      }
-    });
+    // Meta data of the schemas used as $refs
+    const refSchemaMetaData = [...metaData.schemas]
+      .filter(([id, schema]) => schema.isRef)
+      .map(([id, schema]) => schema);
 
-    const schemas = refSchemaMetaData.map(
+    const refSchemas = refSchemaMetaData.map(
       ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId }) => {
         return {
           importPath: utils.makeRelativePath({
@@ -25,33 +23,37 @@ const fastifyTypeProviderPlugin: Plugin =
       },
     );
 
+    // Generate $ref JSON refSchemas import statements
     let output = '';
-
-    schemas.forEach((schema) => {
+    refSchemas.forEach((schema) => {
       output += `\n import ${schema.schemaUniqueName} from "${schema.importPath}";`;
     });
 
+    // Generate $ref JSON schema objects with $id prop
     output += '\n\n';
-
-    schemas.forEach((schema) => {
+    refSchemas.forEach((schema) => {
       output += `\n const ${schema.schemaUniqueName}WithId = {...${schema.schemaUniqueName}, $id: "${schema.schemaId}"} as const;`;
     });
 
-    // Generate a TS tuple type containing the types of all $ref schema found
+    // RefSchemas type: generate TS tuple type containing the types of all $ref JSON schema
     output += `\n\n
     export type RefSchemas = [
-      ${schemas
+      ${refSchemas
         .map((schema) => `typeof ${schema.schemaUniqueName}WithId`)
         .join(',')}
-  ];`;
+    ];`;
 
-    // Generate an array af all $ref schema
-    // @TODO make selected schemas configurable
+    // refSchemas: generate an array of all $ref JSON schema
     output += `\n\n
     export const refSchemas = [
-      ${schemas.map((schema) => `${schema.schemaUniqueName}WithId`).join(',')}
-  ];`;
+      ${refSchemas
+        .map((schema) => `${schema.schemaUniqueName}WithId`)
+        .join(',')}
+    ];`;
 
+    // @TODO Add a way to append to refSchemas a configurable set of other schemas
+
+    // Format and save file
     const formattedOutput = await utils.formatTypeScript(output);
     await utils.saveFile({
       path: [outputPath, FILE_NAME],

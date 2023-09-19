@@ -110,3 +110,5 @@ await openapiToTsJsonSchema({
   plugins: [myPlugin({ optionOne: 'foo', optionTwo: 'bar' })],
 });
 ```
+
+Take a look at [`fastifyTypeProviderPlugin` implementation](../src/plugins/fastifyTypeProviderPlugin.ts) to get an idea.
