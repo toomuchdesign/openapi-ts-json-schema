@@ -11,10 +11,19 @@ This plugin is specifically designed to use Fastify and its [`json-schema-to-ts`
 
 No plugins are needed to use Fastify's `json-schema-to-ts` type provider with `refHandling` === "inline" or "import".
 
-The plugin generates a `<outputPath>/fastifyTypeProvider.ts` TS file exposing:
+The plugin generates a `<outputPath>/fastify-type-provider.ts.ts` TS file exposing:
 
-- `refSchemas`: an array containing all the `$ref` schemas found provided with the relevant `$id` property necessary to register schemas with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema)
 - `RefSchemas` TS type specifically built to enable `json-schema-to-ts` to resolve `$ref` schema types
+- `refSchemas`: an array containing all the `$ref` schemas found provided with the relevant `$id` property necessary to register schemas with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema)
+- `sharedSchemas`: an array of the extra user-selected schemas (via `sharedSchemasFilter` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as shared openAPI components
+
+### Options
+
+| Property                | Type                                         | Description                                                                                                                                                                                  | Default |
+| ----------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **sharedSchemasFilter** | `({schemaId}: {schemaId:string}) => boolean` | Expose a `sharedSchemas` array with extra user-selected schemas to be registered with `fastify.addSchema`. Provided function is used to filter all available non-$ref generated JSON schemas | -       |
+
+### Example
 
 Generate TypeScript JSON schemas:
 
@@ -29,7 +38,13 @@ await openapiToTsJsonSchema({
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   refHandling: 'keep',
-  plugins: [fastifyTypeProviderPlugin()],
+  plugins: [
+    fastifyTypeProviderPlugin({
+      // Optional
+      sharedSchemasFilter: ({ schemaId }) =>
+        schemaId.startsWith('#/components/schemas'),
+    }),
+  ],
 });
 ```
 
@@ -41,7 +56,8 @@ import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts
 import {
   RefSchemas,
   refSchemas,
-} from 'path/to/generated/schemas/fastifyTypeProvider';
+  sharedSchemas,
+} from 'path/to/generated/schemas/fastify-type-provider.ts';
 
 // Enable @fastify/type-provider-json-schema-to-ts to resolve all found `$ref` schema types
 const server =
@@ -49,11 +65,13 @@ const server =
     JsonSchemaToTsProvider<JsonSchemaToTsProvider<{ references: RefSchemas }>>
   >();
 
-/**
- * Register `$ref` schemas individually so that they `$ref`s get resolved runtime.
- * This also allows @fastify.swagger to re-expose the schemas as shared components.
- */
+// Register `$ref` schemas individually so that they `$ref`s get resolved runtime.
 refSchemas.forEach((schema) => {
+  fastify.addSchema(schema);
+});
+
+// Register other schemas to let @fastify.swagger re-export them as shared openAPI components
+sharedSchemas.forEach((schema) => {
   fastify.addSchema(schema);
 });
 

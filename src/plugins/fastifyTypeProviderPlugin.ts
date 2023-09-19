@@ -1,37 +1,48 @@
-import type { Plugin, SchemaMetaData } from '../types';
+import type { Plugin } from '../types';
 
-const FILE_NAME = 'fastifyTypeProvider.ts';
+const FILE_NAME = 'fastify-type-provider.ts';
 
-const fastifyTypeProviderPlugin: Plugin =
-  () =>
+const fastifyTypeProviderPlugin: Plugin<
+  {
+    sharedSchemasFilter?: ({ schemaId }: { schemaId: string }) => boolean;
+  } | void
+> =
+  ({ sharedSchemasFilter = () => false } = {}) =>
   async ({ outputPath, metaData, utils }) => {
-    // Meta data of the schemas used as $refs
-    const refSchemaMetaData = [...metaData.schemas]
-      .filter(([id, schema]) => schema.isRef)
-      .map(([id, schema]) => schema);
+    // Derive the schema data necessary to generate the declarations
+    const allSchemas = [...metaData.schemas]
+      .map(([id, schema]) => schema)
+      .map(
+        ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId, isRef }) => {
+          return {
+            importPath: utils.makeRelativePath({
+              fromDirectory: outputPath,
+              to: schemaAbsoluteImportPath,
+            }),
+            schemaUniqueName,
+            schemaId,
+            isRef,
+          };
+        },
+      );
 
-    const refSchemas = refSchemaMetaData.map(
-      ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId }) => {
-        return {
-          importPath: utils.makeRelativePath({
-            fromDirectory: outputPath,
-            to: schemaAbsoluteImportPath,
-          }),
-          schemaUniqueName,
-          schemaId,
-        };
-      },
+    // Separate schemas used as $refs from the others
+    const refSchemas = allSchemas.filter((schema) => schema.isRef);
+    const nonRefSchemas = allSchemas.filter((schema) => !schema.isRef);
+    const sharedSchemas = nonRefSchemas.filter(({ schemaId }) =>
+      sharedSchemasFilter({ schemaId }),
     );
 
-    // Generate $ref JSON refSchemas import statements
     let output = '';
-    refSchemas.forEach((schema) => {
+
+    // Generate JSON schemas import statements
+    [...refSchemas, ...sharedSchemas].forEach((schema) => {
       output += `\n import ${schema.schemaUniqueName} from "${schema.importPath}";`;
     });
 
-    // Generate $ref JSON schema objects with $id prop
+    // Generate JSON schema objects with $id prop
     output += '\n\n';
-    refSchemas.forEach((schema) => {
+    [...refSchemas, ...sharedSchemas].forEach((schema) => {
       output += `\n const ${schema.schemaUniqueName}WithId = {...${schema.schemaUniqueName}, $id: "${schema.schemaId}"} as const;`;
     });
 
@@ -43,7 +54,7 @@ const fastifyTypeProviderPlugin: Plugin =
         .join(',')}
     ];`;
 
-    // refSchemas: generate an array of all $ref JSON schema
+    // refSchemas: generate an array of all $ref JSON schema to be registered with `fastify.addSchema`
     output += `\n\n
     export const refSchemas = [
       ${refSchemas
@@ -51,7 +62,13 @@ const fastifyTypeProviderPlugin: Plugin =
         .join(',')}
     ];`;
 
-    // @TODO Add a way to append to refSchemas a configurable set of other schemas
+    // sharedSchemas: generate an array of user-defined schemas to be registered with `fastify.addSchema`
+    output += `\n\n
+    export const sharedSchemas = [
+      ${sharedSchemas
+        .map((schema) => `${schema.schemaUniqueName}WithId`)
+        .join(',')}
+    ];`;
 
     // Format and save file
     const formattedOutput = await utils.formatTypeScript(output);
