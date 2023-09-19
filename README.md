@@ -102,9 +102,9 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
 
 ## Plugins
 
-`openapi-ts-json-schema` plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
+Plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
 
-`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/), and you can write your owns.
+`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/), but you can write your own.
 
 Read [plugins documentation 📖](./docs/plugins.md).
 
