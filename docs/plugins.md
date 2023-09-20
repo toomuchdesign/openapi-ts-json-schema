@@ -7,7 +7,7 @@
 
 ## Fastify type provider plugin
 
-This plugin is specifically designed to use Fastify and its [`json-schema-to-ts` type provider](https://github.com/fastify/fastify-type-provider-json-schema-to-ts) with JSON schemas generated with `refHandling` === "keep", where `$ref` values are not replaced.
+This plugin is an attempt to better integrate Fastify and its [`json-schema-to-ts` type provider](https://github.com/fastify/fastify-type-provider-json-schema-to-ts) with JSON schemas generated with `refHandling` === "keep", where `$ref` values are not replaced.
 
 No plugins are needed to use Fastify's `json-schema-to-ts` type provider with `refHandling` === "inline" or "import".
 
@@ -16,6 +16,13 @@ The plugin generates a `<outputPath>/fastify-type-provider.ts.ts` TS file exposi
 - `RefSchemas` TS type specifically built to enable `json-schema-to-ts` to resolve `$ref` schema types
 - `refSchemas`: an array containing all the `$ref` schemas found provided with the relevant `$id` property necessary to register schemas with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema)
 - `sharedSchemas`: an array of the extra user-selected schemas (via `sharedSchemasFilter` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as shared openAPI components
+
+### Notes
+
+Please consider that `@fastify/swagger` currently comes with some limitions. Eg:
+
+- no support for `$ref`s in array [🔗](https://github.com/fastify/fastify-swagger/issues/612)
+- `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs)
 
 ### Options
 
@@ -62,7 +69,7 @@ import {
 // Enable @fastify/type-provider-json-schema-to-ts to resolve all found `$ref` schema types
 const server =
   fastify().withTypeProvider<
-    JsonSchemaToTsProvider<JsonSchemaToTsProvider<{ references: RefSchemas }>>
+    JsonSchemaToTsProvider<{ references: RefSchemas }>
   >();
 
 // Register `$ref` schemas individually so that they `$ref`s get resolved runtime.

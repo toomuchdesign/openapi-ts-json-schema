@@ -1,0 +1,37 @@
+export default {
+  get: {
+    summary: "Info for a specific pet",
+    operationId: "showPetById",
+    tags: ["pets"],
+    parameters: {
+      path: {
+        properties: {
+          petId: {
+            type: "string",
+          },
+        },
+        required: ["petId"],
+      },
+    },
+    responses: {
+      "200": {
+        description: "Expected response to a valid request",
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/Pet" },
+          },
+        },
+      },
+      default: {
+        description: "unexpected error",
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/Error" },
+          },
+        },
+      },
+    },
+  },
+} as const;
+
+export const $id = "#/paths/pets|{petId}";
