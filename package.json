@@ -49,7 +49,7 @@
     "pre-commit": "npm run source:check && npm test -- --run"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^10.1.0",
+    "@apidevtools/json-schema-ref-parser": "^11.1.0",
     "@openapi-contrib/openapi-schema-to-json-schema": "^5.1.0",
     "comment-json": "^4.2.3",
     "filenamify": "^4.3.0",
