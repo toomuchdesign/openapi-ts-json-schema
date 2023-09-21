@@ -1,8 +1,8 @@
 import type { Plugin } from '../types';
 
-const FILE_NAME = 'fastify-type-provider.ts';
+const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 
-const fastifyTypeProviderPlugin: Plugin<
+const fastifyIntegrationPlugin: Plugin<
   {
     sharedSchemasFilter?: ({ schemaId }: { schemaId: string }) => boolean;
   } | void
@@ -73,9 +73,9 @@ const fastifyTypeProviderPlugin: Plugin<
     // Format and save file
     const formattedOutput = await utils.formatTypeScript(output);
     await utils.saveFile({
-      path: [outputPath, FILE_NAME],
+      path: [outputPath, OUTPUT_FILE_NAME],
       data: formattedOutput,
     });
   };
 
-export default fastifyTypeProviderPlugin;
+export default fastifyIntegrationPlugin;

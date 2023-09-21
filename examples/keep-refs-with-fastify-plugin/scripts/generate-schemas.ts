@@ -1,5 +1,5 @@
 import path from 'path';
-import { openapiToTsJsonSchema, fastifyTypeProviderPlugin } from '../../../src';
+import { openapiToTsJsonSchema, fastifyIntegrationPlugin } from '../../../src';
 
 async function generate() {
   await openapiToTsJsonSchema({
@@ -10,7 +10,7 @@ async function generate() {
     definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
     refHandling: 'keep',
     plugins: [
-      fastifyTypeProviderPlugin({
+      fastifyIntegrationPlugin({
         sharedSchemasFilter: ({ schemaId }) =>
           schemaId.startsWith('#/components/schemas'),
       }),
