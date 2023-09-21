@@ -1,0 +1,9 @@
+{
+  "name": "keep-refs-with-fastify-plugin",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "generate-schemas": "ts-node ./scripts/generate-schemas.ts"
+  }
+}
