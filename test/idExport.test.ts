@@ -19,7 +19,7 @@ describe('$id export', async () => {
       path.resolve(outputPath, 'components/months/February')
     );
 
-    expect(januarySchema['$id']).toBe('#/components/months/January');
-    expect(februarySchema['$id']).toBe('#/components/months/February');
+    expect(januarySchema['$id']).toBe('/components/months/January');
+    expect(februarySchema['$id']).toBe('/components/months/February');
   });
 });

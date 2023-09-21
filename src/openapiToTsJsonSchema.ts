@@ -117,7 +117,7 @@ export async function openapiToTsJsonSchema({
   if (refHandling === 'import' || refHandling === 'keep') {
     for (const [ref, schema] of inlinedRefs) {
       addSchemaToMetaData({
-        id: ref,
+        ref,
         schemaMetaDataMap,
         schema,
         outputPath,
@@ -133,19 +133,19 @@ export async function openapiToTsJsonSchema({
     const definitionSchemas = get(jsonSchema, definitionPath);
     for (const schemaName in definitionSchemas) {
       // Create expected OpenAPI ref
-      const id = pathToRef({
+      const ref = pathToRef({
         schemaRelativeDirName: definitionPath,
         schemaName,
       });
 
       addSchemaToMetaData({
-        id,
+        ref,
         schemaMetaDataMap,
         schema: definitionSchemas[schemaName],
         outputPath,
         schemaPatcher,
         refHandling,
-        isRef: inlinedRefs.has(id),
+        isRef: inlinedRefs.has(ref),
       });
     }
   }

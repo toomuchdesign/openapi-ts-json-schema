@@ -12,7 +12,7 @@ async function generate() {
     plugins: [
       fastifyIntegrationPlugin({
         sharedSchemasFilter: ({ schemaId }) =>
-          schemaId.startsWith('#/components/schemas'),
+          schemaId.startsWith('/components/schemas'),
       }),
     ],
   });

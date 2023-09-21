@@ -19,10 +19,14 @@ The plugin generates a `<outputPath>/fastify-integration.ts` TS file exposing:
 
 ### Notes
 
+This plugin should be considered bleeding edge. I'm still figuring out the best way to integrate `open-ts-json-schema` output with Fastify.
+
 Please consider that `@fastify/swagger` currently comes with some limitations. Eg:
 
 - no support for `$ref`s in array [🔗](https://github.com/fastify/fastify-swagger/issues/612)
 - `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs)
+
+...therefore the OpenAPI specification resulting from your Fastify application could be affected.
 
 ### Options
 
