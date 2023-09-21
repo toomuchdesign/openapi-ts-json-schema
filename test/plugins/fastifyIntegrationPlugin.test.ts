@@ -2,23 +2,23 @@ import path from 'path';
 import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../../src';
-import { fastifyTypeProviderPlugin } from '../../src';
+import { fastifyIntegrationPlugin } from '../../src';
 import { fixtures, makeTestOutputPath } from '../test-utils';
 import { formatTypeScript } from '../../src/utils';
 
-describe('fastifyTypeProviderPlugin plugin', () => {
+describe('fastifyIntegration plugin', () => {
   it('generates expected file', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('plugin-fastify'),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
       refHandling: 'keep',
-      plugins: [fastifyTypeProviderPlugin()],
+      plugins: [fastifyIntegrationPlugin()],
       silent: true,
     });
 
     const actualAsText = await fs.readFile(
-      path.resolve(outputPath, 'fastify-type-provider.ts'),
+      path.resolve(outputPath, 'fastify-integration.ts'),
       {
         encoding: 'utf8',
       },
@@ -70,7 +70,7 @@ describe('fastifyTypeProviderPlugin plugin', () => {
       path.resolve(outputPath, 'components/months/February')
     );
     const actual = await import(
-      path.resolve(outputPath, 'fastify-type-provider')
+      path.resolve(outputPath, 'fastify-integration')
     );
 
     expect(actual.refSchemas).toEqual([
@@ -90,7 +90,7 @@ describe('fastifyTypeProviderPlugin plugin', () => {
         definitionPathsToGenerateFrom: ['components.months', 'paths'],
         refHandling: 'keep',
         plugins: [
-          fastifyTypeProviderPlugin({
+          fastifyIntegrationPlugin({
             sharedSchemasFilter: ({ schemaId }) =>
               schemaId.startsWith('#/components/months'),
           }),
@@ -99,7 +99,7 @@ describe('fastifyTypeProviderPlugin plugin', () => {
       });
 
       const actual = await import(
-        path.resolve(outputPath, 'fastify-type-provider')
+        path.resolve(outputPath, 'fastify-integration')
       );
 
       // refSchemas containing only $ref schemas

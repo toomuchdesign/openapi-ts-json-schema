@@ -2,16 +2,16 @@
 
 `openapi-ts-json-schema` plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
 
-- [Fastify type provider plugin](#fastify-type-provider-plugin)
+- [Fastify integration plugin](#fastify-integration-plugin)
 - [Write your own plugin](#write-your-own-plugin)
 
-## Fastify type provider plugin
+## Fastify integration plugin
 
 This plugin is an attempt to better integrate Fastify and its [`json-schema-to-ts` type provider](https://github.com/fastify/fastify-type-provider-json-schema-to-ts) with JSON schemas generated with `refHandling` === "keep", where `$ref` values are not replaced.
 
 No plugins are needed to use Fastify's `json-schema-to-ts` type provider with `refHandling` === "inline" or "import".
 
-The plugin generates a `<outputPath>/fastify-type-provider.ts.ts` TS file exposing:
+The plugin generates a `<outputPath>/fastify-integration.ts` TS file exposing:
 
 - `RefSchemas` TS type specifically built to enable `json-schema-to-ts` to resolve `$ref` schema types
 - `refSchemas`: an array containing all the `$ref` schemas found provided with the relevant `$id` property necessary to register schemas with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema)
@@ -19,7 +19,7 @@ The plugin generates a `<outputPath>/fastify-type-provider.ts.ts` TS file exposi
 
 ### Notes
 
-Please consider that `@fastify/swagger` currently comes with some limitions. Eg:
+Please consider that `@fastify/swagger` currently comes with some limitations. Eg:
 
 - no support for `$ref`s in array [🔗](https://github.com/fastify/fastify-swagger/issues/612)
 - `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs)
@@ -37,7 +37,7 @@ Generate TypeScript JSON schemas:
 ```ts
 import {
   openapiToTsJsonSchema,
-  fastifyTypeProviderPlugin,
+  fastifyIntegrationPlugin,
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
@@ -46,7 +46,7 @@ await openapiToTsJsonSchema({
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   refHandling: 'keep',
   plugins: [
-    fastifyTypeProviderPlugin({
+    fastifyIntegrationPlugin({
       // Optional
       sharedSchemasFilter: ({ schemaId }) =>
         schemaId.startsWith('#/components/schemas'),
@@ -64,7 +64,7 @@ import {
   RefSchemas,
   refSchemas,
   sharedSchemas,
-} from 'path/to/generated/schemas/fastify-type-provider.ts';
+} from 'path/to/generated/schemas/fastify-integration.ts';
 
 // Enable @fastify/type-provider-json-schema-to-ts to resolve all found `$ref` schema types
 const server =
@@ -136,4 +136,4 @@ await openapiToTsJsonSchema({
 });
 ```
 
-Take a look at [`fastifyTypeProviderPlugin` implementation](../src/plugins/fastifyTypeProviderPlugin.ts) to get an idea.
+Take a look at [`fastifyIntegrationPlugin`](../src/plugins/fastifyIntegrationPlugin.ts) to get an idea.
