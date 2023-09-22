@@ -1,5 +1,20 @@
 # openapi-ts-json-schema
 
+## 0.4.0
+
+### Minor Changes
+
+- 905ef5a: Remove `experimentalImportRefs` option in favour of `refHandling`
+- b5688ad: Expose `metaData` return property holding generated schemas meta data
+- 79feb32: Introduce `plugins` option
+- 85ca0e8: Add "keep" `refHandling` option, to preserve $ref objects
+- 62ded69: Add `fastifyIntegrationPlugin` plugin
+
+### Patch Changes
+
+- 9e0a222: Fix `isRef` meta data prop for inline `refHandling` option
+- 27404ae: Fix external local `$ref`s resolution
+
 ## 0.3.0
 
 ### Minor Changes
