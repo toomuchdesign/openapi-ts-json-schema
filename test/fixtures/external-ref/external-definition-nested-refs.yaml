@@ -1,0 +1,9 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    BarFromRef:
+      $ref: './external-definition.yaml#/components/schemas/Bar'

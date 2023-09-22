@@ -8,7 +8,15 @@ components:
     LocalDefinitionReferencingExternal:
       type: object
       properties:
-        remoteDefinition:
-          $ref: '#/components/schemas/ExternalDefinition'
-    ExternalDefinition:
-      $ref: './external-definition-1.yaml#/components/schemas/Foo1'
+        externalDefinitionWithRef:
+          $ref: '#/components/schemas/ExternalDefinitionWithRef'
+        externalDefinitionWholeDocument:
+          $ref: '#/components/schemas/ExternalDefinitionWholeDocument'
+        externalDefinitionNestedRefs:
+          $ref: '#/components/schemas/ExternalDefinitionNestedRefs'
+    ExternalDefinitionWithRef:
+      $ref: './external-definition.yaml#/components/schemas/Foo'
+    ExternalDefinitionWholeDocument:
+      $ref: './external-definition-whole-document.yaml'
+    ExternalDefinitionNestedRefs:
+      $ref: './external-definition-nested-refs.yaml#/components/schemas/BarFromRef'
