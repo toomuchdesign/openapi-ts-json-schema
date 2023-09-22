@@ -1,8 +1,6 @@
-import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'node:path';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
-import YAML from 'yaml';
 import get from 'lodash.get';
 import {
   clearFolder,
@@ -68,10 +66,7 @@ export async function openapiToTsJsonSchema({
 
   await clearFolder(outputPath);
 
-  const openApiSchema = await fs.readFile(openApiSchemaPath, 'utf-8');
-  const jsonOpenApiSchema: Record<string, any> = YAML.parse(openApiSchema);
-  // Resolve/inline remote and URL $ref's (keeping local ones "#/...")
-  const bundledOpenApiSchema = await $RefParser.bundle(jsonOpenApiSchema);
+  const bundledOpenApiSchema = await $RefParser.bundle(openApiSchemaPath);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
