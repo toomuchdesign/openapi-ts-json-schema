@@ -18,7 +18,7 @@ import type {
  * Just an utility function to add entries to SchemaMetaDataMap Map keyed by ref
  */
 export function addSchemaToMetaData({
-  id,
+  ref,
   schemaMetaDataMap,
   schema,
   isRef,
@@ -27,7 +27,7 @@ export function addSchemaToMetaData({
   schemaPatcher,
   refHandling,
 }: {
-  id: string;
+  ref: string;
   schemaMetaDataMap: SchemaMetaDataMap;
   schema: JSONSchema;
   isRef: boolean;
@@ -36,9 +36,9 @@ export function addSchemaToMetaData({
   refHandling: 'inline' | 'import' | 'keep';
 }): void {
   // Do not override existing meta info of inlined schemas
-  if (schemaMetaDataMap.has(id) === false) {
-    const { schemaRelativeDirName, schemaName } = refToPath(id);
-    const schemaRelativePath = path.join(schemaRelativeDirName, schemaName);
+  if (schemaMetaDataMap.has(ref) === false) {
+    const { schemaRelativeDirName, schemaName, schemaRelativePath } =
+      refToPath(ref);
     const originalSchema =
       refHandling === 'import' || refHandling === 'keep'
         ? replaceInlinedRefsWithStringPlaceholder(schema)
@@ -52,7 +52,7 @@ export function addSchemaToMetaData({
     );
 
     const metaInfo: SchemaMetaData = {
-      schemaId: id,
+      schemaId: `/${schemaRelativePath}`,
       schemaFileName,
       schemaAbsoluteDirName,
       schemaAbsoluteImportPath,
@@ -61,6 +61,6 @@ export function addSchemaToMetaData({
       schema: patchedSchema,
       isRef,
     };
-    schemaMetaDataMap.set(id, metaInfo);
+    schemaMetaDataMap.set(ref, metaInfo);
   }
 }

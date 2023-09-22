@@ -52,6 +52,16 @@ It's quite counterintuitive since refs gets dereferenced to be later re-referenc
 
 In a future refactoring we might consider skipping dereferencing for this `refHandling` option.
 
+## OpenAPI $ref vs JSON schema $id
+
+- [OpenAPI `$ref`s documentation](https://swagger.io/docs/specification/using-ref/)
+- [JSON schema `$ref`s documentation](https://json-schema.org/understanding-json-schema/structuring.html#ref)
+- [JSON schema Compound Schema Document `$id` documentation](https://json-schema.org/understanding-json-schema/structuring.html#bundling)
+
+Each generated JSON schema is shipped with an inferred JSON schema Compound Schema Document `$id`.
+
+We are currently assuming that a OpenAPI `$ref` like `#/components/schemas/MySchema` should be translated into the following JSON schema `$ref`/`$id`: `/components/schemas/MySchema`.
+
 ## TypeScript cannot import json as const
 
 We are currently forced to generate `.ts` files with `as const` assertions since [TypeScript cannot import JSON or any other file as const](https://github.com/ThomasAribart/json-schema-to-ts/blob/v2.10.0/documentation/FAQs/does-json-schema-to-ts-work-on-json-file-schemas.md).

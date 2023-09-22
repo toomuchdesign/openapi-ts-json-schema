@@ -4,4 +4,4 @@ export default {
   items: { $ref: "#/components/schemas/Pet" },
 } as const;
 
-export const $id = "#/components/schemas/Pets";
+export const $id = "/components/schemas/Pets";

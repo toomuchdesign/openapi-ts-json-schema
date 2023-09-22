@@ -7,6 +7,7 @@ import path from 'node:path';
  * @NOTE Remote and url refs should have been already resolved and inlined
  */
 export function refToPath(ref: string): {
+  schemaRelativePath: string;
   schemaRelativeDirName: string;
   schemaName: string;
 } {
@@ -20,6 +21,7 @@ export function refToPath(ref: string): {
   const schemaRelativeDirName = path.dirname(refPath);
 
   return {
+    schemaRelativePath: path.join(schemaRelativeDirName, schemaName),
     schemaRelativeDirName,
     schemaName,
   };

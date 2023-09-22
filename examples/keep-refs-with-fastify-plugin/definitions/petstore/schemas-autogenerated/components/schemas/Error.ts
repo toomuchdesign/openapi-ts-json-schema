@@ -14,4 +14,4 @@ export default {
   },
 } as const;
 
-export const $id = "#/components/schemas/Error";
+export const $id = "/components/schemas/Error";

@@ -7,6 +7,7 @@ describe('refToPath', () => {
     const expected = {
       schemaName: 'Foo',
       schemaRelativeDirName: 'components/schema',
+      schemaRelativePath: 'components/schema/Foo',
     };
 
     expect(actual).toEqual(expected);

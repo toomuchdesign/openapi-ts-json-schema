@@ -77,9 +77,11 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
   metaData: {
     // Meta data of the generated schemas
     schemas: Map<
+      // OpenAPI ref. Eg: "#/components/schemas/MySchema"
       string,
       {
         schemaId: string;
+        // JSON schema Compound Schema Document `$id`
         schemaFileName: string;
         // Valid filename for given schema (without extension).
         schemaAbsoluteDirName: string;
