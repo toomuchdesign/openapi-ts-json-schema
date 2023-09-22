@@ -61,5 +61,3 @@ export default {
     },
   },
 } as const;
-
-export const $id = "/paths/pets";

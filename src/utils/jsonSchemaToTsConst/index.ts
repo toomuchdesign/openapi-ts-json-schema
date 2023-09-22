@@ -36,9 +36,6 @@ export async function jsonSchemaToTsConst({
     });
   }
 
-  // Add $id named export
-  tsSchema = tsSchema + `\n\nexport const $id = "${metaData.schemaId}";`;
-
   const formattedSchema = await formatTypeScript(tsSchema);
   return formattedSchema;
 }
