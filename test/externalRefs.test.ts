@@ -12,28 +12,68 @@ describe('External $ref', () => {
       silent: true,
     });
 
-    const externalDefinitionSchema = await import(
-      path.resolve(outputPath, 'components/schemas/ExternalDefinition')
+    // $ref: './external-definition.yaml#/components/schemas/Foo1'
+    const externalDefinitionWithRefSchema = await import(
+      path.resolve(outputPath, 'components/schemas/ExternalDefinitionWithRef')
     );
 
-    expect(externalDefinitionSchema.default).toEqual({
-      description: 'External Foo 1 description',
+    expect(externalDefinitionWithRefSchema.default).toEqual({
+      description: 'External Foo description',
       type: ['string', 'null'],
       enum: ['yes', 'no', null],
     });
 
-    const localDefinitionReferencingExternalSchema = await import(
+    // $ref: './external-definition-whole-document.yaml'
+    const externalDefinitionWholeDocumentSchema = await import(
+      path.resolve(
+        outputPath,
+        'components/schemas/ExternalDefinitionWholeDocument',
+      )
+    );
+
+    expect(externalDefinitionWholeDocumentSchema.default).toEqual({
+      description: 'External definition whole document',
+      type: ['string', 'null'],
+      enum: ['yes', 'no', null],
+    });
+
+    // $ref: './external-definition-nested-refs.yaml#/components/schemas/BarFromRef'
+    const externalDefinitionNestedRefsSchema = await import(
+      path.resolve(
+        outputPath,
+        'components/schemas/ExternalDefinitionNestedRefs',
+      )
+    );
+
+    expect(externalDefinitionNestedRefsSchema.default).toEqual({
+      description: 'External Bar description',
+      type: ['string', 'null'],
+      enum: ['yes', 'no', null],
+    });
+
+    // Local definition referencing external schemas
+    const localDefinitionReferencingExternalSchemas = await import(
       path.resolve(
         outputPath,
         'components/schemas/LocalDefinitionReferencingExternal',
       )
     );
 
-    expect(localDefinitionReferencingExternalSchema.default).toEqual({
+    expect(localDefinitionReferencingExternalSchemas.default).toEqual({
       type: 'object',
       properties: {
-        remoteDefinition: {
-          description: 'External Foo 1 description',
+        externalDefinitionWithRef: {
+          description: 'External Foo description',
+          type: ['string', 'null'],
+          enum: ['yes', 'no', null],
+        },
+        externalDefinitionWholeDocument: {
+          description: 'External definition whole document',
+          type: ['string', 'null'],
+          enum: ['yes', 'no', null],
+        },
+        externalDefinitionNestedRefs: {
+          description: 'External Bar description',
           type: ['string', 'null'],
           enum: ['yes', 'no', null],
         },

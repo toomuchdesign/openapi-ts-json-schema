@@ -1,0 +1,6 @@
+description: External definition whole document
+type: string
+nullable: true
+enum:
+  - yes
+  - no
