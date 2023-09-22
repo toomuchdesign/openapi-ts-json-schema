@@ -45,7 +45,7 @@ import {
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
-  openApiSchema: path.resolve(fixtures, 'path/to/open-api-spec.yaml'),
+  openApiSchema: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   refHandling: 'keep',
@@ -53,61 +53,13 @@ await openapiToTsJsonSchema({
     fastifyIntegrationPlugin({
       // Optional
       sharedSchemasFilter: ({ schemaId }) =>
-        schemaId.startsWith('#/components/schemas'),
+        schemaId.startsWith('/components/schemas'),
     }),
   ],
 });
 ```
 
-Setup `Fastify` and `json-schema-to-ts` type provider:
-
-```ts
-import fastify from 'fastify';
-import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
-import {
-  RefSchemas,
-  refSchemas,
-  sharedSchemas,
-} from 'path/to/generated/schemas/fastify-integration.ts';
-
-// Enable @fastify/type-provider-json-schema-to-ts to resolve all found `$ref` schema types
-const server =
-  fastify().withTypeProvider<
-    JsonSchemaToTsProvider<{ references: RefSchemas }>
-  >();
-
-// Register `$ref` schemas individually so that they `$ref`s get resolved runtime.
-refSchemas.forEach((schema) => {
-  fastify.addSchema(schema);
-});
-
-// Register other schemas to let @fastify.swagger re-export them as shared openAPI components
-sharedSchemas.forEach((schema) => {
-  fastify.addSchema(schema);
-});
-
-// Reference the shared schema like the following
-fastify.get(
-  '/profile',
-  {
-    schema: {
-      body: {
-        type: 'object',
-        properties: {
-          user: {
-            $ref: '#/components/schemas/User',
-          },
-        },
-        required: ['user'],
-      },
-    } as const,
-  },
-  (req) => {
-    // givenName and familyName will be correctly typed as strings!
-    const { givenName, familyName } = req.body.user;
-  },
-);
-```
+Check out the [Fastify integration plugin example](../examples/fastify-integration-plugin/) to get an idea to how to setup `Fastify` and `json-schema-to-ts` type provider.
 
 ## Write your own plugin
 

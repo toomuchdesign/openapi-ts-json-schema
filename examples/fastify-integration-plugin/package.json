@@ -1,5 +1,5 @@
 {
-  "name": "keep-refs-with-fastify-plugin",
+  "name": "fastify-integration-plugin",
   "private": true,
   "version": "0.0.0",
   "scripts": {
