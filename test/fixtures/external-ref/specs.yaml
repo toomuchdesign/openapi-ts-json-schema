@@ -11,4 +11,4 @@ components:
         remoteDefinition:
           $ref: '#/components/schemas/ExternalDefinition'
     ExternalDefinition:
-      $ref: 'test/fixtures/external-ref/external-definition.yaml#/components/schemas/Foo'
+      $ref: './external-definition-1.yaml#/components/schemas/Foo1'

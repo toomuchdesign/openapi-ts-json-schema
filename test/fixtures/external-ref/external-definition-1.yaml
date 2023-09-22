@@ -5,15 +5,15 @@ info:
   version: 1.0.0
 components:
   schemas:
-    Foo:
-      description: External Foo description
+    Foo1:
+      description: External Foo 1 description
       type: string
       nullable: true
       enum:
         - yes
         - no
-    Bar:
-      description: External Bar description
+    Bar1:
+      description: External Bar 1 description
       type: string
       nullable: true
       enum:

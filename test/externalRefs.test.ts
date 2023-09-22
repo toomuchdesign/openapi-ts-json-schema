@@ -17,7 +17,7 @@ describe('External $ref', () => {
     );
 
     expect(externalDefinitionSchema.default).toEqual({
-      description: 'External Foo description',
+      description: 'External Foo 1 description',
       type: ['string', 'null'],
       enum: ['yes', 'no', null],
     });
@@ -33,7 +33,7 @@ describe('External $ref', () => {
       type: 'object',
       properties: {
         remoteDefinition: {
-          description: 'External Foo description',
+          description: 'External Foo 1 description',
           type: ['string', 'null'],
           enum: ['yes', 'no', null],
         },
