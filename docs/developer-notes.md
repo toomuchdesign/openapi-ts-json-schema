@@ -68,6 +68,23 @@ We are currently forced to generate `.ts` files with `as const` assertions since
 
 In [this GitHub thread](https://github.com/microsoft/TypeScript/issues/32063), TypeScript maintainers discuss the topic in depth.
 
+## Handling multiple OpenApi definitions
+
+There are currently at least 2 open points regarding handling multiple OpenApi definition files:
+
+- External `#ref`s being inlined and possibly duplicated, loosing ability to reference shared components
+- Merge multiple different OpenApi definitions consistently.
+
+External `$ref`s are currently inlined with `@apidevtools/json-schema-ref-parser`'s `bundle` method. We should investigate whether any OpenApi-specific library could provide a more flexible alternative:
+
+- [openapi-merger](https://github.com/kota65535/openapi-merger)
+- [swagger-merger](https://github.com/WindomZ/swagger-merger)
+- [swagger-combine](https://github.com/maxdome/swagger-combine)
+- [openapi-merge](https://github.com/robertmassaioli/openapi-merge)
+- [api-ref-resolver](https://github.com/apiture/api-ref-resolver)
+- [@iouring-engineering/openapi-merge](https://github.com/iouring-engineering/openapi-merge)
+- [@stoplight/json-ref-resolver](https://www.npmjs.com/package/@stoplight/json-ref-resolver)
+
 ## Debugging tests
 
 Comment [this line](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/vitest.setup.mts#L17) out to disable schemas cleanup after tests and check the generated files.
