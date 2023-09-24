@@ -16,6 +16,8 @@ components:
           $ref: '#/components/schemas/ExternalDefinitionNestedRefs'
     ExternalDefinitionWithRef:
       $ref: './external-definition.yaml#/components/schemas/Foo'
+    ExternalDefinitionWithSameRef:
+      $ref: './external-definition.yaml#/components/schemas/Foo'
     ExternalDefinitionWholeDocument:
       $ref: './external-definition-whole-document.yaml'
     ExternalDefinitionNestedRefs:
