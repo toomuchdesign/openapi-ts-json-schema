@@ -158,4 +158,27 @@ describe('refHandling option === "import"', () => {
 
     expect(actualFebruarySchemaFile).toMatch(expectedFebruarySchemaFile);
   });
+
+  describe('Alias definitions', () => {
+    it('re-exports original definition', async () => {
+      const { outputPath } = await openapiToTsJsonSchema({
+        openApiSchema: path.resolve(fixtures, 'alias-definitions/specs.yaml'),
+        outputPath: makeTestOutputPath('refHandling-import-alias-definitions'),
+        definitionPathsToGenerateFrom: ['components.schemas'],
+        silent: true,
+        refHandling: 'import',
+      });
+
+      const answerSchema = await import(
+        path.resolve(outputPath, 'components/schemas/Answer')
+      );
+
+      const answerAliasDefinition = await import(
+        path.resolve(outputPath, 'components/schemas/AnswerAliasDefinition')
+      );
+
+      expect(answerSchema.default).toEqual(answerAliasDefinition.default);
+      expect(answerSchema.default).toBe(answerAliasDefinition.default);
+    });
+  });
 });

@@ -1,5 +1,6 @@
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
+export type JSONSchemaWithPlaceholders = JSONSchema | string;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 import type { makeRelativePath, formatTypeScript, saveFile } from './utils';
@@ -11,7 +12,7 @@ import type { makeRelativePath, formatTypeScript, saveFile } from './utils';
  * @prop `schemaAbsoluteImportPath` - Absolute import path (without extension). Eg: `"/output/path/components/schemas/MySchema"`
  * @prop `schemaUniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @prop `schemaId` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
- * @prop `schema` - The actual JSON schema
+ * @prop `schema` - JSON schema value with $refs replaced by a placeholder
  * @prop `isRef` - True if schemas is used as a `$ref`
  */
 export type SchemaMetaData = {
@@ -21,7 +22,7 @@ export type SchemaMetaData = {
   schemaAbsoluteImportPath: string;
   schemaUniqueName: string;
   schemaId: string;
-  schema: JSONSchema;
+  schema: JSONSchemaWithPlaceholders;
   isRef: boolean;
 };
 

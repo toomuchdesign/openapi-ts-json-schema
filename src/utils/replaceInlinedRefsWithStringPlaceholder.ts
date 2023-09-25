@@ -1,6 +1,6 @@
 import mapObject from 'map-obj';
 import { refToPlaceholder, REF_SYMBOL } from '.';
-import type { JSONSchema } from '../types';
+import type { JSONSchema, JSONSchemaWithPlaceholders } from '../types';
 
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -42,7 +42,11 @@ function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,
-): JSONSchema {
+): JSONSchemaWithPlaceholders {
+  if (getRef(schema)) {
+    return replaceInlinedSchemaWithPlaceholder(schema);
+  }
+
   return mapObject(
     schema,
     (key, value) => {

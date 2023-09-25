@@ -16,7 +16,7 @@ At the time of writing the implementation is build around `@apidevtools/json-sch
 ```ts
 {
   bar: {
-    [Symbol('ref')]: '#/foo/Bar',
+    [Symbol('ref')]: '#/components/schemas/Bar',
     // ...Inlined schema props
   }
 }
@@ -26,8 +26,14 @@ At the time of writing the implementation is build around `@apidevtools/json-sch
 
 ```ts
 {
-  bar: '_OTJS-START_#/foo/Bar_OTJS-END_';
+  bar: '_OTJS-START_#/components/schemas/Bar_OTJS-END_';
 }
+```
+
+Note: alias definitions (eg. `Foo: "#components/schemas/Bar"`) will result in a plain **string placeholder**.
+
+```ts
+'_OTJS-START_#/components/schemas/Bar_OTJS-END_';
 ```
 
 4. Inlined and dereferenced schemas get stringified and parsed to retrieve **string placeholders** and the contained original `$ref` value
@@ -37,9 +43,9 @@ At the time of writing the implementation is build around `@apidevtools/json-sch
 ```ts
 import Bar from '../foo/Bar';
 
-{
+export default {
   bar: Bar;
-}
+} as const
 ```
 
 This process could be definitely shorter if `@apidevtools/json-schema-ref-parser`'s `dereference` method allowed to access the parent object holding the `$ref` value to be replaced. In that case step 2 could be skipped and the ref object could be immediately replaced with the relevant **string placeholder**.
