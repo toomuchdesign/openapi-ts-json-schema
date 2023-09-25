@@ -70,7 +70,6 @@ export async function openapiToTsJsonSchema({
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
-
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
