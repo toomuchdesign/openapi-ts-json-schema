@@ -2,11 +2,7 @@ import path from 'node:path';
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
 import filenamify from 'filenamify';
-import {
-  replaceInlinedRefsWithStringPlaceholder,
-  patchJsonSchema,
-  refToPath,
-} from '.';
+import { patchJsonSchema, refToPath } from '.';
 import type {
   SchemaMetaDataMap,
   SchemaMetaData,
@@ -25,7 +21,6 @@ export function addSchemaToMetaData({
   // Options
   outputPath,
   schemaPatcher,
-  refHandling,
 }: {
   ref: string;
   schemaMetaDataMap: SchemaMetaDataMap;
@@ -33,21 +28,13 @@ export function addSchemaToMetaData({
   isRef: boolean;
   outputPath: string;
   schemaPatcher?: SchemaPatcher;
-  refHandling: 'inline' | 'import' | 'keep';
 }): void {
   // Do not override existing meta info of inlined schemas
   if (schemaMetaDataMap.has(ref) === false) {
     const { schemaRelativeDirName, schemaName, schemaRelativePath } =
       refToPath(ref);
     // Shall we generate the actual final schema here instead of makeJsonSchemaFiles?
-    const schemaWithPlaceholders =
-      refHandling === 'import' || refHandling === 'keep'
-        ? replaceInlinedRefsWithStringPlaceholder(schema)
-        : schema;
-    const isAlias = typeof schemaWithPlaceholders === 'string';
-    const patchedSchema = isAlias
-      ? schemaWithPlaceholders
-      : patchJsonSchema(schemaWithPlaceholders, schemaPatcher);
+    const patchedSchema = patchJsonSchema(schema, schemaPatcher);
     const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName, { replacement: '|' });
     const schemaAbsoluteImportPath = path.join(

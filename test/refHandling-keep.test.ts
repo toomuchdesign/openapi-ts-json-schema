@@ -57,8 +57,12 @@ describe('refHandling option === "keep"', () => {
                 "application/json": {
                   schema: {
                     oneOf: [
-                      { $ref: "#/components/months/January" },
-                      { $ref: "#/components/months/February" }
+                      {
+                        $ref: "#/components/months/January"
+                      },
+                      {
+                        $ref: "#/components/months/February"
+                      }
                     ],
                   },
                 },
@@ -130,7 +134,9 @@ describe('refHandling option === "keep"', () => {
 
       expect(answerAliasDefinitionFile).toEqual(
         await formatTypeScript(`
-          export default { $ref: '#/components/schemas/Answer' } as const;
+          export default {
+            $ref: '#/components/schemas/Answer'
+          } as const;
         `),
       );
     });

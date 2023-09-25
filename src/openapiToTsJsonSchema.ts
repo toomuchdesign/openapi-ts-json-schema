@@ -5,7 +5,6 @@ import get from 'lodash.get';
 import {
   clearFolder,
   makeJsonSchemaFiles,
-  REF_SYMBOL,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
   addSchemaToMetaData,
@@ -13,6 +12,7 @@ import {
   formatTypeScript,
   saveFile,
   makeRelativePath,
+  refToPlaceholder,
 } from './utils';
 import type {
   SchemaPatcher,
@@ -68,40 +68,39 @@ export async function openapiToTsJsonSchema({
 
   const bundledOpenApiSchema = await $RefParser.bundle(openApiSchemaPath);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
-
   const inlinedRefs: Map<string, JSONSchema> = new Map();
-
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
-        onDereference: (ref, inlinedSchema) => {
+        onDereference: (ref, inlinedSchema, obj, key) => {
           // Keep track of inlined refs
           if (!inlinedRefs.has(ref)) {
             // Make a shallow copy of the ref schema to avoid the mutations below
             inlinedRefs.set(ref, { ...inlinedSchema });
           }
 
-          /**
-           * "import" refHandling support:
-           * mark inlined ref objects with a "REF_SYMBOL" prop to replace them later on
-           *
-           * @NOTE inlinedSchema is a reference to the $ref schema object which we are mutating.
-           */
-          inlinedSchema[REF_SYMBOL] = ref;
+          if (refHandling === 'import') {
+            obj[key] = refToPlaceholder(ref);
+          }
 
-          /**
-           * "inline" refHandling support:
-           * add a $ref comment to each inlined schema with the original ref value.
-           * See: https://github.com/kaelzhang/node-comment-json
-           */
-          inlinedSchema[Symbol.for('before')] = [
-            {
-              type: 'LineComment',
-              value: ` $ref: "${ref}"`,
-            },
-          ];
+          if (refHandling === 'keep') {
+            obj[key] = { $ref: ref };
+          }
+
+          if (refHandling === 'inline') {
+            /**
+             * add a $ref comment to each inlined schema with the original ref value.
+             * See: https://github.com/kaelzhang/node-comment-json
+             */
+            inlinedSchema[Symbol.for('before')] = [
+              {
+                type: 'LineComment',
+                value: ` $ref: "${ref}"`,
+              },
+            ];
+          }
         },
       },
     },
@@ -123,7 +122,6 @@ export async function openapiToTsJsonSchema({
         schema,
         outputPath,
         schemaPatcher,
-        refHandling,
         isRef: true,
       });
     }
@@ -146,7 +144,6 @@ export async function openapiToTsJsonSchema({
         schema: definitionSchemas[schemaName],
         outputPath,
         schemaPatcher,
-        refHandling,
         isRef: inlinedRefs.has(ref),
       });
     }

@@ -5,12 +5,7 @@ export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeJsonSchemaFiles } from './makeJsonSchemaFiles';
 export { refToPath } from './refToPath';
 export { pathToRef } from './pathToRef';
-export {
-  REF_SYMBOL,
-  PLACEHOLDER_REGEX,
-  refToPlaceholder,
-} from './refReplacementUtils';
-export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
+export { PLACEHOLDER_REGEX, refToPlaceholder } from './refReplacementUtils';
 export { replacePlaceholdersWithImportedSchemas } from './jsonSchemaToTsConst/replacePlaceholdersWithImportedSchemas';
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 

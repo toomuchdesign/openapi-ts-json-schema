@@ -1,6 +1,5 @@
 import { stringify } from 'comment-json';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
-import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
 import { formatTypeScript } from '../';
 import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
 
@@ -36,12 +35,6 @@ export async function jsonSchemaToTsConst({
       schemaAsText: tsSchema,
       schemaAbsoluteDirName,
       schemaMetaDataMap,
-    });
-  }
-
-  if (refHandling === 'keep') {
-    tsSchema = replacePlaceholdersWithRefs({
-      schemaAsText: tsSchema,
     });
   }
 

@@ -1,5 +1,3 @@
-export const REF_SYMBOL = Symbol('ref');
-
 const REF_MARKER_START = '_OTJS-START_';
 const REF_MARKER_END = '_OTJS-END_';
 
