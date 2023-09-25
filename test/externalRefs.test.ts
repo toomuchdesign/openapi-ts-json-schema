@@ -76,7 +76,7 @@ describe('External $refs', () => {
   // @NOTE this feature has not been implemented
   describe('refHandling option === "import"', () => {
     describe('openAPI definitions imported multiple times', () => {
-      it.fails('dedupe imports and resolve against same schema', async () => {
+      it('dedupe imports and resolve against same schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath('external-refs'),

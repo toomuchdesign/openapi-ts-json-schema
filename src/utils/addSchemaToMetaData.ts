@@ -39,11 +39,15 @@ export function addSchemaToMetaData({
   if (schemaMetaDataMap.has(ref) === false) {
     const { schemaRelativeDirName, schemaName, schemaRelativePath } =
       refToPath(ref);
-    const originalSchema =
+    // Shall we generate the actual final schema here instead of makeJsonSchemaFiles?
+    const schemaWithPlaceholders =
       refHandling === 'import' || refHandling === 'keep'
         ? replaceInlinedRefsWithStringPlaceholder(schema)
         : schema;
-    const patchedSchema = patchJsonSchema(originalSchema, schemaPatcher);
+    const isAlias = typeof schemaWithPlaceholders === 'string';
+    const patchedSchema = isAlias
+      ? schemaWithPlaceholders
+      : patchJsonSchema(schemaWithPlaceholders, schemaPatcher);
     const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName, { replacement: '|' });
     const schemaAbsoluteImportPath = path.join(

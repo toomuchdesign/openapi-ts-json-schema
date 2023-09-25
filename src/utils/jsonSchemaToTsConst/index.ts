@@ -20,7 +20,16 @@ export async function jsonSchemaToTsConst({
    * to generate inline comments for "inline" refHandling
    */
   const stringifiedSchema = stringify(schema, null, 2);
-  let tsSchema = `export default ` + stringifiedSchema + ' as const;';
+
+  /**
+   * Schemas being just a placeholder are nothing but an alias
+   * of the definition found in the placeholder
+   */
+  const isAlias = typeof schema === 'string';
+  let tsSchema =
+    isAlias && refHandling === 'import'
+      ? `export default ` + stringifiedSchema + ';'
+      : `export default ` + stringifiedSchema + ' as const;';
 
   if (refHandling === 'import') {
     tsSchema = replacePlaceholdersWithImportedSchemas({

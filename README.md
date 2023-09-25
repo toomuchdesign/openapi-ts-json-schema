@@ -102,8 +102,8 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
         // Absolute import path (without extension). Eg: `"/output/path/components/schemas/MySchema"`
         schemaUniqueName: string;
         // Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
-        schema: JSONSchema;
-        // The actual JSON schema
+        schema: JSONSchema | string;
+        // JSON schema value with $refs replaced by a placeholder
         isRef: boolean;
         // True if schemas is used as a `$ref`
       }

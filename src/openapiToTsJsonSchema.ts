@@ -70,15 +70,24 @@ export async function openapiToTsJsonSchema({
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
+
   const dereferencedJsonSchema = await $RefParser.dereference(
     initialJsonSchema,
     {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
+          // Keep track of inlined refs
+          if (!inlinedRefs.has(ref)) {
+            // Make a shallow copy of the ref schema to avoid the mutations below
+            inlinedRefs.set(ref, { ...inlinedSchema });
+          }
+
           /**
            * "import" refHandling support:
            * mark inlined ref objects with a "REF_SYMBOL" prop to replace them later on
+           *
+           * @NOTE inlinedSchema is a reference to the $ref schema object which we are mutating.
            */
           inlinedSchema[REF_SYMBOL] = ref;
 
@@ -93,9 +102,6 @@ export async function openapiToTsJsonSchema({
               value: ` $ref: "${ref}"`,
             },
           ];
-
-          // Keep track of inlined refs
-          inlinedRefs.set(ref, inlinedSchema);
         },
       },
     },
@@ -126,6 +132,7 @@ export async function openapiToTsJsonSchema({
   // Generate schema meta info for user requested schemas
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const definitionSchemas = get(jsonSchema, definitionPath);
+
     for (const schemaName in definitionSchemas) {
       // Create expected OpenAPI ref
       const ref = pathToRef({
