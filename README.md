@@ -125,8 +125,8 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Consider merging "operation" and "path" parameters definition
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 - Consider adding a way to customize the values of the generated JSON schema ids. This could be beneficial even in case of multiple schemas being merged with plugins
-- Avoid inlining/duplicating external `#ref`s
 - Find a way to merge multiple different OpenApi definitions consistently
+- Improve external `#ref`s handling
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
