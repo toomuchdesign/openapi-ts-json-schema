@@ -1,5 +1,15 @@
 # openapi-ts-json-schema
 
+## 0.5.0
+
+### Minor Changes
+
+- 05c3865: Partially support external ref deduplication when refHandling === "import"
+
+### Patch Changes
+
+- ebcfd27: Don't duplicate alias definitions but re-export original schema
+
 ## 0.4.0
 
 ### Minor Changes
