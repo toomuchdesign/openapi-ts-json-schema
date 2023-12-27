@@ -26,7 +26,7 @@ jobs:
 
       - run: npm ci
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: matrix.node-version == '18'
         with:
           name: code-coverage
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: code-coverage
           path: coverage
