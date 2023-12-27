@@ -3,7 +3,11 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   test: {
     setupFiles: ['vitest.setup.mts'],
-    singleThread: true,
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
     sequence: {
       hooks: 'stack',
       concurrent: false,
@@ -11,6 +15,7 @@ export default defineConfig({
     },
     coverage: {
       provider: 'istanbul',
+      include: ['src'],
       enabled: true,
       reporter: [['lcov', { projectRoot: './' }], ['text']],
     },
