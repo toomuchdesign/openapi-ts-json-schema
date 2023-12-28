@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   test: {
-    setupFiles: ['vitest.setup.mts'],
+    setupFiles: ['vitest.setup.ts'],
     poolOptions: {
       threads: {
         singleThread: true,
@@ -14,7 +14,7 @@ export default defineConfig({
       shuffle: true,
     },
     coverage: {
-      provider: 'istanbul',
+      provider: 'v8',
       include: ['src'],
       enabled: true,
       reporter: [['lcov', { projectRoot: './' }], ['text']],
