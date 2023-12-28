@@ -39,6 +39,7 @@
     "@tsconfig/node18": "^18.2.0",
     "@types/lodash.get": "^4.4.7",
     "@vitest/coverage-istanbul": "^1.1.0",
+    "@vitest/coverage-v8": "^1.1.0",
     "fastify": "^4.23.2",
     "rimraf": "^5.0.1",
     "simple-git-hooks": "^2.9.0",

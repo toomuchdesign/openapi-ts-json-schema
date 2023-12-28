@@ -11,10 +11,11 @@ export function refToPath(ref: string): {
   schemaRelativeDirName: string;
   schemaName: string;
 } {
-  /* istanbul ignore if: if this condition was true the execution would break before getting to this line -- @preserve */
+  /* c8 ignore start */
   if (!ref.startsWith('#/')) {
     throw new Error(`[openapi-ts-json-schema] Unsupported ref value: "${ref}"`);
   }
+  /* c8 ignore stop */
 
   const refPath = ref.replace('#/', '');
   const schemaName = path.basename(refPath);

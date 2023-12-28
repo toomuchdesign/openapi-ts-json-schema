@@ -19,12 +19,13 @@ export function replacePlaceholdersWithImportedSchemas({
   let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, ref) => {
     const importedSchema = schemaMetaDataMap.get(ref);
 
-    /* istanbul ignore if: It should not be possible to hit this condition -- @preserve */
+    /* c8 ignore start */
     if (!importedSchema) {
       throw new Error(
         '[openapi-ts-json-schema] No matching schema found in "schemaMetaDataMap"',
       );
     }
+    /* c8 ignore stop */
 
     // Evaluate imported schema relative path from current schema file
     const importedSchemaRelativePath = makeRelativePath({
