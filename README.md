@@ -4,12 +4,12 @@
 [![Npm version][npm-version-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Generate **TypeScript JSON schema** files (`.ts`) from **OpenAPI** definitions on Node.js.
+Generate **TypeScript JSON schema** files (`.ts` modules with `as const` assertions) from **OpenAPI** definitions.
 
-TypeScript JSON schemas can natively be used for:
+TypeScript JSON schemas can be used for:
 
-- Runtime data validation (with any JSON schema validator like [Ajv](https://ajv.js.org/))
-- Static TypeScript type check (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts))
+- Inferring TypeScript type definitions from OpenApi definitions (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts))
+- Runtime data validation with TypeScript type inferring (with any JSON schema validator like [Ajv](https://ajv.js.org/))
 
 Given an OpenAPI definition file, `openapi-ts-json-schema` will:
 
