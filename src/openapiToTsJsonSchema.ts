@@ -66,11 +66,12 @@ export async function openapiToTsJsonSchema({
 
   await clearFolder(outputPath);
 
-  const bundledOpenApiSchema = await $RefParser.bundle(openApiSchemaPath);
+  const schemaParser = new $RefParser();
+  const bundledOpenApiSchema = await schemaParser.bundle(openApiSchemaPath);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
-  const dereferencedJsonSchema = await $RefParser.dereference(
+  const dereferencedJsonSchema = await schemaParser.dereference(
     initialJsonSchema,
     {
       dereference: {
@@ -105,6 +106,12 @@ export async function openapiToTsJsonSchema({
       },
     },
   );
+
+  if (refHandling === 'inline' && schemaParser.$refs.circular) {
+    throw new Error(
+      '[openapi-ts-json-schema] Circular input definition detected. Use "import" or "keep" refHandling option, instead.',
+    );
+  }
 
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();

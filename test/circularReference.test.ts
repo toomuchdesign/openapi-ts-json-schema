@@ -4,32 +4,86 @@ import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 describe('Circular reference', () => {
-  it("Doesn't break", async () => {
-    const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'circular-reference/specs.yaml'),
-      outputPath: makeTestOutputPath('circular'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
-      refHandling: 'import',
-      silent: true,
+  describe('"refHandling" option', () => {
+    describe('inline', () => {
+      it('Throws expected error', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiSchema: path.resolve(
+              fixtures,
+              'circular-reference/specs.yaml',
+            ),
+            outputPath: makeTestOutputPath('circular-inline'),
+            definitionPathsToGenerateFrom: ['components.schemas'],
+            refHandling: 'inline',
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] Circular input definition detected. Use "import" or "keep" refHandling option, instead.',
+        );
+      });
     });
 
-    const januarySchema = await import(
-      path.resolve(outputPath, 'components/schemas/January')
-    );
+    describe('import', () => {
+      it('Generates expected schema', async () => {
+        const { outputPath } = await openapiToTsJsonSchema({
+          openApiSchema: path.resolve(
+            fixtures,
+            'circular-reference/specs.yaml',
+          ),
+          outputPath: makeTestOutputPath('circular-import'),
+          definitionPathsToGenerateFrom: ['components.schemas'],
+          refHandling: 'import',
+          silent: true,
+        });
 
-    expect(januarySchema.default).toEqual({
-      description: 'January description',
-      type: 'object',
-      properties: {
-        nextMonth: {
-          description: 'February description',
+        const januarySchema = await import(
+          path.resolve(outputPath, 'components/schemas/January')
+        );
+
+        expect(januarySchema.default).toEqual({
+          description: 'January description',
           type: 'object',
           properties: {
-            // Node stops recursion
-            previousMonth: undefined,
+            nextMonth: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                // Node stops recursion
+                previousMonth: undefined,
+              },
+            },
           },
-        },
-      },
+        });
+      });
+    });
+
+    describe('keep', () => {
+      it('Generates expected schema', async () => {
+        const { outputPath } = await openapiToTsJsonSchema({
+          openApiSchema: path.resolve(
+            fixtures,
+            'circular-reference/specs.yaml',
+          ),
+          outputPath: makeTestOutputPath('circular-keep'),
+          definitionPathsToGenerateFrom: ['components.schemas'],
+          refHandling: 'keep',
+          silent: true,
+        });
+
+        const januarySchema = await import(
+          path.resolve(outputPath, 'components/schemas/January')
+        );
+
+        expect(januarySchema.default).toEqual({
+          description: 'January description',
+          type: 'object',
+          properties: {
+            nextMonth: {
+              $ref: '#/components/schemas/February',
+            },
+          },
+        });
+      });
     });
   });
 });
