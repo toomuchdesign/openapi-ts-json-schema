@@ -1,5 +1,12 @@
 # openapi-ts-json-schema
 
+## 0.6.0
+
+### Minor Changes
+
+- 1f3294a: default `refHandling` option switched from "inline" to "import"
+- 1b6a53d: Throw descriptive error with circular schemas and "inline" `refHandling` option
+
 ## 0.5.0
 
 ### Minor Changes
