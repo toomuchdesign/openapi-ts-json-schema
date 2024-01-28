@@ -29,7 +29,7 @@ export async function openapiToTsJsonSchema({
   outputPath: providedOutputPath,
   plugins = [],
   silent,
-  refHandling = 'inline',
+  refHandling = 'import',
 }: {
   openApiSchema: string;
   definitionPathsToGenerateFrom: string[];
