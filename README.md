@@ -45,15 +45,19 @@ const { outputPath } = await openapiToTsJsonSchema({
 ```ts
 import Ajv from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
-import myGeneratedModelSchema from 'path/to/generated/schemas/MyModel.ts';
+import mySchema from 'path/to/generated/schemas/MyModel.ts';
 
-// Perform static TypeScript type check, inferring TS types from the same TypeScript JSON schema
-type MyModel = FromSchema<typeof myGeneratedModelSchema>;
-const myModel: MyModel = { hello: 'World' };
-
-// Perform runtime data validation using the same schema
 const ajv = new Ajv();
-const valid = ajv.validate(myGeneratedModelSchema, myModel);
+// Perform data validation and type inference using the same schema
+const validate = ajv.compile<FromSchema<typeof mySchema>>(mySchema);
+const data: unknown = {};
+
+if (validate(data)) {
+  // data gets type inference
+  console.log(data.foo);
+} else {
+  console.log(validate.errors);
+}
 ```
 
 ## Options
