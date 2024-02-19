@@ -94,3 +94,9 @@ External `$ref`s are currently inlined with `@apidevtools/json-schema-ref-parser
 ## Debugging tests
 
 Comment [this line](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/vitest.setup.mts#L17) out to disable schemas cleanup after tests and check the generated files.
+
+## AJV TS support
+
+AVJ doesn't support implicit data validation and type inference, yet.
+
+https://github.com/ajv-validator/ajv/issues/1902
