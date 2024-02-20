@@ -11,6 +11,10 @@ components:
       properties:
         nextMonth:
           $ref: '#/components/schemas/February'
+        nextMonthTwo:
+          $ref: '#/components/schemas/February'
+        nextMonthThree:
+          $ref: '#/components/schemas/February'
     February:
       description: February description
       type: object

@@ -107,12 +107,6 @@ export async function openapiToTsJsonSchema({
     },
   );
 
-  if (refHandling === 'inline' && schemaParser.$refs.circular) {
-    throw new Error(
-      '[openapi-ts-json-schema] Circular input definition detected. Use "import" or "keep" refHandling option, instead.',
-    );
-  }
-
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
