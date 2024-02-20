@@ -1,8 +1,8 @@
 export { patchJsonSchema } from './patchJsonSchema';
-export { jsonSchemaToTsConst } from './jsonSchemaToTsConst';
+export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiParameters } from './convertOpenApiParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
-export { makeJsonSchemaFiles } from './makeJsonSchemaFiles';
+export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
 export { refToPath } from './refToPath';
 export { pathToRef } from './pathToRef';
 export {
@@ -11,7 +11,7 @@ export {
   refToPlaceholder,
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
-export { replacePlaceholdersWithImportedSchemas } from './jsonSchemaToTsConst/replacePlaceholdersWithImportedSchemas';
+export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas';
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 
 export { clearFolder } from './clearFolder';

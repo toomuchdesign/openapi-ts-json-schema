@@ -4,7 +4,7 @@ import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
 import { formatTypeScript } from '../';
 import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
 
-export async function jsonSchemaToTsConst({
+export async function makeTsJsonSchema({
   metaData,
   schemaMetaDataMap,
   refHandling,
