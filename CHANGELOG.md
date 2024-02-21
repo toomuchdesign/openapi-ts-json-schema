@@ -1,5 +1,15 @@
 # openapi-ts-json-schema
 
+## 0.7.0
+
+### Minor Changes
+
+- 1f01e99: Resolve circular $refs with "inline" refHandling option
+
+### Patch Changes
+
+- 4206868: Cleanup dependencies
+
 ## 0.6.0
 
 ### Minor Changes
