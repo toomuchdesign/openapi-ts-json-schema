@@ -10,7 +10,6 @@ export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
    */
   const definitionKeywords = ['components'];
 
-  /* istanbul ignore else: this if condition is executed and tested -- @preserve */
   if ('components' in schema) {
     definitionKeywords.push(
       ...Object.keys(schema.components).map((field) => `components.${field}`),
