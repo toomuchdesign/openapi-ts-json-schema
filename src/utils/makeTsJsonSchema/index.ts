@@ -1,10 +1,11 @@
 import { stringify } from 'comment-json';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
 import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
+import { getCircularReplacer } from './getCircularReplacer';
 import { formatTypeScript } from '../';
 import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
 
-export async function jsonSchemaToTsConst({
+export async function makeTsJsonSchema({
   metaData,
   schemaMetaDataMap,
   refHandling,
@@ -19,7 +20,7 @@ export async function jsonSchemaToTsConst({
    * Stringifying schema with "comment-json" instead of JSON.stringify
    * to generate inline comments for "inline" refHandling
    */
-  const stringifiedSchema = stringify(schema, null, 2);
+  const stringifiedSchema = stringify(schema, getCircularReplacer(), 2);
 
   /**
    * Schemas being just a placeholder are nothing but an alias

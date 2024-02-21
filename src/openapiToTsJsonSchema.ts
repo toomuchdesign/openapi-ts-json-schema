@@ -4,7 +4,7 @@ import $RefParser from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 import {
   clearFolder,
-  makeJsonSchemaFiles,
+  makeTsJsonSchemaFiles,
   REF_SYMBOL,
   convertOpenApiToJsonSchema,
   convertOpenApiParameters,
@@ -107,19 +107,13 @@ export async function openapiToTsJsonSchema({
     },
   );
 
-  if (refHandling === 'inline' && schemaParser.$refs.circular) {
-    throw new Error(
-      '[openapi-ts-json-schema] Circular input definition detected. Use "import" or "keep" refHandling option, instead.',
-    );
-  }
-
   const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**
-   * Generate meta data for schemas which have been previously dereferenced.
-   * It happens for "import" and "keep" refHandling since they expect to find
-   * $ref schemas generated as standalone schemas
+   * Create meta data for $ref schemas which have been previously dereferenced.
+   * It happens only with "import" and "keep" refHandling since they expect
+   * $ref schemas to be generated no matter of
    */
   if (refHandling === 'import' || refHandling === 'keep') {
     for (const [ref, schema] of inlinedRefs) {
@@ -135,7 +129,9 @@ export async function openapiToTsJsonSchema({
     }
   }
 
-  // Generate schema meta info for user requested schemas
+  /**
+   * Create meta data for each output schema
+   */
   for (const definitionPath of definitionPathsToGenerateFrom) {
     const definitionSchemas = get(jsonSchema, definitionPath);
 
@@ -158,7 +154,7 @@ export async function openapiToTsJsonSchema({
     }
   }
 
-  await makeJsonSchemaFiles({
+  await makeTsJsonSchemaFiles({
     refHandling,
     schemaMetaDataMap,
   });

@@ -1,10 +1,10 @@
-import { jsonSchemaToTsConst, saveFile } from '.';
+import { makeTsJsonSchema, saveFile } from '.';
 import type { SchemaMetaDataMap } from '../types';
 
 /**
- * Save TS JSON schema with the expected naming conventions
+ * Save TS JSON schema files with the expected naming conventions
  */
-export async function makeJsonSchemaFiles({
+export async function makeTsJsonSchemaFiles({
   schemaMetaDataMap,
   refHandling,
 }: {
@@ -12,7 +12,7 @@ export async function makeJsonSchemaFiles({
   refHandling: 'inline' | 'import' | 'keep';
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
-    const tsSchema = await jsonSchemaToTsConst({
+    const tsSchema = await makeTsJsonSchema({
       metaData,
       schemaMetaDataMap,
       refHandling,

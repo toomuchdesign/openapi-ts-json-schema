@@ -86,7 +86,11 @@ Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more
 
 ### Circular `$ref`s
 
-Circular `$ref`s can be technically resolved with "import" `refHandling` option. However, TS engine will interrupt type recursion and type the schema as `any` (error `ts(7022)`). See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
+Circular `$ref`s can be technically resolved with "inline" and "import" `refHandling` option ("keep" doesn't resolve them by definition).
+
+"inline" option replaces nested circular references with a `{}`.
+
+"import" option fully resolves the tree but TS engine will interrupt type recursion and type the schema as `any` (error `ts(7022)`). See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
 
 ## Return values
 
@@ -139,7 +143,7 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Consider adding a way to customize the values of the generated JSON schema ids. This could be beneficial even in case of multiple schemas being merged with plugins
 - Find a way to merge multiple different OpenApi definitions consistently
 - Improve external `#ref`s handling
-- Consider implementing a strategy to stop circular reference recursion after a given amount of nesting
+- Consider implementing an option to inline circular $refs with a configurable nesting level
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml

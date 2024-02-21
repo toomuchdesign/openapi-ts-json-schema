@@ -6,20 +6,49 @@ import { openapiToTsJsonSchema } from '../src';
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
     describe('inline', () => {
-      it('Throws expected error', async () => {
-        await expect(
-          openapiToTsJsonSchema({
-            openApiSchema: path.resolve(
-              fixtures,
-              'circular-reference/specs.yaml',
-            ),
-            outputPath: makeTestOutputPath('circular-inline'),
-            definitionPathsToGenerateFrom: ['components.schemas'],
-            refHandling: 'inline',
-          }),
-        ).rejects.toThrow(
-          '[openapi-ts-json-schema] Circular input definition detected. Use "import" or "keep" refHandling option, instead.',
+      it('Replaces 2nd circular reference occurrence with "{}"', async () => {
+        const { outputPath } = await openapiToTsJsonSchema({
+          openApiSchema: path.resolve(
+            fixtures,
+            'circular-reference/specs.yaml',
+          ),
+          outputPath: makeTestOutputPath('circular-inline'),
+          definitionPathsToGenerateFrom: ['components.schemas'],
+          refHandling: 'inline',
+          silent: true,
+        });
+
+        const januarySchema = await import(
+          path.resolve(outputPath, 'components/schemas/January')
         );
+
+        expect(januarySchema.default).toEqual({
+          description: 'January description',
+          type: 'object',
+          properties: {
+            nextMonth: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                previousMonth: {},
+              },
+            },
+            nextMonthTwo: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                previousMonth: {},
+              },
+            },
+            nextMonthThree: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                previousMonth: {},
+              },
+            },
+          },
+        });
       });
     });
 
@@ -48,7 +77,23 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                // Node stops recursion
+                // Node.js seems to stop resolution recursion
+                previousMonth: undefined,
+              },
+            },
+            nextMonthTwo: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                // Node.js seems to stop resolution recursion
+                previousMonth: undefined,
+              },
+            },
+            nextMonthThree: {
+              description: 'February description',
+              type: 'object',
+              properties: {
+                // Node.js seems to stop resolution recursion
                 previousMonth: undefined,
               },
             },
@@ -79,6 +124,12 @@ describe('Circular reference', () => {
           type: 'object',
           properties: {
             nextMonth: {
+              $ref: '#/components/schemas/February',
+            },
+            nextMonthTwo: {
+              $ref: '#/components/schemas/February',
+            },
+            nextMonthThree: {
               $ref: '#/components/schemas/February',
             },
           },
