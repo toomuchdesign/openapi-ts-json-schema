@@ -1,5 +1,6 @@
 import path from 'path';
 import { describe, it, expect } from 'vitest';
+import fs from 'fs/promises';
 import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
@@ -22,6 +23,7 @@ describe('Circular reference', () => {
           path.resolve(outputPath, 'components/schemas/January')
         );
 
+        // Parsed schema expectations
         expect(januarySchema.default).toEqual({
           description: 'January description',
           type: 'object',
@@ -49,6 +51,29 @@ describe('Circular reference', () => {
             },
           },
         });
+
+        // Inline comments expectations
+        const februarySchemaAsText = await fs.readFile(
+          path.resolve(outputPath, 'components/schemas/February.ts'),
+          {
+            encoding: 'utf8',
+          },
+        );
+
+        const expectedInlinedRef = `
+        nextMonth: {
+          // Circular recursion interrupted (#/components/schemas/February)
+        },
+        nextMonthTwo: {
+          // Circular recursion interrupted (#/components/schemas/February)
+        },
+        nextMonthThree: {
+          // Circular recursion interrupted (#/components/schemas/February)
+        },`;
+
+        expect(februarySchemaAsText).toEqual(
+          expect.stringContaining(expectedInlinedRef),
+        );
       });
     });
 
