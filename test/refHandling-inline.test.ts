@@ -21,7 +21,7 @@ describe('refHandling option === "inline"', () => {
       },
     );
 
-    const expectedInlinedRef = await `
+    const expectedInlinedRef = `
   properties: {
     isJanuary: {
       // $ref: "#/components/schemas/Answer"
