@@ -1,3 +1,5 @@
+import { REF_SYMBOL } from '../';
+
 /**
  * JSON.stringify replacer
  * Replace circular references with {}
@@ -21,7 +23,17 @@ export function getCircularReplacer(): (
 
     // @NOTE Should we make recursion depth configurable?
     if (ancestors.includes(value)) {
-      return {};
+      // @ts-expect-error REF_SYMBOL doesn't exist on value
+      const ref = value[REF_SYMBOL];
+      return {
+        // Drop an line comment about recursion interruption
+        [Symbol.for('before')]: [
+          {
+            type: 'LineComment',
+            value: ` Circular recursion interrupted (${ref})`,
+          },
+        ],
+      };
     }
 
     ancestors.push(value);
