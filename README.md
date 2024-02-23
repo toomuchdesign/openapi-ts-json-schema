@@ -6,18 +6,19 @@
 
 Generate **TypeScript JSON schema** files (`.ts` modules with `as const` assertions) from **OpenAPI** definitions.
 
-TypeScript JSON schemas can be used for:
+TypeScript JSON schemas serve various purposes, including:
 
-- Inferring TypeScript type definitions from OpenApi definitions (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts))
-- Runtime data validation with TypeScript type inferring (with any JSON schema validator like [Ajv](https://ajv.js.org/))
+- Validate data and infer validated data TS types with the same JSON schema (with any JSON schema validator like [Ajv](https://ajv.js.org/))
+- Infer TS type definitions from JSON schemas (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts))
+- Fastify integration: infer route handlers input types from their schema (with [`@fastify/type-provider-json-schema-to-ts`](https://github.com/fastify/fastify-type-provider-json-schema-to-ts))
 
 Given an OpenAPI definition file, `openapi-ts-json-schema` will:
 
 - Resolve external/remote `$ref`s and dereference them with [`@apidevtools/json-schema-ref-parser`](https://github.com/APIDevTools/json-schema-ref-parser)
-- Optionally inline, import or keep local `$ref`s
+- Optionally inline, import or retain local `$ref`s
 - Convert to JSON schema with [`@openapi-contrib/openapi-schema-to-json-schema`](https://github.com/openapi-contrib/openapi-schema-to-json-schema) and [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters)
-- Generate one TypeScript JSON schema file for each definition (`.ts` files with `as const` assertion)
-- Store schemas in a folder structure reflecting the original OpenAPI definition structure
+- Generate a TypeScript JSON schema file for each definition (`.ts` files with `as const` assertion)
+- Organizing schemas in a folder structure mirroring the original OpenAPI definition layout.
 
 TypeScript JSON schemas are 100% valid JSON schemas.
 
@@ -78,23 +79,29 @@ Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more
 
 ### `$ref`s handling
 
-`openapi-ts-json-schema` provides 3 different strategies to handle OpenApi `$ref` properties configurable via the `refHandling` option:
+`openapi-ts-json-schema` provides 3 `refHandling` strategies for OpenAPI `$ref` properties:
 
-- `import`: `$ref` values get replaced with a local variable pointing to module of the generated target definition
-- `inline`: `$ref` values get recursively replaced with inline copies of the target definition. This produces self-contained standalone schemas with usually repeated inline definitions
-- `keep`: `$ref` values get preserved.
+| `refHandling` option |                                                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `inline`             | Replaces `$ref`s with inline copies of the target definition, creating self-contained schemas with potential redundancy |
+| `import`             | Replaces `$ref`s with a local variable pointing to the module of the target `$ref` definition                           |
+| `keep`               | Retains `$ref`s values without modification                                                                             |
 
-### Circular `$ref`s
+#### Circular `$ref`s
 
-Circular `$ref`s can be technically resolved with "inline" and "import" `refHandling` option ("keep" doesn't resolve them by definition).
+Circular `$ref`s references are supported, too:
 
-"inline" option replaces nested circular references with a `{}`.
+| `refHandling` option |                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `inline`             | Nested circular references are substituted with `{}`                                                                                                                 |
+| `import`             | Completely resolves the JSON schema tree. However, the TypeScript engine will halt type recursion and assign the schema type as `any`, resulting in error `ts(7022)` |
+| `keep`               | Does not resolve circular references by definition                                                                                                                   |
 
-"import" option fully resolves the tree but TS engine will interrupt type recursion and type the schema as `any` (error `ts(7022)`). See [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
+For further details, refer to the [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
 
 ## Return values
 
-Beside generating the expected schema files under `outputPath`, `openapiToTsJsonSchema` returns the following data:
+Beside generating the expected schema files under `outputPath`, `openapiToTsJsonSchema` returns the following meta data:
 
 ```ts
 {
