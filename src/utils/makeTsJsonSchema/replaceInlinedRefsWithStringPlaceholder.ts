@@ -1,24 +1,7 @@
 import mapObject from 'map-obj';
-import { refToPlaceholder, REF_SYMBOL } from '.';
-import type { JSONSchema, JSONSchemaWithPlaceholders } from '../types';
-
-function isObject(value: unknown): value is Record<string | symbol, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-/**
- * Retrieve REF_SYMBOL prop value
- */
-function getRef(node: unknown): string | undefined {
-  if (
-    isObject(node) &&
-    REF_SYMBOL in node &&
-    typeof node[REF_SYMBOL] === 'string'
-  ) {
-    return node[REF_SYMBOL];
-  }
-  return undefined;
-}
+import { refToPlaceholder } from '..';
+import { getRef } from './getRef';
+import type { JSONSchema, JSONSchemaWithPlaceholders } from '../../types';
 
 /**
  * Get any JSON schema node and:
@@ -38,7 +21,7 @@ function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
 /**
  * Iterate a JSON schema to replace inlined ref schema objects
  * (marked with a REF_SYMBOL property holding the original $ref value)
- * with a string placeholder with a reference to the original $ref value
+ * with a string placeholder with a reference to the original $ref value ("_OTJS-START_#/ref/value_OTJS-END_")
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,

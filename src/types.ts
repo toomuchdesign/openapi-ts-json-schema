@@ -12,8 +12,8 @@ import type { makeRelativePath, formatTypeScript, saveFile } from './utils';
  * @prop `schemaAbsoluteImportPath` - Absolute import path (without extension). Eg: `"/output/path/components/schemas/MySchema"`
  * @prop `schemaUniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @prop `schemaId` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
- * @prop `schema` - JSON schema value with $refs replaced by a placeholder
- * @prop `isRef` - True if schemas is used as a `$ref`
+ * @prop `originalSchema` - Original dereferenced JSON schema
+ * @prop `isRef` - True if schemas is used as `$ref`
  */
 export type SchemaMetaData = {
   schemaFileName: string;
@@ -22,7 +22,7 @@ export type SchemaMetaData = {
   schemaAbsoluteImportPath: string;
   schemaUniqueName: string;
   schemaId: string;
-  schema: JSONSchemaWithPlaceholders;
+  originalSchema: JSONSchema;
   isRef: boolean;
 };
 
