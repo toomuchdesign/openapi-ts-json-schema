@@ -19,6 +19,7 @@ describe('OpenAPI parameters', () => {
     expect(pathSchema.default).toEqual({
       parameters: {
         headers: {
+          type: 'object',
           required: ['path-headers-param-1'],
           properties: {
             'path-headers-param-1': {
@@ -30,6 +31,7 @@ describe('OpenAPI parameters', () => {
       get: {
         parameters: {
           headers: {
+            type: 'object',
             properties: {
               'headers-param-1': {
                 type: 'string',
@@ -43,6 +45,7 @@ describe('OpenAPI parameters', () => {
           },
           body: { type: 'string', enum: ['foo', 'bar'] },
           path: {
+            type: 'object',
             properties: {
               'path-param-1': {
                 type: 'string',
@@ -51,6 +54,7 @@ describe('OpenAPI parameters', () => {
             required: ['path-param-1'],
           },
           query: {
+            type: 'object',
             properties: {
               'query-param-1': {
                 type: 'string',
