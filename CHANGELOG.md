@@ -1,5 +1,15 @@
 # openapi-ts-json-schema
 
+## 0.8.0
+
+### Minor Changes
+
+- a134798: Returned `metaData.schema` property replaced by `metaData.originalSchema` holding the original dereferenced JSON schema
+
+### Patch Changes
+
+- fcd7b9d: Append `type: "object"` prop to generated parameter schemas
+
 ## 0.7.0
 
 ### Minor Changes
