@@ -1,4 +1,4 @@
-export { patchJsonSchema } from './patchJsonSchema';
+export { patchJsonSchema } from './makeTsJsonSchema/patchJsonSchema';
 export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiParameters } from './convertOpenApiParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
@@ -10,7 +10,7 @@ export {
   PLACEHOLDER_REGEX,
   refToPlaceholder,
 } from './refReplacementUtils';
-export { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
+export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/replaceInlinedRefsWithStringPlaceholder';
 export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas';
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 

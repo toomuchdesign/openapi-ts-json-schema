@@ -79,29 +79,30 @@ export async function openapiToTsJsonSchema({
         onDereference: (ref, inlinedSchema) => {
           // Keep track of inlined refs
           if (!inlinedRefs.has(ref)) {
-            // Make a shallow copy of the ref schema to avoid the mutations below
+            // Make a shallow copy of the ref schema to save it from the mutations below
             inlinedRefs.set(ref, { ...inlinedSchema });
+
+            /**
+             * "import" refHandling support:
+             * mark inlined ref objects with a "REF_SYMBOL" to retrieve their
+             * original $ref value once inlined
+             */
+            inlinedSchema[REF_SYMBOL] = ref;
+
+            /**
+             * "inline" refHandling support:
+             * add a $ref comment to each inlined schema with the original ref value.
+             * See: https://github.com/kaelzhang/node-comment-json
+             */
+            if (refHandling === 'inline') {
+              inlinedSchema[Symbol.for('before')] = [
+                {
+                  type: 'LineComment',
+                  value: ` $ref: "${ref}"`,
+                },
+              ];
+            }
           }
-
-          /**
-           * "import" refHandling support:
-           * mark inlined ref objects with a "REF_SYMBOL" prop to replace them later on
-           *
-           * @NOTE inlinedSchema is a reference to the $ref schema object which we are mutating.
-           */
-          inlinedSchema[REF_SYMBOL] = ref;
-
-          /**
-           * "inline" refHandling support:
-           * add a $ref comment to each inlined schema with the original ref value.
-           * See: https://github.com/kaelzhang/node-comment-json
-           */
-          inlinedSchema[Symbol.for('before')] = [
-            {
-              type: 'LineComment',
-              value: ` $ref: "${ref}"`,
-            },
-          ];
         },
       },
     },
@@ -122,8 +123,6 @@ export async function openapiToTsJsonSchema({
         schemaMetaDataMap,
         schema,
         outputPath,
-        schemaPatcher,
-        refHandling,
         isRef: true,
       });
     }
@@ -147,8 +146,6 @@ export async function openapiToTsJsonSchema({
         schemaMetaDataMap,
         schema: definitionSchemas[schemaName],
         outputPath,
-        schemaPatcher,
-        refHandling,
         isRef: inlinedRefs.has(ref),
       });
     }
@@ -157,6 +154,7 @@ export async function openapiToTsJsonSchema({
   await makeTsJsonSchemaFiles({
     refHandling,
     schemaMetaDataMap,
+    schemaPatcher,
   });
 
   const returnPayload: ReturnPayload = {

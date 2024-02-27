@@ -1,11 +1,11 @@
-import { REF_SYMBOL } from '../';
+import { getRef } from './getRef';
 
 /**
  * JSON.stringify replacer
  * Replace circular references with {}
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#circular_references
  */
-export function getCircularReplacer(): (
+export function makeCircularRefReplacer(): (
   key: string,
   value: unknown,
 ) => unknown {
@@ -23,8 +23,7 @@ export function getCircularReplacer(): (
 
     // @NOTE Should we make recursion depth configurable?
     if (ancestors.includes(value)) {
-      // @ts-expect-error REF_SYMBOL doesn't exist on value
-      const ref = value[REF_SYMBOL];
+      const ref = getRef(value);
       return {
         // Drop an inline comment about recursion interruption
         [Symbol.for('before')]: [

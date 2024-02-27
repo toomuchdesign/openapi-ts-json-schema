@@ -1,32 +1,56 @@
 import { stringify } from 'comment-json';
+import { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
 import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
-import { getCircularReplacer } from './getCircularReplacer';
+import { makeCircularRefReplacer } from './makeCircularRefReplacer';
+import { patchJsonSchema } from './patchJsonSchema';
 import { formatTypeScript } from '../';
-import type { SchemaMetaDataMap, SchemaMetaData } from '../../types';
+import type {
+  SchemaMetaDataMap,
+  SchemaMetaData,
+  SchemaPatcher,
+} from '../../types';
 
 export async function makeTsJsonSchema({
   metaData,
   schemaMetaDataMap,
   refHandling,
+  schemaPatcher,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: 'inline' | 'import' | 'keep';
+  schemaPatcher?: SchemaPatcher;
 }): Promise<string> {
-  const { schema, schemaAbsoluteDirName } = metaData;
+  const { originalSchema, schemaAbsoluteDirName } = metaData;
+
+  // "inline" refHandling doesn't need replacing inlined refs
+  const schemaWithPlaceholders =
+    refHandling === 'import' || refHandling === 'keep'
+      ? replaceInlinedRefsWithStringPlaceholder(originalSchema)
+      : originalSchema;
+
+  // Check if this schema is just the reference to another schema
+  const isAlias = typeof schemaWithPlaceholders === 'string';
+
+  const patchedSchema = isAlias
+    ? schemaWithPlaceholders
+    : patchJsonSchema(schemaWithPlaceholders, schemaPatcher);
 
   /**
    * Stringifying schema with "comment-json" instead of JSON.stringify
    * to generate inline comments for "inline" refHandling
    */
-  const stringifiedSchema = stringify(schema, getCircularReplacer(), 2);
+  const stringifiedSchema = stringify(
+    patchedSchema,
+    makeCircularRefReplacer(),
+    2,
+  );
 
   /**
    * Schemas being just a placeholder are nothing but an alias
    * of the definition found in the placeholder
    */
-  const isAlias = typeof schema === 'string';
   let tsSchema =
     isAlias && refHandling === 'import'
       ? `export default ` + stringifiedSchema + ';'
