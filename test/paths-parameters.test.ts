@@ -3,10 +3,10 @@ import { describe, it, expect } from 'vitest';
 import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
-describe('OpenAPI parameters', () => {
-  it('Transforms parameters array into a JSON schema record', async () => {
+describe('OpenAPI paths parameters', () => {
+  it('Transforms parameters array into valid JSON schema', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'parameters/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
       outputPath: makeTestOutputPath('parameters'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
@@ -20,9 +20,12 @@ describe('OpenAPI parameters', () => {
       parameters: {
         headers: {
           type: 'object',
-          required: ['path-headers-param-1'],
+          required: ['path-header-param'],
           properties: {
-            'path-headers-param-1': {
+            'path-header-param': {
+              type: 'string',
+            },
+            'path-header-param-overridden-at-operation-level': {
               type: 'string',
             },
           },
@@ -33,15 +36,23 @@ describe('OpenAPI parameters', () => {
           headers: {
             type: 'object',
             properties: {
-              'headers-param-1': {
+              'header-param-1': {
                 type: 'string',
               },
-              'headers-param-2': {
+              'header-param-2': {
                 type: 'string',
                 enum: ['yes', 'no'],
               },
+              // Merges path level parameters
+              'path-header-param': {
+                type: 'string',
+              },
+              // Overrides path level parameters
+              'path-header-param-overridden-at-operation-level': {
+                type: 'number',
+              },
             },
-            required: ['headers-param-1', 'headers-param-2'],
+            required: ['path-header-param', 'header-param-1', 'header-param-2'],
           },
           body: { type: 'string', enum: ['foo', 'bar'] },
           path: {
