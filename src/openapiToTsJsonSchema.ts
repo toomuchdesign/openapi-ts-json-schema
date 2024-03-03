@@ -7,7 +7,7 @@ import {
   makeTsJsonSchemaFiles,
   REF_SYMBOL,
   convertOpenApiToJsonSchema,
-  convertOpenApiParameters,
+  convertOpenApiPathsParameters,
   addSchemaToMetaData,
   pathToRef,
   formatTypeScript,
@@ -108,7 +108,7 @@ export async function openapiToTsJsonSchema({
     },
   );
 
-  const jsonSchema = convertOpenApiParameters(dereferencedJsonSchema);
+  const jsonSchema = convertOpenApiPathsParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**

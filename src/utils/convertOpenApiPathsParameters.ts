@@ -5,6 +5,7 @@ import {
 import type { JSONSchema } from '../types';
 
 type OpenAPIParameters = Parameters<typeof _convertParametersToJSONSchema>[0];
+
 function convertParametersToJSONSchema(
   openApiParameters: OpenAPIParameters,
 ): OpenAPIParametersAsJSONSchema {
@@ -22,35 +23,45 @@ function convertParametersToJSONSchema(
 }
 
 /**
- * Parameters field can only be found in:
+ * Paths parameters field can only be found in:
  * - paths[path].parameters
  * - paths[path][operation].parameters
  *
  * https://swagger.io/docs/specification/describing-parameters/
+ *
+ * @NOTE The schema must be dereferenced since openapi-jsonschema-parameters
+ * doesn't handle $refs
  */
-export function convertOpenApiParameters(schema: JSONSchema): JSONSchema {
+export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
   if ('paths' in schema) {
     for (const path in schema.paths) {
       const pathSchema = schema.paths[path];
 
       /**
-       * Path level parameters
-       * These could be merged with operation params:
-       * https://swagger.io/docs/specification/describing-parameters/#common
+       * Common path parameters
+       * https://swagger.io/docs/specification/describing-parameters/#common-for-path
        */
-      if ('parameters' in pathSchema) {
+      const pathParameters =
+        'parameters' in pathSchema ? pathSchema.parameters : [];
+
+      if (pathParameters.length) {
         pathSchema.parameters = convertParametersToJSONSchema(
           pathSchema.parameters,
         );
       }
 
-      // Operation level parameters
+      /**
+       * Operation path parameters
+       * https://swagger.io/docs/specification/describing-parameters/#path-parameters
+       */
       for (const operation in pathSchema) {
         const operationSchema = pathSchema[operation];
         if ('parameters' in operationSchema) {
-          operationSchema.parameters = convertParametersToJSONSchema(
-            operationSchema.parameters,
-          );
+          // Merge operation and common path parameters
+          operationSchema.parameters = convertParametersToJSONSchema([
+            ...pathParameters,
+            ...operationSchema.parameters,
+          ]);
         }
       }
     }

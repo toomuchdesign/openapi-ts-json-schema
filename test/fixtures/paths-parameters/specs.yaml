@@ -17,23 +17,35 @@ paths:
       - schema:
           type: string
         in: header
-        name: path-headers-param-1
+        name: path-header-param
         required: true
-        description: path-headers-param-1 description
+        description: path-header-param description
+      - schema:
+          type: string
+        in: header
+        name: path-header-param-overridden-at-operation-level
+        description: path-header-param-overridden-at-operation-level description
     get:
       parameters:
+        # Header
         - schema:
             type: string
           in: header
-          name: headers-param-1
+          name: header-param-1
           required: true
-          description: headers-param-1 description
+          description: header-param-1 description
         - schema:
             $ref: '#/components/schemas/Answer'
           in: header
-          name: headers-param-2
+          name: header-param-2
           required: true
-          description: headers-param-2 description
+          description: header-param-2 description
+        - schema:
+            type: number
+          in: header
+          name: path-header-param-overridden-at-operation-level
+          description: path-header-param-overridden-at-operation-level description
+        # Body
         - schema:
             type: string
             enum:
@@ -42,12 +54,14 @@ paths:
           in: body
           required: true
           description: Body param description
+        # Path
         - schema:
             type: string
           in: path
           name: path-param-1
           required: true
           description: Path param description
+        # Query
         - schema:
             type: string
           in: query
