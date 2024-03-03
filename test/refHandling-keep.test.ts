@@ -29,6 +29,11 @@ describe('refHandling option === "keep"', () => {
                   oneOf: [
                     { $ref: '#/components/months/January' },
                     { $ref: '#/components/months/February' },
+                    {
+                      description: 'Inline path schema',
+                      type: ['integer', 'null'],
+                      enum: [1, 0, null],
+                    },
                   ],
                 },
               },

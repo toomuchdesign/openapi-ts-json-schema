@@ -63,6 +63,11 @@ describe('refHandling option === "import"', () => {
                           },
                         },
                       },
+                      {
+                        description: 'Inline path schema',
+                        type: ['integer', 'null'],
+                        enum: [1, 0, null],
+                      },
                     ],
                   },
                 },
