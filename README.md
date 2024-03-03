@@ -149,7 +149,7 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 - Consider adding a way to customize the values of the generated JSON schema ids. This could be beneficial even in case of multiple schemas being merged with plugins
 - Find a way to merge multiple different OpenApi definitions consistently
-- Improve external `#ref`s handling
+- Improve external `#ref`s handling (currently being inlined)
 - Consider implementing an option to inline circular $refs with a configurable nesting level
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg

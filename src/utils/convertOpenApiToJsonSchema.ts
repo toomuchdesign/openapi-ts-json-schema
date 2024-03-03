@@ -4,7 +4,7 @@ import type { OpenApiSchema } from '../types';
 export function convertOpenApiToJsonSchema(schema: OpenApiSchema) {
   /**
    * @openapi-contrib/openapi-schema-to-json-schema doesn't convert definitions by default,
-   * Here we convert all direct children of components
+   * Here we convert all direct children of components object:
    * https://swagger.io/specification/#components-object
    * https://github.com/openapi-contrib/openapi-schema-to-json-schema#definitionkeywords-array
    */

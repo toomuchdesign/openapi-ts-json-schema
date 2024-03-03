@@ -5,6 +5,7 @@ import {
 import type { JSONSchema } from '../types';
 
 type OpenAPIParameters = Parameters<typeof _convertParametersToJSONSchema>[0];
+
 function convertParametersToJSONSchema(
   openApiParameters: OpenAPIParameters,
 ): OpenAPIParametersAsJSONSchema {
@@ -22,13 +23,16 @@ function convertParametersToJSONSchema(
 }
 
 /**
- * Parameters field can only be found in:
+ * Paths parameters field can only be found in:
  * - paths[path].parameters
  * - paths[path][operation].parameters
  *
  * https://swagger.io/docs/specification/describing-parameters/
+ *
+ * @NOTE The schema must be dereferenced since openapi-jsonschema-parameters
+ * doesn't handle $refs
  */
-export function convertOpenApiParameters(schema: JSONSchema): JSONSchema {
+export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
   if ('paths' in schema) {
     for (const path in schema.paths) {
       const pathSchema = schema.paths[path];
