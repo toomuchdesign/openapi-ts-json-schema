@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Gets a user by ID.
+      description: Get users description
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - Users
+      summary: Posts a user by ID.
+      description: Post users description
+      operationId: postUserById
+      parameters:
+        - name: id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Body description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            # Inlining User definition to test conversion to JSON schema
+            schema:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+              required:
+                - id
+                - name
+          text/plain:
+            schema:
+              type: string
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              # Inlining User definition to test conversion to JSON schema
+              schema:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                required:
+                  - id
+                  - name
+components:
+  schemas:
+    User:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
