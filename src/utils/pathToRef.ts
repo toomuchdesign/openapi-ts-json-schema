@@ -1,5 +1,5 @@
 import path from 'node:path';
-import filenamify from 'filenamify';
+import { filenamify } from './';
 
 /**
  * Generate a local OpenAPI ref from a relative path and a schema name
@@ -15,7 +15,7 @@ export function pathToRef({
     '#/' +
     path.join(
       schemaRelativeDirName.replaceAll('.', '/'),
-      filenamify(schemaName, { replacement: '|' }),
+      filenamify(schemaName),
     )
   );
 }

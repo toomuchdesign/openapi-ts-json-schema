@@ -14,6 +14,7 @@ export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/repl
 export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas';
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 export { isObject } from './isObject';
+export { filenamify } from './filenamify';
 
 export { clearFolder } from './clearFolder';
 export { makeRelativePath } from './makeRelativePath';

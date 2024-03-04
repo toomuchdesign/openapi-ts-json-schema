@@ -11,6 +11,7 @@ export default {
           },
         },
         required: ["petId"],
+        type: "object",
       },
     },
     responses: {

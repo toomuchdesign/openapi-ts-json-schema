@@ -13,7 +13,7 @@ describe('OpenAPI paths', () => {
     });
 
     const pathSchema = await import(
-      path.resolve(outputPath, 'paths/users|{id}')
+      path.resolve(outputPath, 'paths/users_{id}')
     );
 
     const componentsSchemasUser = {
