@@ -1,15 +1,15 @@
 import {
-  convertParametersToJSONSchema as _convertParametersToJSONSchema,
+  convertParametersToJSONSchema,
   OpenAPIParametersAsJSONSchema,
 } from 'openapi-jsonschema-parameters';
 import type { JSONSchema } from '../types';
 
-type OpenAPIParameters = Parameters<typeof _convertParametersToJSONSchema>[0];
+type OpenAPIParameters = Parameters<typeof convertParametersToJSONSchema>[0];
 
-function convertParametersToJSONSchema(
+function convertParametersToJsonSchema(
   openApiParameters: OpenAPIParameters,
 ): OpenAPIParametersAsJSONSchema {
-  const parameters = _convertParametersToJSONSchema(openApiParameters);
+  const parameters = convertParametersToJSONSchema(openApiParameters);
 
   // Append "type" prop which "openapi-jsonschema-parameters" seems to omit
   let paramName: keyof OpenAPIParametersAsJSONSchema;
@@ -45,7 +45,7 @@ export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
         'parameters' in pathSchema ? pathSchema.parameters : [];
 
       if (pathParameters.length) {
-        pathSchema.parameters = convertParametersToJSONSchema(
+        pathSchema.parameters = convertParametersToJsonSchema(
           pathSchema.parameters,
         );
       }
@@ -58,7 +58,7 @@ export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
         const operationSchema = pathSchema[operation];
         if ('parameters' in operationSchema) {
           // Merge operation and common path parameters
-          operationSchema.parameters = convertParametersToJSONSchema([
+          operationSchema.parameters = convertParametersToJsonSchema([
             ...pathParameters,
             ...operationSchema.parameters,
           ]);
