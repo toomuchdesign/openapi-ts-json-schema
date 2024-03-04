@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { makeRelativePath } from '../../src/utils';
 import path from 'node:path';
+import { makeRelativePath } from '../../src/utils';
 
 describe('makeRelativePath', () => {
   it.each([
