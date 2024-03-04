@@ -1,7 +1,8 @@
 import path from 'node:path';
 
 /**
- * Evaluate the relative path from/to the given absolute paths.
+ * Evaluate the relative module path from/to 2 absolute paths.
+ * Accepts posix and win32 absolute urls and return a relative modules path (""./foo/bar")
  */
 export function makeRelativeModulePath({
   fromDirectory,
@@ -10,5 +11,7 @@ export function makeRelativeModulePath({
   fromDirectory: string;
   to: string;
 }): string {
-  return './' + path.posix.relative(fromDirectory, to);
+  return (
+    './' + path.relative(fromDirectory, to).split(path.sep).join(path.posix.sep)
+  );
 }
