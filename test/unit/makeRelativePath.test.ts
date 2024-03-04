@@ -7,21 +7,23 @@ describe('makeRelativePath', () => {
     {
       fromDirectory: '/data/orandea/test/aaa',
       to: '/data/orandea/impl/bbb',
-      expected: `./../../impl/bbb`,
+      // Take into account different OS path separators ("/" vs "\")
+      expected: './../../impl/bbb'.replaceAll('/', path.sep),
     },
     {
       fromDirectory: '/data/orandea/test',
       to: '/data/orandea/impl/bbb',
-      expected: `./../impl/bbb`,
+      // Take into account different OS path separators ("/" vs "\")
+      expected: './../impl/bbb'.replaceAll('/', path.sep),
     },
     {
       fromDirectory: '/data/orandea/test',
       to: '/data/orandea/test/bbb',
-      expected: `./bbb`,
+      // Take into account different OS path separators ("/" vs "\")
+      expected: './bbb'.replaceAll('/', path.sep),
     },
   ])('generates expected relative path', ({ fromDirectory, to, expected }) => {
     const actual = makeRelativePath({ fromDirectory, to });
-    // Take into account different OS path separators (/ vs \)
-    expect(actual).toBe(expected.replaceAll('/', path.sep));
+    expect(actual).toBe(expected);
   });
 });

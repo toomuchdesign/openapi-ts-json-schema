@@ -4,6 +4,7 @@ import { filenamify } from './';
 /**
  * Generate a local OpenAPI ref from a relative path and a schema name
  */
+const TRALING_SLASH_REGEX = /\/$/;
 export function pathToRef({
   schemaRelativeDirName,
   schemaName,
@@ -13,9 +14,12 @@ export function pathToRef({
 }): string {
   return (
     '#/' +
-    path.join(
-      schemaRelativeDirName.replaceAll('.', '/'),
-      filenamify(schemaName),
-    )
+    path
+      .normalize(schemaRelativeDirName)
+      .replaceAll('.', '/')
+      .replaceAll('\\', '/')
+      .replace(TRALING_SLASH_REGEX, '') +
+    '/' +
+    filenamify(schemaName)
   );
 }
