@@ -21,7 +21,7 @@ describe('openapiToTsJsonSchema', () => {
     );
 
     // definition paths get escaped
-    const path1 = await import(path.resolve(outputPath, 'paths/v1|path-1'));
+    const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
 
     expect(januarySchema.default).toEqual({
       description: 'January description',

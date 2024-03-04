@@ -13,7 +13,7 @@ describe('OpenAPI paths parameters', () => {
     });
 
     const pathSchema = await import(
-      path.resolve(outputPath, 'paths/v1|path-1')
+      path.resolve(outputPath, 'paths/v1_path-1')
     );
 
     expect(pathSchema.default).toEqual({

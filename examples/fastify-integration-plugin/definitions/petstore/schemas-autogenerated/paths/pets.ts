@@ -10,9 +10,11 @@ export default {
             type: "integer",
             maximum: 100,
             format: "int32",
+            minimum: -2147483648,
           },
         },
         required: [],
+        type: "object",
       },
     },
     responses: {

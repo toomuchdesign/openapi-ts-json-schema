@@ -15,7 +15,7 @@ describe('refHandling option === "keep"', () => {
       refHandling: 'keep',
     });
 
-    const path1 = await import(path.resolve(outputPath, 'paths/v1|path-1'));
+    const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
 
     // Expectations against parsed root schema
     expect(path1.default).toEqual({
@@ -45,7 +45,7 @@ describe('refHandling option === "keep"', () => {
 
     // Expectations against actual root schema file
     const actualPath1File = await fs.readFile(
-      path.resolve(outputPath, 'paths/v1|path-1.ts'),
+      path.resolve(outputPath, 'paths/v1_path-1.ts'),
       {
         encoding: 'utf8',
       },
