@@ -29,6 +29,11 @@ describe('refHandling option === "keep"', () => {
                   oneOf: [
                     { $ref: '#/components/months/January' },
                     { $ref: '#/components/months/February' },
+                    {
+                      description: 'Inline path schema',
+                      type: ['integer', 'null'],
+                      enum: [1, 0, null],
+                    },
                   ],
                 },
               },
@@ -58,7 +63,12 @@ describe('refHandling option === "keep"', () => {
                   schema: {
                     oneOf: [
                       { $ref: "#/components/months/January" },
-                      { $ref: "#/components/months/February" }
+                      { $ref: "#/components/months/February" },
+                      {
+                        type: ['integer', 'null'],
+                        enum: [1, 0, null],
+                        description: 'Inline path schema'
+                      },
                     ],
                   },
                 },

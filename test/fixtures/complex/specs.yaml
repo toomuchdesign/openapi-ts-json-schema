@@ -50,6 +50,12 @@ paths:
                 oneOf:
                   - $ref: '#/components/months/January'
                   - $ref: '#/components/months/February'
+                  - type: integer
+                    nullable: true
+                    enum:
+                      - 1
+                      - 0
+                    description: Inline path schema
 
 servers:
   - url: url

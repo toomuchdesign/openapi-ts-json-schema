@@ -63,6 +63,11 @@ describe('refHandling option === "import"', () => {
                           },
                         },
                       },
+                      {
+                        description: 'Inline path schema',
+                        type: ['integer', 'null'],
+                        enum: [1, 0, null],
+                      },
                     ],
                   },
                 },
@@ -92,7 +97,15 @@ describe('refHandling option === "import"', () => {
                 content: {
                   "application/json": {
                     schema: {
-                      oneOf: [componentsMonthsJanuary, componentsMonthsFebruary],
+                      oneOf: [
+                        componentsMonthsJanuary,
+                        componentsMonthsFebruary,
+                        {
+                          type: ["integer", "null"],
+                          enum: [1, 0, null],
+                          description: "Inline path schema",
+                        },
+                      ],
                     },
                   },
                 },
@@ -101,7 +114,7 @@ describe('refHandling option === "import"', () => {
           },
         } as const;`);
 
-      expect(actualPath1File).toMatch(expectedPath1File);
+      expect(actualPath1File).toEqual(expectedPath1File);
     });
   });
 

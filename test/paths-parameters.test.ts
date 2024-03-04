@@ -7,7 +7,7 @@ describe('OpenAPI paths parameters', () => {
   it('Transforms parameters array into valid JSON schema', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
-      outputPath: makeTestOutputPath('parameters'),
+      outputPath: makeTestOutputPath('paths-parameters'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });
