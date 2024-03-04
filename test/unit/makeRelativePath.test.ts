@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
 import path from 'node:path';
+import { describe, it, expect } from 'vitest';
 import { makeRelativePath } from '../../src/utils';
 
 describe('makeRelativePath', () => {
