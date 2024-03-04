@@ -3,6 +3,7 @@ export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
+export { parseRef } from './parseRef';
 export { refToPath } from './refToPath';
 export { pathToRef } from './pathToRef';
 export {
