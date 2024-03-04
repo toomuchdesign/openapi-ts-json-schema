@@ -15,7 +15,7 @@ const fastifyIntegrationPlugin: Plugin<
       .map(
         ({ schemaAbsoluteImportPath, schemaUniqueName, schemaId, isRef }) => {
           return {
-            importPath: utils.makeRelativePath({
+            importPath: utils.makeRelativeModulePath({
               fromDirectory: outputPath,
               to: schemaAbsoluteImportPath,
             }),

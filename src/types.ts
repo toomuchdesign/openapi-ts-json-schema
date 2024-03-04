@@ -3,7 +3,11 @@ export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
-import type { makeRelativePath, formatTypeScript, saveFile } from './utils';
+import type {
+  makeRelativeModulePath,
+  formatTypeScript,
+  saveFile,
+} from './utils';
 
 /**
  * @prop `schemaAbsoluteDirName` - Absolute path pointing to schema folder. Eg: `"/output/path/components/schemas"`
@@ -36,7 +40,7 @@ export type ReturnPayload = {
 
 type PluginInput = ReturnPayload & {
   utils: {
-    makeRelativePath: typeof makeRelativePath;
+    makeRelativeModulePath: typeof makeRelativeModulePath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };

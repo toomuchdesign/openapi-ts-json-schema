@@ -18,6 +18,6 @@ export { isObject } from './isObject';
 export { filenamify } from './filenamify';
 
 export { clearFolder } from './clearFolder';
-export { makeRelativePath } from './makeRelativePath';
+export { makeRelativeModulePath } from './makeRelativeModulePath';
 export { formatTypeScript } from './formatTypeScript';
 export { saveFile } from './saveFile';
