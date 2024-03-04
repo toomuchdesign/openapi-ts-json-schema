@@ -28,7 +28,6 @@ describe('Returned "metaData"', async () => {
     }
 
     const expectedAnswerMetaData: SchemaMetaData = {
-      schemaFileName: 'Answer',
       schemaAbsoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
         path.sep,
@@ -44,7 +43,6 @@ describe('Returned "metaData"', async () => {
     };
 
     const expectedJanuaryMetaData: SchemaMetaData = {
-      schemaFileName: 'January',
       schemaAbsoluteDirName: `${outputPath}/components/months`.replaceAll(
         '/',
         path.sep,

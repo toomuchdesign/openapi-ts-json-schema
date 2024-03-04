@@ -35,7 +35,6 @@ export function addSchemaToMetaData({
     const metaInfo: SchemaMetaData = {
       originalSchema: schema,
       schemaId: `/${refPath}`,
-      schemaFileName,
       schemaAbsoluteDirName,
       schemaAbsoluteImportPath,
       schemaAbsolutePath: schemaAbsoluteImportPath + '.ts',

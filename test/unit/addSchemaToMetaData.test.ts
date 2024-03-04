@@ -39,7 +39,6 @@ describe('addSchemaToMetaData', () => {
           '/',
           path.sep,
         ),
-      schemaFileName: 'Foo',
       schemaId: '/components/schemas/Foo',
       schemaUniqueName: 'componentsSchemasFoo',
     };
