@@ -10,5 +10,5 @@ export function makeRelativePath({
   fromDirectory: string;
   to: string;
 }): string {
-  return './' + path.relative(fromDirectory, to);
+  return `.${path.sep}` + path.relative(fromDirectory, to);
 }

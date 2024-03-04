@@ -1,25 +1,27 @@
 import { describe, it, expect } from 'vitest';
 import { makeRelativePath } from '../../src/utils';
+import path from 'node:path';
 
 describe('makeRelativePath', () => {
   it.each([
     {
       fromDirectory: '/data/orandea/test/aaa',
       to: '/data/orandea/impl/bbb',
-      expected: './../../impl/bbb',
+      expected: `./../../impl/bbb`,
     },
     {
       fromDirectory: '/data/orandea/test',
       to: '/data/orandea/impl/bbb',
-      expected: './../impl/bbb',
+      expected: `./../impl/bbb`,
     },
     {
       fromDirectory: '/data/orandea/test',
       to: '/data/orandea/test/bbb',
-      expected: './bbb',
+      expected: `./bbb`,
     },
   ])('generates expected relative path', ({ fromDirectory, to, expected }) => {
     const actual = makeRelativePath({ fromDirectory, to });
-    expect(actual).toBe(expected);
+    // Take into account different OS path separators (/ vs \)
+    expect(actual).toBe(expected.replaceAll('/', path.sep));
   });
 });
