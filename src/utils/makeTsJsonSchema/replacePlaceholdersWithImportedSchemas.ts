@@ -1,4 +1,4 @@
-import { makeRelativePath, PLACEHOLDER_REGEX } from '..';
+import { makeRelativeModulePath, PLACEHOLDER_REGEX } from '..';
 import type { SchemaMetaDataMap } from '../../types';
 
 /**
@@ -28,7 +28,7 @@ export function replacePlaceholdersWithImportedSchemas({
     /* c8 ignore stop */
 
     // Evaluate imported schema relative path from current schema file
-    const importedSchemaRelativePath = makeRelativePath({
+    const importedSchemaRelativePath = makeRelativeModulePath({
       fromDirectory: schemaAbsoluteDirName,
       to: importedSchema.schemaAbsoluteImportPath,
     });

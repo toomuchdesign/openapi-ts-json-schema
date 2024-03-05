@@ -3,6 +3,7 @@ export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
+export { parseRef } from './parseRef';
 export { refToPath } from './refToPath';
 export { pathToRef } from './pathToRef';
 export {
@@ -17,6 +18,6 @@ export { isObject } from './isObject';
 export { filenamify } from './filenamify';
 
 export { clearFolder } from './clearFolder';
-export { makeRelativePath } from './makeRelativePath';
+export { makeRelativeModulePath } from './makeRelativeModulePath';
 export { formatTypeScript } from './formatTypeScript';
 export { saveFile } from './saveFile';

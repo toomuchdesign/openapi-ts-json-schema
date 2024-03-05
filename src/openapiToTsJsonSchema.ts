@@ -12,7 +12,7 @@ import {
   pathToRef,
   formatTypeScript,
   saveFile,
-  makeRelativePath,
+  makeRelativeModulePath,
 } from './utils';
 import type {
   SchemaPatcher,
@@ -166,7 +166,7 @@ export async function openapiToTsJsonSchema({
   for (const plugin of plugins) {
     await plugin({
       ...returnPayload,
-      utils: { makeRelativePath, formatTypeScript, saveFile },
+      utils: { makeRelativeModulePath, formatTypeScript, saveFile },
     });
   }
 

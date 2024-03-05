@@ -115,8 +115,6 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
       {
         schemaId: string;
         // JSON schema Compound Schema Document `$id`. Eg: `"/components/schemas/MySchema"`
-        schemaFileName: string;
-        // Valid filename for given schema (without extension). Eg: `"MySchema"`
         schemaAbsoluteDirName: string;
         // Absolute path pointing to schema folder. Eg: `"/output/path/components/schemas"`
         schemaAbsolutePath: string;
