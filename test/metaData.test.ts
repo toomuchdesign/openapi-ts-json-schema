@@ -28,6 +28,11 @@ describe('Returned "metaData"', async () => {
     }
 
     const expectedAnswerMetaData: SchemaMetaData = {
+      schemaId: '/components/schemas/Answer',
+      schemaUniqueName: 'componentsSchemasAnswer',
+      originalSchema: expect.any(Object),
+      isRef: true,
+
       schemaAbsoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
         path.sep,
@@ -36,13 +41,14 @@ describe('Returned "metaData"', async () => {
         `${outputPath}/components/schemas/Answer.ts`.replaceAll('/', path.sep),
       schemaAbsoluteImportPath:
         `${outputPath}/components/schemas/Answer`.replaceAll('/', path.sep),
-      schemaUniqueName: 'componentsSchemasAnswer',
-      schemaId: '/components/schemas/Answer',
-      originalSchema: expect.any(Object),
-      isRef: true,
     };
 
     const expectedJanuaryMetaData: SchemaMetaData = {
+      schemaId: '/components/months/January',
+      schemaUniqueName: 'componentsMonthsJanuary',
+      originalSchema: expect.any(Object),
+      isRef: false,
+
       schemaAbsoluteDirName: `${outputPath}/components/months`.replaceAll(
         '/',
         path.sep,
@@ -51,10 +57,6 @@ describe('Returned "metaData"', async () => {
         `${outputPath}/components/months/January.ts`.replaceAll('/', path.sep),
       schemaAbsoluteImportPath:
         `${outputPath}/components/months/January`.replaceAll('/', path.sep),
-      schemaUniqueName: 'componentsMonthsJanuary',
-      schemaId: '/components/months/January',
-      originalSchema: expect.any(Object),
-      isRef: false,
     };
 
     expect(answerMetaData).toEqual(expectedAnswerMetaData);

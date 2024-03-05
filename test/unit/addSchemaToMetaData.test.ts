@@ -25,8 +25,11 @@ describe('addSchemaToMetaData', () => {
 
     const actual = schemaMetaDataMap.get(ref);
     const expected: SchemaMetaData = {
+      schemaId: '/components/schemas/Foo',
+      schemaUniqueName: 'componentsSchemasFoo',
       isRef: true,
       originalSchema: schema,
+
       schemaAbsoluteDirName:
         '/absolute/output/path/components/schemas'.replaceAll('/', path.sep),
       schemaAbsoluteImportPath:
@@ -39,8 +42,6 @@ describe('addSchemaToMetaData', () => {
           '/',
           path.sep,
         ),
-      schemaId: '/components/schemas/Foo',
-      schemaUniqueName: 'componentsSchemasFoo',
     };
 
     expect(actual).toEqual(expected);

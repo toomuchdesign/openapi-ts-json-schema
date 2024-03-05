@@ -10,22 +10,25 @@ import type {
 } from './utils';
 
 /**
- * @prop `schemaAbsoluteDirName` - Absolute path pointing to schema folder. Eg: `"/output/path/components/schemas"`
- * @prop `schemaAbsolutePath` - Absolute path pointing to schema file. Eg: `"/output/path/components/schemas/MySchema.ts"`
- * @prop `schemaAbsoluteImportPath` - Absolute import path (without extension). Eg: `"/output/path/components/schemas/MySchema"`
- * @prop `schemaUniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
- * @prop `schemaId` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
- * @prop `originalSchema` - Original dereferenced JSON schema
- * @prop `isRef` - True if schemas is used as `$ref`
+ * Meta data for representing a specific openApi definition
+ * @property `schemaId` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
+ * @property `isRef` - True if schemas is used as `$ref`
+ * @property `schemaUniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
+ * @property `originalSchema` - Original dereferenced JSON schema
+ *
+ * @property `schemaAbsoluteDirName` - Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`
+ * @property `schemaAbsolutePath` - Absolute path pointing to schema file (posix or win32). Eg: `"Users/username/output/path/components/schemas/MySchema.ts"`
+ * @property `schemaAbsoluteImportPath` - Absolute import path (posix or win32, without extension). Eg: `"Users/username/output/path/components/schemas/MySchema"`
  */
 export type SchemaMetaData = {
+  schemaId: string;
+  isRef: boolean;
+  schemaUniqueName: string;
+  originalSchema: JSONSchema;
+
   schemaAbsoluteDirName: string;
   schemaAbsolutePath: string;
   schemaAbsoluteImportPath: string;
-  schemaUniqueName: string;
-  schemaId: string;
-  originalSchema: JSONSchema;
-  isRef: boolean;
 };
 
 export type SchemaMetaDataMap = Map<
