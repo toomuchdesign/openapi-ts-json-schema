@@ -33,14 +33,16 @@ export function addSchemaToMetaData({
     );
 
     const metaInfo: SchemaMetaData = {
-      originalSchema: schema,
       schemaId: `/${refPath}`,
+      schemaUniqueName: namify(refPath),
+      isRef,
+      originalSchema: schema,
+
       schemaAbsoluteDirName,
       schemaAbsoluteImportPath,
       schemaAbsolutePath: schemaAbsoluteImportPath + '.ts',
-      schemaUniqueName: namify(refPath),
-      isRef,
     };
+
     schemaMetaDataMap.set(ref, metaInfo);
   }
 }
