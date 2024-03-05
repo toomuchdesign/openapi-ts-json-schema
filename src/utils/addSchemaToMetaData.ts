@@ -41,6 +41,8 @@ export function addSchemaToMetaData({
       schemaUniqueName: namify(refPath),
       isRef,
     };
+
+    console.log({ metaInfo });
     schemaMetaDataMap.set(ref, metaInfo);
   }
 }
