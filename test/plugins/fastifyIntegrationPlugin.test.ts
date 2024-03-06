@@ -96,8 +96,8 @@ describe('fastifyIntegration plugin', () => {
         refHandling: 'keep',
         plugins: [
           fastifyIntegrationPlugin({
-            sharedSchemasFilter: ({ schemaId }) =>
-              schemaId.startsWith('/components/months'),
+            sharedSchemasFilter: ({ id }) =>
+              id.startsWith('/components/months'),
           }),
         ],
         silent: true,

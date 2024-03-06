@@ -21,7 +21,7 @@ export async function makeTsJsonSchemaFiles({
       schemaPatcher,
     });
 
-    const { schemaAbsolutePath } = metaData;
-    await saveFile({ path: [schemaAbsolutePath], data: tsSchema });
+    const { absolutePath } = metaData;
+    await saveFile({ path: [absolutePath], data: tsSchema });
   }
 }
