@@ -1,5 +1,20 @@
 # openapi-ts-json-schema
 
+## 0.9.0
+
+### Minor Changes
+
+- 06b8d4f: Use `_` as path separator to support Windows OS
+- a8b4e24: Metadata props renamed (see documentation)
+- a418ecb: `PluginInput['makeRelativePath']` type renamed to `PluginInput['makeRelativeModulePath']`
+- a418ecb: Support Windows OS
+- 8ce3621: Merge operation and path level path parameters
+- a418ecb: `schemaFileName` metadata prop removed
+
+### Patch Changes
+
+- 7461657: Convert inlined definitions in other places then components prop
+
 ## 0.8.0
 
 ### Minor Changes
