@@ -11,8 +11,7 @@ async function generate() {
     refHandling: 'keep',
     plugins: [
       fastifyIntegrationPlugin({
-        sharedSchemasFilter: ({ schemaId }) =>
-          schemaId.startsWith('/components/schemas'),
+        sharedSchemasFilter: ({ id }) => id.startsWith('/components/schemas'),
       }),
     ],
   });

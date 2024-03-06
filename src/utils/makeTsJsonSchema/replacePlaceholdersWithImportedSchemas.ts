@@ -6,11 +6,11 @@ import type { SchemaMetaDataMap } from '../../types';
  */
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
-  schemaAbsoluteDirName,
+  absoluteDirName,
   schemaMetaDataMap,
 }: {
   schemaAsText: string;
-  schemaAbsoluteDirName: string;
+  absoluteDirName: string;
   schemaMetaDataMap: SchemaMetaDataMap;
 }): string {
   const importStatements = new Set<string>();
@@ -29,17 +29,17 @@ export function replacePlaceholdersWithImportedSchemas({
 
     // Evaluate imported schema relative path from current schema file
     const importedSchemaRelativePath = makeRelativeModulePath({
-      fromDirectory: schemaAbsoluteDirName,
-      to: importedSchema.schemaAbsoluteImportPath,
+      fromDirectory: absoluteDirName,
+      to: importedSchema.absoluteImportPath,
     });
 
-    const { schemaUniqueName } = importedSchema;
+    const { uniqueName } = importedSchema;
 
     importStatements.add(
-      `import ${schemaUniqueName} from "${importedSchemaRelativePath}"`,
+      `import ${uniqueName} from "${importedSchemaRelativePath}"`,
     );
 
-    return schemaUniqueName;
+    return uniqueName;
   });
 
   if (importStatements.size > 0) {

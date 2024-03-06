@@ -30,9 +30,9 @@ Please consider that `@fastify/swagger` currently comes with some limitations. E
 
 ### Options
 
-| Property                | Type                                         | Description                                                                                                                                                                                  | Default |
-| ----------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| **sharedSchemasFilter** | `({schemaId}: {schemaId:string}) => boolean` | Expose a `sharedSchemas` array with extra user-selected schemas to be registered with `fastify.addSchema`. Provided function is used to filter all available non-$ref generated JSON schemas | -       |
+| Property                | Type                             | Description                                                                                                                                                                                  | Default |
+| ----------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **sharedSchemasFilter** | `({id}: {id:string}) => boolean` | Expose a `sharedSchemas` array with extra user-selected schemas to be registered with `fastify.addSchema`. Provided function is used to filter all available non-$ref generated JSON schemas | -       |
 
 ### Example
 
@@ -52,8 +52,7 @@ await openapiToTsJsonSchema({
   plugins: [
     fastifyIntegrationPlugin({
       // Optional
-      sharedSchemasFilter: ({ schemaId }) =>
-        schemaId.startsWith('/components/schemas'),
+      sharedSchemasFilter: ({ id }) => id.startsWith('/components/schemas'),
     }),
   ],
 });

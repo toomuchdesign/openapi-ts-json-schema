@@ -22,7 +22,7 @@ export async function makeTsJsonSchema({
   refHandling: 'inline' | 'import' | 'keep';
   schemaPatcher?: SchemaPatcher;
 }): Promise<string> {
-  const { originalSchema, schemaAbsoluteDirName } = metaData;
+  const { originalSchema, absoluteDirName } = metaData;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
@@ -59,7 +59,7 @@ export async function makeTsJsonSchema({
   if (refHandling === 'import') {
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
-      schemaAbsoluteDirName,
+      absoluteDirName,
       schemaMetaDataMap,
     });
   }

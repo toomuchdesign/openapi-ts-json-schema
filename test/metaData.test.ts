@@ -28,42 +28,50 @@ describe('Returned "metaData"', async () => {
     }
 
     const expectedAnswerMetaData: SchemaMetaData = {
-      schemaId: '/components/schemas/Answer',
-      schemaUniqueName: 'componentsSchemasAnswer',
+      id: '/components/schemas/Answer',
+      uniqueName: 'componentsSchemasAnswer',
       originalSchema: expect.any(Object),
       isRef: true,
 
-      schemaAbsoluteDirName: `${outputPath}/components/schemas`.replaceAll(
+      absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
         path.sep,
       ),
-      schemaAbsolutePath:
-        `${outputPath}/components/schemas/Answer.ts`.replaceAll('/', path.sep),
-      schemaAbsoluteImportPath:
-        `${outputPath}/components/schemas/Answer`.replaceAll('/', path.sep),
+      absolutePath: `${outputPath}/components/schemas/Answer.ts`.replaceAll(
+        '/',
+        path.sep,
+      ),
+      absoluteImportPath: `${outputPath}/components/schemas/Answer`.replaceAll(
+        '/',
+        path.sep,
+      ),
     };
 
     const expectedJanuaryMetaData: SchemaMetaData = {
-      schemaId: '/components/months/January',
-      schemaUniqueName: 'componentsMonthsJanuary',
+      id: '/components/months/January',
+      uniqueName: 'componentsMonthsJanuary',
       originalSchema: expect.any(Object),
       isRef: false,
 
-      schemaAbsoluteDirName: `${outputPath}/components/months`.replaceAll(
+      absoluteDirName: `${outputPath}/components/months`.replaceAll(
         '/',
         path.sep,
       ),
-      schemaAbsolutePath:
-        `${outputPath}/components/months/January.ts`.replaceAll('/', path.sep),
-      schemaAbsoluteImportPath:
-        `${outputPath}/components/months/January`.replaceAll('/', path.sep),
+      absolutePath: `${outputPath}/components/months/January.ts`.replaceAll(
+        '/',
+        path.sep,
+      ),
+      absoluteImportPath: `${outputPath}/components/months/January`.replaceAll(
+        '/',
+        path.sep,
+      ),
     };
 
     expect(answerMetaData).toEqual(expectedAnswerMetaData);
     expect(januaryMetaData).toEqual(expectedJanuaryMetaData);
 
-    // schemaAbsolutePath matches generated schema path
-    expect(fs.existsSync(answerMetaData.schemaAbsolutePath)).toBe(true);
-    expect(fs.existsSync(januaryMetaData.schemaAbsolutePath)).toBe(true);
+    // absolutePath matches generated schema path
+    expect(fs.existsSync(answerMetaData.absolutePath)).toBe(true);
+    expect(fs.existsSync(januaryMetaData.absolutePath)).toBe(true);
   });
 });

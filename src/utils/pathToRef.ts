@@ -16,6 +16,7 @@ export function pathToRef({
     '#/' +
     path
       .normalize(schemaRelativeDirName)
+      // Supporting definitionPathsToGenerateFrom dot notation
       .replaceAll('.', '/')
       .replaceAll('\\', '/')
       .replace(TRALING_SLASH_REGEX, '') +

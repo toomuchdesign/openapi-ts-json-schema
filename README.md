@@ -113,20 +113,20 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
       // OpenAPI ref. Eg: "#/components/schemas/MySchema"
       string,
       {
-        schemaId: string;
+        id: string;
         // JSON schema Compound Schema Document `$id`. Eg: `"/components/schemas/MySchema"`
-        schemaUniqueName: string;
+        uniqueName: string;
         // Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
         originalSchema: JSONSchema | string;
         // Original dereferenced JSON schema
         isRef: boolean;
         // True if schemas is used as a `$ref`
 
-        schemaAbsoluteDirName: string;
+        absoluteDirName: string;
         // Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`
-        schemaAbsolutePath: string;
+        absolutePath: string;
         // Absolute path pointing to schema file (posix or win32). Eg: `"Users/username/output/path/components/schemas/MySchema.ts"`
-        schemaAbsoluteImportPath: string;
+        absoluteImportPath: string;
         // Absolute import path (posix or win32, without extension). Eg: `"Users/username/output/path/components/schemas/MySchema"`
       }
     >;

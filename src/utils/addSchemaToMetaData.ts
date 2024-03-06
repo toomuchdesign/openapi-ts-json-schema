@@ -25,22 +25,19 @@ export function addSchemaToMetaData({
   if (!schemaMetaDataMap.has(ref)) {
     const refPath = parseRef(ref);
     const { schemaRelativeDirName, schemaName } = refToPath(ref);
-    const schemaAbsoluteDirName = path.join(outputPath, schemaRelativeDirName);
+    const absoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName);
-    const schemaAbsoluteImportPath = path.join(
-      schemaAbsoluteDirName,
-      schemaFileName,
-    );
+    const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
 
     const metaInfo: SchemaMetaData = {
-      schemaId: `/${refPath}`,
-      schemaUniqueName: namify(refPath),
+      id: `/${refPath}`,
+      uniqueName: namify(refPath),
       isRef,
       originalSchema: schema,
 
-      schemaAbsoluteDirName,
-      schemaAbsoluteImportPath,
-      schemaAbsolutePath: schemaAbsoluteImportPath + '.ts',
+      absoluteDirName,
+      absoluteImportPath,
+      absolutePath: absoluteImportPath + '.ts',
     };
 
     schemaMetaDataMap.set(ref, metaInfo);
