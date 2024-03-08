@@ -25,6 +25,22 @@ describe('convertOpenApiToJsonSchema', () => {
     });
   });
 
+  describe('array of definitions', () => {
+    it('convert nested definitions', () => {
+      const actual = convertOpenApiToJsonSchema({
+        foo: { schema: { oneOf: [openApiDefinition, openApiDefinition] } },
+      });
+
+      const expected = {
+        foo: {
+          schema: { oneOf: [jsonSchemaDefinition, jsonSchemaDefinition] },
+        },
+      };
+
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('Unprocessable definitions', () => {
     describe('type prop === array', () => {
       it('Returns original definition', () => {
@@ -43,6 +59,25 @@ describe('convertOpenApiToJsonSchema', () => {
         const definition = {
           in: 'path',
           name: 'userId',
+        };
+        const actual = convertOpenApiToJsonSchema(definition);
+        expect(actual).toEqual(definition);
+      });
+    });
+
+    describe('array of parameters-like definition', () => {
+      it('Returns original definition', () => {
+        const definition = {
+          foo: [
+            {
+              in: 'path',
+              name: 'foo',
+            },
+            {
+              in: 'header',
+              name: 'bar',
+            },
+          ],
         };
         const actual = convertOpenApiToJsonSchema(definition);
         expect(actual).toEqual(definition);

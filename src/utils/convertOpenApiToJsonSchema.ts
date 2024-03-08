@@ -27,7 +27,7 @@ function convertToJsonSchema<Value extends unknown>(
   }
 
   /**
-   * Skip parameters
+   * Skip parameter objects
    */
   if ('in' in value) {
     return value;
@@ -51,10 +51,13 @@ function convertToJsonSchema<Value extends unknown>(
 }
 
 /**
- * Traverse the openAPI schema tree an brutally try to convert
- * everything possible to JSON schema. We are probably overdoing since we process any object
- * @TODO Find a cleaner way to convert to JSON schema all the existing OpenAPI schemas
- * @NOTE We are currently skipping arrays
+ * Traverse the openAPI schema tree an brutally try to convert everything
+ * possible to JSON schema. We are probably overdoing since we process any object we find.
+ *
+ * - Is there a way to tell an OpenAPI schema objects convertible to JSON schema from the others?
+ * - Could we explicitly convert only the properties where we know conversion is needed?
+ *
+ * @TODO Find a nicer way to convert convert all the expected OpenAPI schemas
  */
 export function convertOpenApiToJsonSchema(
   schema: OpenApiSchema,
@@ -62,6 +65,10 @@ export function convertOpenApiToJsonSchema(
   return mapObject(
     schema,
     (key, value) => {
+      if (Array.isArray(value)) {
+        return [key, value.map((entry) => convertToJsonSchema(entry))];
+      }
+
       return [key, convertToJsonSchema(value)];
     },
     { deep: true },
