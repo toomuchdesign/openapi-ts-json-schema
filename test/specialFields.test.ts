@@ -3,12 +3,12 @@ import { describe, it, expect } from 'vitest';
 import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
-describe('OpenApi security fields', () => {
+describe('OpenApi special fields', () => {
   it('handles schema correctly', async () => {
     await expect(
       openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'security-fields/specs.yaml'),
-        outputPath: makeTestOutputPath('security-fields'),
+        openApiSchema: path.resolve(fixtures, 'special-fields/specs.yaml'),
+        outputPath: makeTestOutputPath('special-fields'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         silent: true,
       }),

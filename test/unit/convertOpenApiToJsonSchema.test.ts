@@ -37,5 +37,27 @@ describe('convertOpenApiToJsonSchema', () => {
         expect(actual).toEqual(definition);
       });
     });
+
+    describe('parameters-like definition', () => {
+      it('Returns original definition', () => {
+        const definition = {
+          in: 'path',
+          name: 'userId',
+        };
+        const actual = convertOpenApiToJsonSchema(definition);
+        expect(actual).toEqual(definition);
+      });
+    });
+
+    describe('OpenAPi security scheme object', () => {
+      it('Returns original definition', () => {
+        const definition = {
+          type: 'http',
+          scheme: 'bearer',
+        };
+        const actual = convertOpenApiToJsonSchema(definition);
+        expect(actual).toEqual(definition);
+      });
+    });
   });
 });

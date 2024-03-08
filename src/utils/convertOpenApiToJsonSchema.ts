@@ -3,6 +3,14 @@ import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import { isObject } from './';
 import type { OpenApiSchema, JSONSchema } from '../types';
 
+const SECURITY_SCHEME_OBJECT_TYPES = [
+  'apiKey',
+  'http',
+  'mutualTLS',
+  'oauth2',
+  'openIdConnect',
+];
+
 function convertToJsonSchema<Value extends unknown>(
   value: Value,
 ): JSONSchema | Value {
@@ -14,7 +22,25 @@ function convertToJsonSchema<Value extends unknown>(
    * type as array is not a valid OpenAPI value
    * https://swagger.io/docs/specification/data-models/data-types#mixed-types
    */
-  if ('type' in value && Array.isArray(value.type)) {
+  if (Array.isArray(value.type)) {
+    return value;
+  }
+
+  /**
+   * Skip parameters
+   */
+  if ('in' in value) {
+    return value;
+  }
+
+  /**
+   * Skip security scheme object definitions
+   * https://swagger.io/specification/#security-scheme-object
+   */
+  if (
+    typeof value.type === 'string' &&
+    SECURITY_SCHEME_OBJECT_TYPES.includes(value.type)
+  ) {
     return value;
   }
 
