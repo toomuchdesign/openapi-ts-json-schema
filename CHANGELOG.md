@@ -1,5 +1,12 @@
 # openapi-ts-json-schema
 
+## 0.9.1
+
+### Patch Changes
+
+- b88000d: Skip converting OpenApi definitions not transformable into JSON schemas
+- b88000d: Convert definitions expressed as array of schemas
+
 ## 0.9.0
 
 ### Minor Changes
