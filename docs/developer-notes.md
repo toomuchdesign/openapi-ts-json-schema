@@ -100,3 +100,11 @@ Comment [this line](https://github.com/toomuchdesign/openapi-ts-json-schema/blob
 AVJ doesn't support implicit data validation and type inference, yet.
 
 https://github.com/ajv-validator/ajv/issues/1902
+
+## OpenApi to JSON schema conversion
+
+The current conversion consists of iterating the whole OpenApi schema and converting any found property with `@openapi-contrib/openapi-schema-to-json-schema`. This approach is definitely suboptimal since not all the OpenApi fields are supposed to be convertible to JSON schema.
+
+Another approach could consist of executing the conversion only on those fields which [OpenApi documentation](https://swagger.io/resources/open-api/) defines as data types convertible to JSON schema.
+
+From v3.1.0, OpenApi definitions should be valid JSON schemas, therefore no conversion should ve needed.

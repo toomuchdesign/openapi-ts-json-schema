@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: OpenAPI definition with special fields
+  version: 1.0.0
+components:
+  schemas:
+    Answer:
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no
+
+  responses:
+    FooResponse:
+      description: A complex object array response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Answer'
+
+  parameters:
+    FooParam:
+      schema:
+        type: string
+      in: header
+      name: header-param-1
+      required: true
+
+  # @TODO add Example Objects
+  examples:
+
+  requestBodies:
+    FooBody:
+      description: user to add to the system
+      content:
+        'application/json':
+          schema:
+            $ref: '#/components/schemas/Answer'
+          examples:
+            user:
+              summary: User Example
+              externalValue: 'http://foo.bar/examples/user-example.json'
+        'application/xml':
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - yes
+              - no
+
+  headers:
+    FooHeader:
+      schema:
+        type: integer
+        nullable: true
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  # @TODO add Link Objects
+  links:
+
+  # @TODO add Callbacks Objects
+  callbacks:
+
+  # @TODO add PathItem Objects
+  pathItems:
+
+paths:
+  '/hello':
+    get:
+      security:
+        - {}
+        - bearerAuth: []
+        - petstoreAuth:
+            - write:pets
+            - read:pets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
