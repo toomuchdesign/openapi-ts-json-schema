@@ -103,6 +103,11 @@ https://github.com/ajv-validator/ajv/issues/1902
 
 ## OpenApi to JSON schema conversion
 
+OpenAPI is often described as an extension of JSON Schema, but both specs have changed over time and grown independently:
+
+- https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-1-1daf6678d86e
+- https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-2-52e282e06a05
+
 The current conversion consists of iterating the whole OpenApi schema and converting any found property with `@openapi-contrib/openapi-schema-to-json-schema`. This approach is definitely suboptimal since not all the OpenApi fields are supposed to be convertible to JSON schema.
 
 Another approach could consist of executing the conversion only on those fields which [OpenApi documentation](https://swagger.io/resources/open-api/) defines as data types convertible to JSON schema.
