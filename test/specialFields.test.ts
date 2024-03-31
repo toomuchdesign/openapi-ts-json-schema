@@ -7,8 +7,11 @@ describe('OpenApi special fields', () => {
   it('handles schema correctly', async () => {
     await expect(
       openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'special-fields/specs.yaml'),
-        outputPath: makeTestOutputPath('special-fields'),
+        openApiSchema: path.resolve(
+          fixtures,
+          'special-openapi-fields/specs.yaml',
+        ),
+        outputPath: makeTestOutputPath('special-openapi-fields'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         silent: true,
       }),

@@ -115,8 +115,8 @@ describe('refHandling option === "keep"', () => {
   describe('Alias definitions', () => {
     it('generate expected $ref object', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'alias-definitions/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-keep-alias-definitions'),
+        openApiSchema: path.resolve(fixtures, 'alias-definition/specs.yaml'),
+        outputPath: makeTestOutputPath('refHandling-keep-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'keep',

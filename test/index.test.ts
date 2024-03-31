@@ -91,7 +91,7 @@ describe('openapiToTsJsonSchema', () => {
     const outputPath = makeTestOutputPath('index');
 
     await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
       definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
@@ -106,7 +106,7 @@ describe('openapiToTsJsonSchema', () => {
     expect(existsSync(previouslyGeneratedSchematPath)).toBe(true);
 
     await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
       definitionPathsToGenerateFrom: ['components.months'],
       silent: true,
@@ -136,7 +136,7 @@ describe('openapiToTsJsonSchema', () => {
     describe('empty', async () => {
       it('logs expected message', async () => {
         await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+          openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
           outputPath: makeTestOutputPath('index'),
           definitionPathsToGenerateFrom: [],
         });
@@ -151,7 +151,7 @@ describe('openapiToTsJsonSchema', () => {
       it('throws with expected message', async () => {
         await expect(
           openapiToTsJsonSchema({
-            openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+            openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
             outputPath: makeTestOutputPath('index'),
             definitionPathsToGenerateFrom: ['paths', '/components.schema'],
           }),

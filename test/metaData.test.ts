@@ -9,7 +9,7 @@ describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
     const outputPath = makeTestOutputPath('meta-data');
     const { metaData } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
       definitionPathsToGenerateFrom: ['components.months'],
       refHandling: 'import',

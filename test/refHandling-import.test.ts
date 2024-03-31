@@ -175,8 +175,8 @@ describe('refHandling option === "import"', () => {
   describe('Alias definitions', () => {
     it('re-exports original definition', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'alias-definitions/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-import-alias-definitions'),
+        openApiSchema: path.resolve(fixtures, 'alias-definition/specs.yaml'),
+        outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'import',
