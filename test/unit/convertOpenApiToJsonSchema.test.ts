@@ -94,5 +94,29 @@ describe('convertOpenApiToJsonSchema', () => {
         expect(actual).toEqual(definition);
       });
     });
+
+    describe('Object with "type" prop (#211)', () => {
+      it('convert object definitions', () => {
+        const actual = convertOpenApiToJsonSchema({
+          type: 'object',
+          properties: {
+            type: { type: 'string', nullable: true },
+            bar: { type: 'string' },
+          },
+          required: ['type', 'bar'],
+        });
+
+        const expected = {
+          type: 'object',
+          properties: {
+            type: { type: ['string', 'null'] },
+            bar: { type: 'string' },
+          },
+          required: ['type', 'bar'],
+        };
+
+        expect(actual).toEqual(expected);
+      });
+    });
   });
 });

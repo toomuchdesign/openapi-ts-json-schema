@@ -18,30 +18,23 @@ function convertToJsonSchema<Value extends unknown>(
     return value;
   }
 
-  /**
-   * type as array is not a valid OpenAPI value
-   * https://swagger.io/docs/specification/data-models/data-types#mixed-types
-   */
-  if (Array.isArray(value.type)) {
-    return value;
-  }
+  if ('type' in value) {
+    /**
+     * Skip entities with "type" props defined and not a string
+     * (They should have already been converted, anyway)
+     * https://github.com/toomuchdesign/openapi-ts-json-schema/issues/211
+     */
+    if (typeof value.type !== 'string') {
+      return value;
+    }
 
-  /**
-   * Skip parameter objects
-   */
-  if ('in' in value) {
-    return value;
-  }
-
-  /**
-   * Skip security scheme object definitions
-   * https://swagger.io/specification/#security-scheme-object
-   */
-  if (
-    typeof value.type === 'string' &&
-    SECURITY_SCHEME_OBJECT_TYPES.includes(value.type)
-  ) {
-    return value;
+    /**
+     * Skip security scheme object definitions
+     * https://swagger.io/specification/#security-scheme-object
+     */
+    if (SECURITY_SCHEME_OBJECT_TYPES.includes(value.type)) {
+      return value;
+    }
   }
 
   const schema = fromSchema(value);
