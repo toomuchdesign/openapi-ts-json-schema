@@ -14,7 +14,7 @@ afterEach(() => {
 describe('"silent" option', async () => {
   it('console.log user messages', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'mini-referenced/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('silent-option'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: false,
