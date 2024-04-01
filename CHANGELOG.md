@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 0.9.2
+
+### Patch Changes
+
+- c2716a5: Fix JSON Schema conversions on objects with `type` prop
+
 ## 0.9.1
 
 ### Patch Changes
