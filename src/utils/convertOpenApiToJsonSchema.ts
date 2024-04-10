@@ -37,7 +37,7 @@ function convertToJsonSchema<Value extends unknown>(
     }
   }
 
-  const schema = fromSchema(value);
+  const schema = fromSchema(value,{strictMode:false});
   // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema
   delete schema.$schema;
   return schema;
