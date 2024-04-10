@@ -2,7 +2,8 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "noErrorTruncation": true
+    "noErrorTruncation": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": ["./dist"]
 }

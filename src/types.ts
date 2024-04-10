@@ -38,6 +38,7 @@ export type SchemaMetaDataMap = Map<
 
 export type ReturnPayload = {
   outputPath: string;
+  schemaPath: string;
   metaData: { schemas: SchemaMetaDataMap };
 };
 

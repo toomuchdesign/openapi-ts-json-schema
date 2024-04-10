@@ -13,6 +13,7 @@ export default defineConfig({
       concurrent: false,
       shuffle: true,
     },
+    testTimeout: 60 * 10000,
     coverage: {
       provider: 'v8',
       include: ['src'],

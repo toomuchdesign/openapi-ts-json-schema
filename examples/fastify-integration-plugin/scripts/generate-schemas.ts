@@ -1,5 +1,9 @@
 import path from 'path';
-import { openapiToTsJsonSchema, fastifyIntegrationPlugin } from '../../../src';
+import {
+  openapiToTsJsonSchema,
+  fastifyIntegrationPlugin,
+  openApiTSCodegenPlugin,
+} from '../../../src';
 
 async function generate() {
   await openapiToTsJsonSchema({
@@ -12,6 +16,9 @@ async function generate() {
     plugins: [
       fastifyIntegrationPlugin({
         sharedSchemasFilter: ({ id }) => id.startsWith('/components/schemas'),
+      }),
+      openApiTSCodegenPlugin({
+        outputGeneratingPath: path.resolve(__dirname, '../api'),
       }),
     ],
   });

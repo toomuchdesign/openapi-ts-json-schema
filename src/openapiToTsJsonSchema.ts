@@ -159,6 +159,7 @@ export async function openapiToTsJsonSchema({
 
   const returnPayload: ReturnPayload = {
     outputPath,
+    schemaPath: openApiSchemaPath,
     metaData: { schemas: schemaMetaDataMap },
   };
 
