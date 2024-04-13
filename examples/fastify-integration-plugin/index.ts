@@ -31,6 +31,27 @@ const start = async () => {
           },
         ],
       },
+      /**
+       * This is needed since Fastify by default names components as "def-${i}"
+       * https://github.com/fastify/fastify-swagger?tab=readme-ov-file#managing-your-refs
+       */
+      refResolver: {
+        buildLocalReference: (json, baseUri, fragment, i) => {
+          const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';
+          if (
+            typeof json.$id === 'string' &&
+            json.$id.startsWith(OPEN_API_COMPONENTS_SCHEMAS_PATH)
+          ) {
+            const name = json.$id.replace(OPEN_API_COMPONENTS_SCHEMAS_PATH, '');
+            if (name) {
+              return name;
+            }
+          }
+
+          // @TODO Support naming component schemas different than "components.schema"
+          return `def-${i}`;
+        },
+      },
     });
 
     await fastify.register(fastifySwaggerUI, {

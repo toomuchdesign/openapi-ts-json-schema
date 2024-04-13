@@ -23,10 +23,7 @@ This plugin should be considered bleeding edge. I'm still figuring out the best 
 
 Please consider that `@fastify/swagger` currently comes with some limitations. Eg:
 
-- no support for `$ref`s in array [🔗](https://github.com/fastify/fastify-swagger/issues/612)
-- `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs)
-
-...therefore the OpenAPI specification resulting from your Fastify application could be affected.
+- `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs) (you need to configure `@fastify/swagger`'s `refResolver` option for tha)
 
 ### Options
 
@@ -58,7 +55,7 @@ await openapiToTsJsonSchema({
 });
 ```
 
-Check out the [Fastify integration plugin example](../examples/fastify-integration-plugin/) to get an idea to how to setup `Fastify` and `json-schema-to-ts` type provider.
+Check out the [Fastify integration plugin example](../examples/fastify-integration-plugin/) to see how to setup `Fastify` and `json-schema-to-ts` type provider.
 
 ## Write your own plugin
 
