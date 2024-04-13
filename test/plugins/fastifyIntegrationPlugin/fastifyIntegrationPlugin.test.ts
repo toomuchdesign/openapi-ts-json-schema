@@ -1,10 +1,9 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { describe, it, expect } from 'vitest';
-import { openapiToTsJsonSchema } from '../../src';
-import { fastifyIntegrationPlugin } from '../../src';
-import { fixtures, makeTestOutputPath } from '../test-utils';
-import { formatTypeScript } from '../../src/utils';
+import { openapiToTsJsonSchema, fastifyIntegrationPlugin } from '../../../src';
+import { fixtures, makeTestOutputPath } from '../../test-utils';
+import { formatTypeScript } from '../../../src/utils';
 
 describe('fastifyIntegration plugin', () => {
   it('generates expected file', async () => {
