@@ -72,7 +72,7 @@ const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
     onInit: async ({ options }) => {
       // Validate/mutate option values here
     };
-    beforeGeneration: async ({ outputPath, metaData, options, utils }) => {
+    onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
       // Generate plugin-specific artifacts
     };
   })

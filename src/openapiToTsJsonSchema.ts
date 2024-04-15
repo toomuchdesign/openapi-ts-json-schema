@@ -161,10 +161,10 @@ export async function openapiToTsJsonSchema(
     metaData: { schemas: schemaMetaDataMap },
   };
 
-  // Execute plugins beforeGeneration method
-  for (const { beforeGeneration } of plugins) {
-    if (beforeGeneration) {
-      await beforeGeneration({
+  // Execute plugins onBeforeGeneration method
+  for (const { onBeforeGeneration } of plugins) {
+    if (onBeforeGeneration) {
+      await onBeforeGeneration({
         ...returnPayload,
         options,
         utils: { makeRelativeModulePath, formatTypeScript, saveFile },

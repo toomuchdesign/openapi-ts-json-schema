@@ -55,7 +55,7 @@ type OnInitInput = {
   options: Options;
 };
 
-type BeforeGenerationInput = ReturnPayload & {
+type OnBeforeGenerationInput = ReturnPayload & {
   options: Options;
   utils: {
     makeRelativeModulePath: typeof makeRelativeModulePath;
@@ -66,5 +66,5 @@ type BeforeGenerationInput = ReturnPayload & {
 
 export type Plugin<PluginOptions = void> = (options: PluginOptions) => {
   onInit?: (input: OnInitInput) => Promise<void>;
-  beforeGeneration?: (input: BeforeGenerationInput) => Promise<void>;
+  onBeforeGeneration?: (input: OnBeforeGenerationInput) => Promise<void>;
 };
