@@ -68,10 +68,14 @@ import type { Plugin } from 'openapi-ts-json-schema';
 // An `openapi-ts-json-schema` consists of a factory function returning an async function
 const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
   // Factory function with optional options
-  ({ optionOne, optionTwo }) =>
-    async ({ outputPath, metaData, options, utils }) => {
-      // Your plugin implementation...
+  ({ optionOne, optionTwo }) => ({
+    onInit: async ({ options }) => {
+      // Validate/mutate option values here
     };
+    beforeGeneration: async ({ outputPath, metaData, options, utils }) => {
+      // Generate plugin-specific artifacts
+    };
+  })
 
 export myPlugin;
 ```
