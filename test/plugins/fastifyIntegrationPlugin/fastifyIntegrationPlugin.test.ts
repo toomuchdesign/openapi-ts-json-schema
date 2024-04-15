@@ -133,4 +133,19 @@ describe('fastifyIntegration plugin', () => {
       ]);
     });
   });
+
+  it('validates "refHandling" options to be "keep"', async () => {
+    await expect(
+      openapiToTsJsonSchema({
+        openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+        outputPath: makeTestOutputPath('plugin-fastify'),
+        definitionPathsToGenerateFrom: ['components.months'],
+        refHandling: 'import',
+        plugins: [fastifyIntegrationPlugin()],
+        silent: true,
+      }),
+    ).rejects.toThrow(
+      '[openapi-ts-json-schema]: "options.refHandling" must be set to "keep"',
+    );
+  });
 });

@@ -15,30 +15,25 @@ import {
   makeRelativeModulePath,
 } from './utils';
 import type {
-  SchemaPatcher,
   SchemaMetaDataMap,
   JSONSchema,
   ReturnPayload,
-  Plugin,
+  Options,
 } from './types';
 
-export async function openapiToTsJsonSchema({
-  openApiSchema: openApiSchemaRelative,
-  definitionPathsToGenerateFrom,
-  schemaPatcher,
-  outputPath: providedOutputPath,
-  plugins = [],
-  silent,
-  refHandling = 'import',
-}: {
-  openApiSchema: string;
-  definitionPathsToGenerateFrom: string[];
-  schemaPatcher?: SchemaPatcher;
-  outputPath?: string;
-  plugins?: ReturnType<Plugin>[];
-  silent?: boolean;
-  refHandling?: 'inline' | 'import' | 'keep';
-}): Promise<ReturnPayload> {
+export async function openapiToTsJsonSchema(
+  options: Options,
+): Promise<ReturnPayload> {
+  const {
+    openApiSchema: openApiSchemaRelative,
+    definitionPathsToGenerateFrom,
+    schemaPatcher,
+    outputPath: providedOutputPath,
+    plugins = [],
+    silent,
+    refHandling = 'import',
+  } = options;
+
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
       `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
@@ -151,12 +146,6 @@ export async function openapiToTsJsonSchema({
     }
   }
 
-  await makeTsJsonSchemaFiles({
-    refHandling,
-    schemaMetaDataMap,
-    schemaPatcher,
-  });
-
   const returnPayload: ReturnPayload = {
     outputPath,
     metaData: { schemas: schemaMetaDataMap },
@@ -166,9 +155,17 @@ export async function openapiToTsJsonSchema({
   for (const plugin of plugins) {
     await plugin({
       ...returnPayload,
+      options,
       utils: { makeRelativeModulePath, formatTypeScript, saveFile },
     });
   }
+
+  // Generate schemas
+  await makeTsJsonSchemaFiles({
+    refHandling,
+    schemaMetaDataMap,
+    schemaPatcher,
+  });
 
   if (!silent) {
     console.log(

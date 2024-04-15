@@ -8,7 +8,18 @@ const fastifyIntegrationPlugin: Plugin<
   } | void
 > =
   ({ sharedSchemasFilter = () => false } = {}) =>
-  async ({ outputPath, metaData, utils }) => {
+  async ({ outputPath, metaData, options, utils }) => {
+    /**
+     * Options validation
+     * Fastify integration plugin is about generating standalone schemas
+     * with "id" and "ref" references
+     */
+    if (options.refHandling !== 'keep') {
+      throw new Error(
+        '[openapi-ts-json-schema]: "options.refHandling" must be set to "keep"',
+      );
+    }
+
     // Derive the schema data necessary to generate the declarations
     const allSchemas = [...metaData.schemas]
       .map(([id, schema]) => schema)
