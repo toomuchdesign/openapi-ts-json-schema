@@ -145,4 +145,34 @@ describe('refHandling option === "keep"', () => {
       );
     });
   });
+
+  describe('"refMapper" option', () => {
+    it('customize generated refs', async () => {
+      const { outputPath } = await openapiToTsJsonSchema({
+        openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+        outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
+        refHandling: {
+          strategy: 'keep',
+          refMapper: ({ ref }) => `foo-${ref}-bar`,
+        },
+        definitionPathsToGenerateFrom: ['components.months'],
+        silent: true,
+      });
+
+      const generatedSchema = await import(
+        path.resolve(outputPath, 'components/months/January')
+      );
+
+      expect(generatedSchema.default).toEqual({
+        description: 'January description',
+        properties: {
+          isJanuary: {
+            $ref: 'foo-#/components/schemas/Answer-bar',
+          },
+        },
+        required: ['isJanuary'],
+        type: 'object',
+      });
+    });
+  });
 });

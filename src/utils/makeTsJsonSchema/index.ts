@@ -68,6 +68,7 @@ export async function makeTsJsonSchema({
   if (refHandling.strategy === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
+      refMapper: refHandling.refMapper,
     });
   }
 
