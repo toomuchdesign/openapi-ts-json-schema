@@ -24,12 +24,22 @@ import type {
 export async function openapiToTsJsonSchema(
   options: Options,
 ): Promise<ReturnPayload> {
+  const { plugins = [] } = options;
+
+  // Execute plugins onInit method
+  for (const { onInit } of plugins) {
+    if (onInit) {
+      await onInit({
+        options,
+      });
+    }
+  }
+
   const {
     openApiSchema: openApiSchemaRelative,
     definitionPathsToGenerateFrom,
     schemaPatcher,
     outputPath: providedOutputPath,
-    plugins = [],
     silent,
     refHandling = 'import',
   } = options;
@@ -151,13 +161,15 @@ export async function openapiToTsJsonSchema(
     metaData: { schemas: schemaMetaDataMap },
   };
 
-  // Execute plugins
-  for (const plugin of plugins) {
-    await plugin({
-      ...returnPayload,
-      options,
-      utils: { makeRelativeModulePath, formatTypeScript, saveFile },
-    });
+  // Execute plugins onBeforeGeneration method
+  for (const { onBeforeGeneration } of plugins) {
+    if (onBeforeGeneration) {
+      await onBeforeGeneration({
+        ...returnPayload,
+        options,
+        utils: { makeRelativeModulePath, formatTypeScript, saveFile },
+      });
+    }
   }
 
   // Generate schemas

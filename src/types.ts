@@ -51,7 +51,11 @@ export type ReturnPayload = {
   metaData: { schemas: SchemaMetaDataMap };
 };
 
-type PluginInput = ReturnPayload & {
+type OnInitInput = {
+  options: Options;
+};
+
+type OnBeforeGenerationInput = ReturnPayload & {
   options: Options;
   utils: {
     makeRelativeModulePath: typeof makeRelativeModulePath;
@@ -60,6 +64,7 @@ type PluginInput = ReturnPayload & {
   };
 };
 
-export type Plugin<PluginOptions = void> = (
-  options: PluginOptions,
-) => (input: PluginInput) => Promise<void>;
+export type Plugin<PluginOptions = void> = (options: PluginOptions) => {
+  onInit?: (input: OnInitInput) => Promise<void>;
+  onBeforeGeneration?: (input: OnBeforeGenerationInput) => Promise<void>;
+};

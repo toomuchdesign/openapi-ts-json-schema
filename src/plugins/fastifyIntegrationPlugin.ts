@@ -6,9 +6,8 @@ const fastifyIntegrationPlugin: Plugin<
   {
     sharedSchemasFilter?: ({ id }: { id: string }) => boolean;
   } | void
-> =
-  ({ sharedSchemasFilter = () => false } = {}) =>
-  async ({ outputPath, metaData, options, utils }) => {
+> = ({ sharedSchemasFilter = () => false } = {}) => ({
+  onInit: async ({ options }) => {
     /**
      * Options validation
      * Fastify integration plugin is about generating standalone schemas
@@ -19,7 +18,8 @@ const fastifyIntegrationPlugin: Plugin<
         '[openapi-ts-json-schema]: "options.refHandling" must be set to "keep"',
       );
     }
-
+  },
+  onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
     const allSchemas = [...metaData.schemas]
       .map(([id, schema]) => schema)
@@ -59,26 +59,26 @@ const fastifyIntegrationPlugin: Plugin<
 
     // RefSchemas type: generate TS tuple TS type containing the types of all $ref JSON schema
     output += `\n\n
-    // Allows json-schema-to-ts to hydrate $refs via the "references" option
-    export type RefSchemas = [
-      ${refSchemas
-        .map((schema) => `typeof ${schema.uniqueName}WithId`)
-        .join(',')}
-    ];`;
+      // Allows json-schema-to-ts to hydrate $refs via the "references" option
+      export type RefSchemas = [
+        ${refSchemas
+          .map((schema) => `typeof ${schema.uniqueName}WithId`)
+          .join(',')}
+      ];`;
 
     // refSchemas: generate an array of all $ref JSON schema to be registered with `fastify.addSchema`
     output += `\n\n
-    // $ref JSON schemas to be registered with "fastify.addSchema"
-    export const refSchemas = [
-      ${refSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
-    ];`;
+      // $ref JSON schemas to be registered with "fastify.addSchema"
+      export const refSchemas = [
+        ${refSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
+      ];`;
 
     // sharedSchemas: generate an array of user-defined schemas to be registered with `fastify.addSchema`
     output += `\n\n
-    // Extra JSON schemas to be registered with "fastify.addSchema"
-    export const sharedSchemas = [
-      ${sharedSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
-    ];`;
+      // Extra JSON schemas to be registered with "fastify.addSchema"
+      export const sharedSchemas = [
+        ${sharedSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
+      ];`;
 
     // Format and save file
     const formattedOutput = await utils.formatTypeScript(output);
@@ -86,6 +86,7 @@ const fastifyIntegrationPlugin: Plugin<
       path: [outputPath, OUTPUT_FILE_NAME],
       data: formattedOutput,
     });
-  };
+  },
+});
 
 export default fastifyIntegrationPlugin;
