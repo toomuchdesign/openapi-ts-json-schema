@@ -9,6 +9,16 @@ import type {
   saveFile,
 } from './utils';
 
+export type Options = {
+  openApiSchema: string;
+  definitionPathsToGenerateFrom: string[];
+  schemaPatcher?: SchemaPatcher;
+  outputPath?: string;
+  plugins?: ReturnType<Plugin>[];
+  silent?: boolean;
+  refHandling?: 'inline' | 'import' | 'keep';
+};
+
 /**
  * Meta data for representing a specific openApi definition
  * @property `id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
@@ -42,6 +52,7 @@ export type ReturnPayload = {
 };
 
 type PluginInput = ReturnPayload & {
+  options: Options;
   utils: {
     makeRelativeModulePath: typeof makeRelativeModulePath;
     formatTypeScript: typeof formatTypeScript;
@@ -49,6 +60,6 @@ type PluginInput = ReturnPayload & {
   };
 };
 
-export type Plugin<Options = void> = (
-  options: Options,
+export type Plugin<PluginOptions = void> = (
+  options: PluginOptions,
 ) => (input: PluginInput) => Promise<void>;

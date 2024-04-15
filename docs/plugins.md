@@ -69,7 +69,7 @@ import type { Plugin } from 'openapi-ts-json-schema';
 const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
   // Factory function with optional options
   ({ optionOne, optionTwo }) =>
-    async ({ outputPath, metaData, utils }) => {
+    async ({ outputPath, metaData, options, utils }) => {
       // Your plugin implementation...
     };
 
