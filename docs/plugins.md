@@ -21,12 +21,10 @@ The plugin generates a `<outputPath>/fastify-integration.ts` TS file exposing:
 
 This plugin should be considered bleeding edge. I'm still figuring out the best way to integrate `open-ts-json-schema` output with Fastify.
 
-Please consider that `@fastify/swagger` currently comes with some limitations. Eg:
+Please consider that `@fastify/swagger` currently comes with some limitations:
 
-- no support for `$ref`s in array [🔗](https://github.com/fastify/fastify-swagger/issues/612)
-- `$ref`s being renamed as `def-${counter}` [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs)
-
-...therefore the OpenAPI specification resulting from your Fastify application could be affected.
+- OpenApi components being renamed as `def-${counter}` by default [🔗](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs) (you need to configure `@fastify/swagger`'s `refResolver` option to preserve components names)
+- All schemas registered via `.addSchema` being exposed under OpenAPi's `components.schemas` no matter their `$ref` value [🔗](https://github.com/fastify/fastify-swagger/blob/22d1e7c4f8cf63b0134047cdc272391d4bef3ec4/lib/spec/openapi/index.js#L23)
 
 ### Options
 
@@ -58,7 +56,7 @@ await openapiToTsJsonSchema({
 });
 ```
 
-Check out the [Fastify integration plugin example](../examples/fastify-integration-plugin/) to get an idea to how to setup `Fastify` and `json-schema-to-ts` type provider.
+Check out the [Fastify integration plugin example](../examples/fastify-integration-plugin/) to see how to setup `Fastify` and `json-schema-to-ts` type provider.
 
 ## Write your own plugin
 
