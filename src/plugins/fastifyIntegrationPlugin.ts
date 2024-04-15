@@ -13,7 +13,7 @@ const fastifyIntegrationPlugin: Plugin<
      * Fastify integration plugin is about generating standalone schemas
      * with "id" and "ref" references
      */
-    if (options.refHandling !== 'keep') {
+    if (options.refHandling?.strategy !== 'keep') {
       throw new Error(
         '[openapi-ts-json-schema]: "options.refHandling" must be set to "keep"',
       );
