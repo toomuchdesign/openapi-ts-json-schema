@@ -10,7 +10,7 @@ describe('refHandling option === "inline"', () => {
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-inline'),
       definitionPathsToGenerateFrom: ['components.months'],
-      refHandling: 'inline',
+      refHandling: { strategy: 'inline' },
       silent: true,
     });
 

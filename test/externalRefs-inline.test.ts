@@ -10,6 +10,7 @@ describe('External $refs', () => {
         openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
         outputPath: makeTestOutputPath('external-refs'),
         definitionPathsToGenerateFrom: ['components.schemas'],
+        refHandling: { strategy: 'inline' },
         silent: true,
       });
 

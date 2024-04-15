@@ -26,7 +26,7 @@ describe('refHandling option === "import"', () => {
         outputPath: makeTestOutputPath('refHandling-import'),
         definitionPathsToGenerateFrom,
         silent: true,
-        refHandling: 'import',
+        refHandling: { strategy: 'import' },
       });
 
       const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
@@ -124,7 +124,7 @@ describe('refHandling option === "import"', () => {
       outputPath: makeTestOutputPath('refHandling-import'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: 'import',
+      refHandling: { strategy: 'import' },
     });
 
     // January schema
@@ -179,7 +179,7 @@ describe('refHandling option === "import"', () => {
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
-        refHandling: 'import',
+        refHandling: { strategy: 'import' },
       });
 
       const answerSchema = await import(
