@@ -12,7 +12,7 @@ describe('Returned "metaData"', async () => {
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
       definitionPathsToGenerateFrom: ['components.months'],
-      refHandling: { strategy: 'import' },
+      refHandling: 'import',
       silent: true,
     });
 

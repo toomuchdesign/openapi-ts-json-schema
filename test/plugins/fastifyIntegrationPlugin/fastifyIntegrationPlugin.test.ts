@@ -11,7 +11,7 @@ describe('fastifyIntegration plugin', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('plugin-fastify'),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
-      refHandling: { strategy: 'keep' },
+      refHandling: 'keep',
       plugins: [fastifyIntegrationPlugin()],
       silent: true,
     });
@@ -92,7 +92,7 @@ describe('fastifyIntegration plugin', () => {
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('plugin-fastify'),
         definitionPathsToGenerateFrom: ['components.months', 'paths'],
-        refHandling: { strategy: 'keep' },
+        refHandling: 'keep',
         plugins: [
           fastifyIntegrationPlugin({
             sharedSchemasFilter: ({ id }) =>
@@ -140,7 +140,7 @@ describe('fastifyIntegration plugin', () => {
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('plugin-fastify'),
         definitionPathsToGenerateFrom: ['components.months'],
-        refHandling: { strategy: 'import' },
+        refHandling: 'import',
         plugins: [fastifyIntegrationPlugin()],
         silent: true,
       }),
