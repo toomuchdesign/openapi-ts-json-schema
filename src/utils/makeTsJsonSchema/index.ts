@@ -9,7 +9,6 @@ import type {
   SchemaMetaDataMap,
   SchemaMetaData,
   SchemaPatcher,
-  RefHandling,
 } from '../../types';
 
 export async function makeTsJsonSchema({
@@ -20,14 +19,14 @@ export async function makeTsJsonSchema({
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
-  refHandling: RefHandling;
+  refHandling: 'inline' | 'import' | 'keep';
   schemaPatcher?: SchemaPatcher;
 }): Promise<string> {
   const { originalSchema, absoluteDirName } = metaData;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
-    refHandling.strategy === 'import' || refHandling.strategy === 'keep'
+    refHandling === 'import' || refHandling === 'keep'
       ? replaceInlinedRefsWithStringPlaceholder(originalSchema)
       : originalSchema;
 
@@ -53,11 +52,11 @@ export async function makeTsJsonSchema({
    * of the definition found in the placeholder
    */
   let tsSchema =
-    isAlias && refHandling.strategy === 'import'
+    isAlias && refHandling === 'import'
       ? `export default ` + stringifiedSchema + ';'
       : `export default ` + stringifiedSchema + ' as const;';
 
-  if (refHandling.strategy === 'import') {
+  if (refHandling === 'import') {
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,
@@ -65,7 +64,7 @@ export async function makeTsJsonSchema({
     });
   }
 
-  if (refHandling.strategy === 'keep') {
+  if (refHandling === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
     });
