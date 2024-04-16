@@ -3,6 +3,11 @@ export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
+export type RefHandling =
+  | { strategy: 'import' }
+  | { strategy: 'inline' }
+  | { strategy: 'keep' };
+
 import type {
   makeRelativeModulePath,
   formatTypeScript,
@@ -16,7 +21,7 @@ export type Options = {
   outputPath?: string;
   plugins?: ReturnType<Plugin>[];
   silent?: boolean;
-  refHandling?: 'inline' | 'import' | 'keep';
+  refHandling?: RefHandling;
 };
 
 /**

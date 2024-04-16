@@ -15,7 +15,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-inline'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: 'inline',
+          refHandling: { strategy: 'inline' },
           silent: true,
         });
 
@@ -86,7 +86,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-import'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: 'import',
+          refHandling: { strategy: 'import' },
           silent: true,
         });
 
@@ -136,7 +136,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-keep'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: 'keep',
+          refHandling: { strategy: 'keep' },
           silent: true,
         });
 
