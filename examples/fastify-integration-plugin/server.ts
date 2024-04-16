@@ -31,7 +31,7 @@ export async function makeServer() {
       ],
     },
     /**
-     * This is needed since Fastify by default names components as "def-${i}"
+     * Register schemas with $id "/components/schemas/xxx" under OpenAPI's "components.schemas"
      * https://github.com/fastify/fastify-swagger?tab=readme-ov-file#managing-your-refs
      */
     refResolver: {
@@ -41,10 +41,7 @@ export async function makeServer() {
           typeof json.$id === 'string' &&
           json.$id.startsWith(OPEN_API_COMPONENTS_SCHEMAS_PATH)
         ) {
-          const name = json.$id.replace(OPEN_API_COMPONENTS_SCHEMAS_PATH, '');
-          if (name) {
-            return name;
-          }
+          return json.$id.replace(OPEN_API_COMPONENTS_SCHEMAS_PATH, '');
         }
 
         // @TODO Support naming component schemas different than "components.schema"
@@ -57,12 +54,12 @@ export async function makeServer() {
     routePrefix: '/documentation',
   });
 
-  // Register `$ref` schemas individually so that they `$ref`s get resolved runtime.
+  // Register `$ref` schemas individually so that they can be resolved at runtime
   refSchemas.forEach((schema) => {
     server.addSchema(schema);
   });
 
-  // Register other schemas to let @fastify/swagger re-export them as shared openAPI components
+  // Register all other non-`$ref` schemas to let @fastify/swagger re-export them under "components.schemas"
   sharedSchemas.forEach((schema) => {
     server.addSchema(schema);
   });

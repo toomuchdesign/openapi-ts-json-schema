@@ -11,7 +11,6 @@ describe('fastifyIntegration plugin', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('plugin-fastify'),
       definitionPathsToGenerateFrom: ['components.months', 'paths'],
-      refHandling: { strategy: 'keep' },
       plugins: [fastifyIntegrationPlugin()],
       silent: true,
     });
@@ -132,20 +131,5 @@ describe('fastifyIntegration plugin', () => {
         { ...marchSchema.default, $id: '/components/months/March' },
       ]);
     });
-  });
-
-  it('validates "refHandling" options to be "keep"', async () => {
-    await expect(
-      openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-        outputPath: makeTestOutputPath('plugin-fastify'),
-        definitionPathsToGenerateFrom: ['components.months'],
-        refHandling: { strategy: 'import' },
-        plugins: [fastifyIntegrationPlugin()],
-        silent: true,
-      }),
-    ).rejects.toThrow(
-      '[openapi-ts-json-schema]: "options.refHandling" must be set to "keep"',
-    );
   });
 });
