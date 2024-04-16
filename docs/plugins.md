@@ -13,13 +13,13 @@ The plugin generates a `<outputPath>/fastify-integration.ts` TS file exposing:
 
 - `RefSchemas` TS type specifically built to enable `json-schema-to-ts` to resolve `$ref` schema types
 - `refSchemas`: an array containing all the `$ref` schemas found provided with the relevant `$id` property necessary to register schemas with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema)
-- `sharedSchemas`: an array of the extra user-picked schemas (via `sharedSchemasFilter` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as shared openAPI components
+- `sharedSchemas`: an array of the extra user-picked schemas (via `includeNonRefSchemas` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as shared openAPI components
 
 ### Options
 
-| Property                | Type                             | Description                                                                                                                                                                                  | Default |
-| ----------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| **sharedSchemasFilter** | `({id}: {id:string}) => boolean` | Expose a `sharedSchemas` array with extra user-selected schemas to be registered with `fastify.addSchema`. Provided function is used to filter all available non-$ref generated JSON schemas | -       |
+| Property                 | Type                             | Description                                                     | Default |
+| ------------------------ | -------------------------------- | --------------------------------------------------------------- | ------- |
+| **includeNonRefSchemas** | `({id}: {id:string}) => boolean` | Pick non-ref schemas to be registered with `fastify.addSchema`. | -       |
 
 ### Example
 
@@ -38,7 +38,7 @@ await openapiToTsJsonSchema({
   plugins: [
     fastifyIntegrationPlugin({
       // Optional
-      sharedSchemasFilter: ({ id }) => id.startsWith('/components/schemas'),
+      includeNonRefSchemas: ({ id }) => id.startsWith('/components/schemas'),
     }),
   ],
 });
@@ -50,8 +50,7 @@ Register generated schemas:
 import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
 import {
   RefSchemas,
-  refSchemas,
-  sharedSchemas,
+  schemas,
 } from '.path/to/generated/schemas/fastify-integration';
 
 // Configure json-schema-to-ts type provider to hydrate "$ref"s schema types
@@ -60,13 +59,8 @@ const server =
     JsonSchemaToTsProvider<{ references: RefSchemas }>
   >();
 
-// Register `$ref` schemas individually so that they can be resolved at runtime
-refSchemas.forEach((schema) => {
-  server.addSchema(schema);
-});
-
-// Register all other non-`$ref` schemas to let @fastify/swagger re-export them under "components.schemas"
-sharedSchemas.forEach((schema) => {
+// Register exposed JSON schemas
+schemas.forEach((schema) => {
   server.addSchema(schema);
 });
 ```

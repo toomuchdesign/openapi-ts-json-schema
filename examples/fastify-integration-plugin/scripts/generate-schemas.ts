@@ -8,10 +8,9 @@ async function generate() {
       '../definitions/petstore/open-api-definition.yaml',
     ),
     definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
-    refHandling: { strategy: 'keep' },
     plugins: [
       fastifyIntegrationPlugin({
-        sharedSchemasFilter: ({ id }) => id.startsWith('/components/schemas'),
+        includeNonRefSchemas: ({ id }) => id.startsWith('/components/schemas'),
       }),
     ],
   });
