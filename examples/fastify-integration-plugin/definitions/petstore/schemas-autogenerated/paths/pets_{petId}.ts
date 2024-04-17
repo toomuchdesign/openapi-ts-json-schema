@@ -19,7 +19,7 @@ export default {
         description: "Expected response to a valid request",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Pet" },
+            schema: { $ref: "/components/schemas/Pet" },
           },
         },
       },
@@ -27,7 +27,7 @@ export default {
         description: "unexpected error",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Error" },
+            schema: { $ref: "/components/schemas/Error" },
           },
         },
       },

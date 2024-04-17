@@ -84,7 +84,7 @@ describe('fastifyIntegration plugin', () => {
                   description: 'Default Response',
                   content: {
                     'application/json': {
-                      schema: { $ref: '#/components/schemas/Pet' },
+                      schema: { $ref: '#/components/schemas/Pets' },
                     },
                   },
                 },

@@ -5,6 +5,7 @@ export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
 export { parseRef } from './parseRef';
 export { refToPath } from './refToPath';
+export { refToId } from './refToId';
 export { pathToRef } from './pathToRef';
 export {
   REF_SYMBOL,

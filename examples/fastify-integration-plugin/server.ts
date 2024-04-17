@@ -71,18 +71,20 @@ export async function makeServer() {
         required: ['id'],
       },
       response: {
-        200: { $ref: '/components/schemas/Pet#' },
+        200: { $ref: '/components/schemas/Pets' },
       },
     } as const,
     handler: (req) => {
       // req.param is fully typed
       const { id } = req.params;
       // Return type type checked to fit schema.response[200] schema
-      return {
-        id,
-        name: 'Pet name',
-        tag: '3',
-      };
+      return [
+        {
+          id,
+          name: 'Pet name',
+          tag: '3',
+        },
+      ];
     },
   });
 

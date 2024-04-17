@@ -1,4 +1,5 @@
 import type { Plugin } from '../types';
+import { refToId } from '../utils';
 
 const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 
@@ -9,7 +10,16 @@ const fastifyIntegrationPlugin: Plugin<
 > = ({ includeNonRefSchemas = () => false } = {}) => ({
   onInit: async ({ options }) => {
     // Force "keep" refHandling
-    options.refHandling = { strategy: 'keep' };
+    options.refHandling = {
+      strategy: 'keep',
+      refMapper: ({ ref }) => {
+        /**
+         * Replace original $ref values with internal schema id which
+         * the schema is registered with via Fastify's `addSchema`
+         */
+        return refToId(ref);
+      },
+    };
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
@@ -46,6 +56,7 @@ const fastifyIntegrationPlugin: Plugin<
     // Generate JSON schema objects with $id prop
     output += '\n\n';
     exportedSchemas.forEach((schema) => {
+      // @NOTE schemas internal $refs should match the $id generated here
       output += `\n const ${schema.uniqueName}WithId = {...${schema.uniqueName}, $id: "${schema.id}"} as const;`;
     });
 
