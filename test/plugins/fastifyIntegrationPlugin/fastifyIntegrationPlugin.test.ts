@@ -42,14 +42,14 @@ describe('fastifyIntegration plugin', () => {
         $id: "/components/months/February",
       } as const;
 
-      // Allows json-schema-to-ts to hydrate $refs via the "references" option
+      // RefSchemas type: tuple of $ref schema types to enable json-schema-to-ts hydrate $refs via "references" option
       export type RefSchemas = [
         typeof componentsSchemasAnswerWithId,
         typeof componentsMonthsJanuaryWithId,
         typeof componentsMonthsFebruaryWithId,
       ];
 
-      // JSON schemas to be registered with "fastify.addSchema"
+      // schemas: array of JSON schemas to be registered with "fastify.addSchema"
       export const schemas = [
         componentsSchemasAnswerWithId,
         componentsMonthsJanuaryWithId,

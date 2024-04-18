@@ -62,16 +62,16 @@ const fastifyIntegrationPlugin: Plugin<
 
     // RefSchemas type: generate TS tuple TS type containing the types of all $ref JSON schema
     output += `\n\n
-      // Allows json-schema-to-ts to hydrate $refs via the "references" option
+      // RefSchemas type: tuple of $ref schema types to enable json-schema-to-ts hydrate $refs via "references" option
       export type RefSchemas = [
         ${refSchemas
           .map((schema) => `typeof ${schema.uniqueName}WithId`)
           .join(',')}
       ];`;
 
-    // schemas: generate an array of all $ref JSON schema to be registered with `fastify.addSchema`
+    // schemas: generate an array of all exported JSON schema to be registered with `fastify.addSchema`
     output += `\n\n
-      // JSON schemas to be registered with "fastify.addSchema"
+      // schemas: array of JSON schemas to be registered with "fastify.addSchema"
       export const schemas = [
         ${exportedSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
       ];`;
