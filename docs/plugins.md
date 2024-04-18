@@ -64,7 +64,7 @@ schemas.forEach((schema) => {
 });
 ```
 
-Configure `@fastify/swagger`'s [`refResolver` option](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs):
+Configure `@fastify/swagger`'s [`refResolver` option](https://github.com/fastify/fastify-swagger/tree/v8.10.1#managing-your-refs) to re-export registered schemas under OpenAPI `components.schema` prop:
 
 ```ts
 await server.register(fastifySwagger, {
@@ -83,6 +83,27 @@ await server.register(fastifySwagger, {
 
       return `def-${i}`;
     },
+  },
+});
+```
+
+Reference registered schemas as:
+
+```ts
+server.get('/pet', {
+  schema: {
+    response: {
+      200: { $ref: '/components/schemas/Pets' },
+    },
+  } as const,
+  handler: (req) => {
+    return [
+      {
+        id,
+        name: 'Pet name',
+        tag: '3',
+      },
+    ];
   },
 });
 ```
