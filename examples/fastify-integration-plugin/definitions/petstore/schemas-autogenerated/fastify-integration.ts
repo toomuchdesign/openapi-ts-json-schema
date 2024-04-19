@@ -26,6 +26,7 @@ export type RefSchemas = [
   typeof componentsSchemasPetWithId,
   typeof componentsSchemasPetsWithId,
   typeof componentsSchemasErrorWithId,
+  typeof componentsSchemasOwnerWithId,
 ];
 
 // schemas: array of JSON schemas to be registered with "fastify.addSchema"

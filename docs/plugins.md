@@ -12,13 +12,13 @@ This plugin is an attempt to better integrate Fastify and its [`json-schema-to-t
 The plugin generates a `<outputPath>/fastify-integration.ts` TS file exposing:
 
 - `RefSchemas` TS type specifically built to enable `json-schema-to-ts` to resolve `$ref` schema types
-- `schemas`: an array containing all `$ref` schemas and user-picked schemas (via `includeNonRefSchemas` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as `components.schemas` OpenAPI definitions
+- `schemas`: an array containing all `$ref` schemas and user-picked schemas (via `schemaFilter` option) to be registered with [`fastify.addSchema`](https://fastify.dev/docs/latest/Reference/Server/#addschema) so that [`@fastify/swagger`](https://github.com/fastify/fastify-swagger) can re-export them as `components.schemas` OpenAPI definitions
 
 ### Options
 
-| Property                 | Type                             | Description                                                     | Default |
-| ------------------------ | -------------------------------- | --------------------------------------------------------------- | ------- |
-| **includeNonRefSchemas** | `({id}: {id:string}) => boolean` | Pick non-ref schemas to be registered with `fastify.addSchema`. | -       |
+| Property         | Type                                             | Description                                            | Default                              |
+| ---------------- | ------------------------------------------------ | ------------------------------------------------------ | ------------------------------------ |
+| **schemaFilter** | `({id}: {id:string, isRef: boolean}) => boolean` | Pick the schemas to register with `fastify.addSchema`. | All `components.schemas` definitions |
 
 ### Example
 
@@ -37,7 +37,7 @@ await openapiToTsJsonSchema({
   plugins: [
     fastifyIntegrationPlugin({
       // Optional
-      includeNonRefSchemas: ({ id }) => id.startsWith('/components/schemas'),
+      schemaFilter: ({ id }) => id.startsWith('/components/schemas'),
     }),
   ],
 });

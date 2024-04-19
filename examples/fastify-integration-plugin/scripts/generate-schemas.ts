@@ -10,7 +10,7 @@ async function generate() {
     definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
     plugins: [
       fastifyIntegrationPlugin({
-        includeNonRefSchemas: ({ id }) => id.startsWith('/components/schemas'),
+        schemaFilter: ({ id }) => id.startsWith('/components/schemas'),
       }),
     ],
   });

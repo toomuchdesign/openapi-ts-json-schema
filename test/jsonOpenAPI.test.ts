@@ -8,12 +8,12 @@ describe('JSON OpenAPI input', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'json/specs.json'),
       outputPath: makeTestOutputPath('json'),
-      definitionPathsToGenerateFrom: ['components.months'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
     });
 
     const januarySchema = await import(
-      path.resolve(outputPath, 'components/months/January')
+      path.resolve(outputPath, 'components/schemas/January')
     );
 
     expect(januarySchema.default).toEqual({

@@ -27,8 +27,8 @@ describe('refHandling option === "keep"', () => {
               'application/json': {
                 schema: {
                   oneOf: [
-                    { $ref: '#/components/months/January' },
-                    { $ref: '#/components/months/February' },
+                    { $ref: '#/components/schemas/January' },
+                    { $ref: '#/components/schemas/February' },
                     {
                       description: 'Inline path schema',
                       type: ['integer', 'null'],
@@ -62,8 +62,8 @@ describe('refHandling option === "keep"', () => {
                 "application/json": {
                   schema: {
                     oneOf: [
-                      { $ref: "#/components/months/January" },
-                      { $ref: "#/components/months/February" },
+                      { $ref: "#/components/schemas/January" },
+                      { $ref: "#/components/schemas/February" },
                       {
                         type: ['integer', 'null'],
                         enum: [1, 0, null],
@@ -90,7 +90,7 @@ describe('refHandling option === "keep"', () => {
     });
 
     const januarySchema = await import(
-      path.resolve(outputPath, 'components/months/January')
+      path.resolve(outputPath, 'components/schemas/January')
     );
 
     expect(januarySchema.default).toEqual({
@@ -151,7 +151,7 @@ describe('refHandling option === "keep"', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
-        definitionPathsToGenerateFrom: ['components.months'],
+        definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: {
           strategy: 'keep',
@@ -160,7 +160,7 @@ describe('refHandling option === "keep"', () => {
       });
 
       const actualSchema = await import(
-        path.resolve(outputPath, 'components/months/January')
+        path.resolve(outputPath, 'components/schemas/January')
       );
 
       expect(actualSchema.default).toEqual({

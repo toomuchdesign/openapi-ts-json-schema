@@ -15,7 +15,7 @@ describe('refHandling option === "import"', () => {
       description: 'Generating $ref schemas, too',
       definitionPathsToGenerateFrom: [
         'paths',
-        'components.months',
+        'components.schemas',
         'components.schemas',
       ],
     },
@@ -86,8 +86,8 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsMonthsFebruary from "./../components/months/February";
-        import componentsMonthsJanuary from "./../components/months/January";
+        import componentsSchemasFebruary from "./../components/schemas/February";
+        import componentsSchemasJanuary from "./../components/schemas/January";
 
         export default {
           get: {
@@ -98,8 +98,8 @@ describe('refHandling option === "import"', () => {
                   "application/json": {
                     schema: {
                       oneOf: [
-                        componentsMonthsJanuary,
-                        componentsMonthsFebruary,
+                        componentsSchemasJanuary,
+                        componentsSchemasFebruary,
                         {
                           type: ["integer", "null"],
                           enum: [1, 0, null],
@@ -129,14 +129,14 @@ describe('refHandling option === "import"', () => {
 
     // January schema
     const actualJanuarySchemaFile = await fs.readFile(
-      path.resolve(outputPath, 'components/months/January.ts'),
+      path.resolve(outputPath, 'components/schemas/January.ts'),
       {
         encoding: 'utf8',
       },
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./../schemas/Answer";
+      import componentsSchemasAnswer from "./Answer";
 
       export default {
         description: "January description",
@@ -151,14 +151,14 @@ describe('refHandling option === "import"', () => {
 
     // February schema
     const actualFebruarySchemaFile = await fs.readFile(
-      path.resolve(outputPath, 'components/months/February.ts'),
+      path.resolve(outputPath, 'components/schemas/February.ts'),
       {
         encoding: 'utf8',
       },
     );
 
     const expectedFebruarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./../schemas/Answer";
+      import componentsSchemasAnswer from "./Answer";
 
       export default {
         description: "February description",

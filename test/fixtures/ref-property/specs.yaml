@@ -4,7 +4,7 @@ info:
   description: description
   version: 1.0.0
 components:
-  months:
+  schemas:
     January:
       description: January description
       type: object
@@ -13,8 +13,6 @@ components:
       properties:
         isJanuary:
           $ref: '#/components/schemas/Answer'
-
-  schemas:
     Answer:
       type: string
       nullable: true

@@ -11,13 +11,15 @@ describe('Returned "metaData"', async () => {
     const { metaData } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
-      definitionPathsToGenerateFrom: ['components.months'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: { strategy: 'import' },
       silent: true,
     });
 
     const answerMetaData = metaData.schemas.get('#/components/schemas/Answer');
-    const januaryMetaData = metaData.schemas.get('#/components/months/January');
+    const januaryMetaData = metaData.schemas.get(
+      '#/components/schemas/January',
+    );
 
     expect(answerMetaData).toBeDefined();
     expect(januaryMetaData).toBeDefined();
@@ -48,20 +50,20 @@ describe('Returned "metaData"', async () => {
     };
 
     const expectedJanuaryMetaData: SchemaMetaData = {
-      id: '/components/months/January',
-      uniqueName: 'componentsMonthsJanuary',
+      id: '/components/schemas/January',
+      uniqueName: 'componentsSchemasJanuary',
       originalSchema: expect.any(Object),
       isRef: false,
 
-      absoluteDirName: `${outputPath}/components/months`.replaceAll(
+      absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
         path.sep,
       ),
-      absolutePath: `${outputPath}/components/months/January.ts`.replaceAll(
+      absolutePath: `${outputPath}/components/schemas/January.ts`.replaceAll(
         '/',
         path.sep,
       ),
-      absoluteImportPath: `${outputPath}/components/months/January`.replaceAll(
+      absoluteImportPath: `${outputPath}/components/schemas/January`.replaceAll(
         '/',
         path.sep,
       ),

@@ -9,15 +9,15 @@ describe('openapiToTsJsonSchema', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('index'),
-      definitionPathsToGenerateFrom: ['paths', 'components.months'],
+      definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
       silent: true,
     });
 
     const januarySchema = await import(
-      path.resolve(outputPath, 'components/months/January')
+      path.resolve(outputPath, 'components/schemas/January')
     );
     const februarySchema = await import(
-      path.resolve(outputPath, 'components/months/February')
+      path.resolve(outputPath, 'components/schemas/February')
     );
 
     // definition paths get escaped
@@ -108,7 +108,7 @@ describe('openapiToTsJsonSchema', () => {
     await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath,
-      definitionPathsToGenerateFrom: ['components.months'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
     });
   });

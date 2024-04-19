@@ -9,13 +9,13 @@ describe('refHandling option === "inline"', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-inline'),
-      definitionPathsToGenerateFrom: ['components.months'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: { strategy: 'inline' },
       silent: true,
     });
 
     const januarySchemaAsText = await fs.readFile(
-      path.resolve(outputPath, 'components/months/January.ts'),
+      path.resolve(outputPath, 'components/schemas/January.ts'),
       {
         encoding: 'utf8',
       },
