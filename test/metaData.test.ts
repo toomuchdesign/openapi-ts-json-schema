@@ -7,10 +7,9 @@ import type { SchemaMetaData } from '../src/types';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
-    const outputPath = makeTestOutputPath('meta-data');
-    const { metaData } = await openapiToTsJsonSchema({
+    const { metaData, outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-      outputPath,
+      outputPath: makeTestOutputPath('meta-data'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: { strategy: 'import' },
       silent: true,

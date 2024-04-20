@@ -88,11 +88,9 @@ describe('openapiToTsJsonSchema', () => {
   });
 
   it('deletes previously generated schemas', async () => {
-    const outputPath = makeTestOutputPath('index');
-
-    await openapiToTsJsonSchema({
+    const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-      outputPath,
+      outputPath: makeTestOutputPath('index-delete-old'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
     });
@@ -118,7 +116,7 @@ describe('openapiToTsJsonSchema', () => {
       await expect(() =>
         openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'does-not-exist.yaml'),
-          outputPath: makeTestOutputPath('index'),
+          outputPath: makeTestOutputPath('index-non-existing-openAPI'),
           definitionPathsToGenerateFrom: ['components'],
           silent: true,
         }),
@@ -137,7 +135,9 @@ describe('openapiToTsJsonSchema', () => {
       it('logs expected message', async () => {
         await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-          outputPath: makeTestOutputPath('index'),
+          outputPath: makeTestOutputPath(
+            'index-definitionPathsToGenerateFrom-missing',
+          ),
           definitionPathsToGenerateFrom: [],
         });
 
@@ -152,7 +152,9 @@ describe('openapiToTsJsonSchema', () => {
         await expect(
           openapiToTsJsonSchema({
             openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-            outputPath: makeTestOutputPath('index'),
+            outputPath: makeTestOutputPath(
+              'index-definitionPathsToGenerateFrom-non-relative',
+            ),
             definitionPathsToGenerateFrom: ['paths', '/components.schema'],
           }),
         ).rejects.toThrow(

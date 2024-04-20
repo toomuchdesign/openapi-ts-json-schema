@@ -9,7 +9,9 @@ describe('External $refs', () => {
       it('dedupe imports and resolve against same schema (aliases)', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
-          outputPath: makeTestOutputPath('external-refs'),
+          outputPath: makeTestOutputPath(
+            'external-refs-import-definition-alias',
+          ),
           definitionPathsToGenerateFrom: ['components.schemas'],
           refHandling: { strategy: 'import' },
           silent: true,
@@ -34,7 +36,7 @@ describe('External $refs', () => {
       it('dedupe imports and resolve against same document', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
-          outputPath: makeTestOutputPath('external-refs'),
+          outputPath: makeTestOutputPath('external-refs-import-document-alias'),
           definitionPathsToGenerateFrom: ['components.schemas'],
           refHandling: { strategy: 'import' },
           silent: true,

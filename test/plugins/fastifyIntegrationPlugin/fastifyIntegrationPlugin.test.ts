@@ -94,7 +94,7 @@ describe('fastifyIntegration plugin', () => {
     it('generates expected file', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-        outputPath: makeTestOutputPath('plugin-fastify'),
+        outputPath: makeTestOutputPath('plugin-fastify-schemaFilter-option'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         refHandling: { strategy: 'keep' },
         plugins: [

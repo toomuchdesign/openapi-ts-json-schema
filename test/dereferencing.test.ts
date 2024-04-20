@@ -29,7 +29,7 @@ describe('Dereferencing', () => {
   it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-      outputPath: makeTestOutputPath('dereferencing'),
+      outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });

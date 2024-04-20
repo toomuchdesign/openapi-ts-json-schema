@@ -121,7 +121,7 @@ describe('refHandling option === "import"', () => {
   it('Generates expected $ref schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-      outputPath: makeTestOutputPath('refHandling-import'),
+      outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
       refHandling: { strategy: 'import' },
