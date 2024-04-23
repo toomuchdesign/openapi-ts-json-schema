@@ -52,11 +52,7 @@ This process could be definitely shorter if `@apidevtools/json-schema-ref-parser
 
 ## `refHandling`: keep
 
-`keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the original `$ref` object `{$ref: "#/foo/bar" }`.
-
-It's quite counterintuitive since refs gets dereferenced to be later re-referenced. The reason is that the dereferencing process is mis-used here as a way to detect `$ref`s all around the schemas and generate the relevant meta data for schema generation.
-
-In a future refactoring we might consider skipping dereferencing for this `refHandling` option.
+`keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the an actual `$ref` value.
 
 ## OpenAPI $ref vs JSON schema $id
 
@@ -64,9 +60,11 @@ In a future refactoring we might consider skipping dereferencing for this `refHa
 - [JSON schema `$ref`s documentation](https://json-schema.org/understanding-json-schema/structuring.html#ref)
 - [JSON schema Compound Schema Document `$id` documentation](https://json-schema.org/understanding-json-schema/structuring.html#bundling)
 
-Each generated JSON schema is shipped with an inferred JSON schema Compound Schema Document `$id`.
+JSON schemas are currently generated without an `$id` prop. `$id`s can currently be generates via plugins (see Fastify integration plugin).
 
-We are currently assuming that a OpenAPI `$ref` like `#/components/schemas/MySchema` should be translated into the following JSON schema `$ref`/`$id`: `/components/schemas/MySchema`.
+Schemas are internally assigned to a private id with the following structure: `/components/schemas/MySchema`.
+
+We could expose an option to append `$id` props to the generated schemas: this would clash with import `refHandling`, unless we find a way to import schemas with and without `$id`.
 
 ## TypeScript cannot import json as const
 
@@ -99,7 +97,8 @@ Comment [this line](https://github.com/toomuchdesign/openapi-ts-json-schema/blob
 
 AVJ doesn't support implicit data validation and type inference, yet.
 
-https://github.com/ajv-validator/ajv/issues/1902
+- https://github.com/ajv-validator/ajv/issues/2398
+- https://github.com/ajv-validator/ajv/issues/2091
 
 ## OpenApi to JSON schema conversion
 
