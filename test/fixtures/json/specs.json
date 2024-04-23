@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "components": {
-    "months": {
+    "schemas": {
       "January": {
         "description": "January description",
         "type": "object",
@@ -18,9 +18,7 @@
             "enum": ["yes", "no"]
           }
         }
-      }
-    },
-    "schemas": {
+      },
       "Answer": {
         "type": "string",
         "nullable": true,

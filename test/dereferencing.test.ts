@@ -8,12 +8,12 @@ describe('Dereferencing', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing'),
-      definitionPathsToGenerateFrom: ['components.months'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
     });
 
     const januarySchema = await import(
-      path.resolve(outputPath, 'components/months/January')
+      path.resolve(outputPath, 'components/schemas/January')
     );
 
     expect(januarySchema.default).toEqual({
@@ -29,7 +29,7 @@ describe('Dereferencing', () => {
   it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-      outputPath: makeTestOutputPath('dereferencing'),
+      outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });

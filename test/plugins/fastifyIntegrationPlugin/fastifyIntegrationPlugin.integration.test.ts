@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { makeServer } from '../../../examples/fastify-integration-plugin/server';
 
+/**
+ * This test runs against the example setup in
+ * examples/fastify-integration-plugin/server.ts
+ */
 describe('fastifyIntegration plugin', () => {
   describe('integration example', () => {
     it('generates expected OpenAPI definition', async () => {
@@ -84,7 +88,7 @@ describe('fastifyIntegration plugin', () => {
                   description: 'Default Response',
                   content: {
                     'application/json': {
-                      schema: { $ref: '#/components/schemas/Pet' },
+                      schema: { $ref: '#/components/schemas/Pets' },
                     },
                   },
                 },

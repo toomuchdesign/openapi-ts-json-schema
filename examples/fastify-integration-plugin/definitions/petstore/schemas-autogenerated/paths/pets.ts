@@ -30,7 +30,7 @@ export default {
         },
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Pets" },
+            schema: { $ref: "/components/schemas/Pets" },
           },
         },
       },
@@ -38,7 +38,7 @@ export default {
         description: "unexpected error",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Error" },
+            schema: { $ref: "/components/schemas/Error" },
           },
         },
       },
@@ -56,7 +56,7 @@ export default {
         description: "unexpected error",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Error" },
+            schema: { $ref: "/components/schemas/Error" },
           },
         },
       },

@@ -8,7 +8,7 @@ describe('"schemaPatcher" option', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('schema-patcher'),
-      definitionPathsToGenerateFrom: ['components.months', 'paths'],
+      definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
       schemaPatcher: ({ schema }) => {
         if (schema.description === 'January description') {
           schema.description = 'Patched January description';
@@ -18,7 +18,7 @@ describe('"schemaPatcher" option', () => {
     });
 
     const januarySchema = await import(
-      path.resolve(outputPath, 'components/months/January')
+      path.resolve(outputPath, 'components/schemas/January')
     );
 
     expect(januarySchema.default).toEqual({

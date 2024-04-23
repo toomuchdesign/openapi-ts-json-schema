@@ -8,7 +8,7 @@ describe('External $refs', () => {
     it('Resolves external refs', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
-        outputPath: makeTestOutputPath('external-refs'),
+        outputPath: makeTestOutputPath('external-refs-inline'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         refHandling: { strategy: 'inline' },
         silent: true,
