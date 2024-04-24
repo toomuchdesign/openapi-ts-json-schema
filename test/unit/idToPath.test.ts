@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { refToPath } from '../../src/utils';
+import { idToPath } from '../../src/utils';
 
-describe('refToPath', () => {
+describe('idToPath', () => {
   it('generates expected ref paths', () => {
-    const actual = refToPath('#/components/schema/Foo');
+    const actual = idToPath('/components/schema/Foo');
     const expected = {
       schemaRelativeDirName: 'components/schema',
       schemaName: 'Foo',

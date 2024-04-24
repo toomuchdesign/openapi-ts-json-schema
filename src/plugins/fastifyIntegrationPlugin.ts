@@ -1,5 +1,4 @@
 import type { Plugin } from '../types';
-import { refToId } from '../utils';
 
 const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';
@@ -19,12 +18,12 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
     // Force "keep" refHandling
     options.refHandling = {
       strategy: 'keep',
-      refMapper: ({ ref }) => {
+      refMapper: ({ id }) => {
         /**
          * Replace original $ref values with internal schema id which
          * the schema is registered with via Fastify's `addSchema`
          */
-        return refToId(ref);
+        return id;
       },
     };
   },

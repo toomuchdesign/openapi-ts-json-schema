@@ -4,13 +4,14 @@ export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
 export { parseRef } from './parseRef';
-export { refToPath } from './refToPath';
+export { parseId } from './parseId';
+export { idToPath } from './idToPath';
 export { refToId } from './refToId';
-export { pathToRef } from './pathToRef';
+export { pathToId } from './pathToId';
 export {
-  REF_SYMBOL,
+  SCHEMA_ID_SYMBOL,
   PLACEHOLDER_REGEX,
-  refToPlaceholder,
+  idToPlaceholder,
 } from './refReplacementUtils';
 export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/replaceInlinedRefsWithStringPlaceholder';
 export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas';

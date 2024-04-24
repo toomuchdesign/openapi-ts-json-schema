@@ -5,7 +5,7 @@ import type { SchemaMetaData } from '../../src/types';
 
 describe('addSchemaToMetaData', () => {
   it('generates expected metadata', () => {
-    const ref = '#/components/schemas/Foo';
+    const id = '/components/schemas/Foo';
     const schemaMetaDataMap = new Map();
     const outputPath = path.normalize('/absolute/output/path');
     const schema = {
@@ -16,14 +16,14 @@ describe('addSchemaToMetaData', () => {
     };
 
     addSchemaToMetaData({
-      ref,
+      id,
       schemaMetaDataMap,
       schema,
       outputPath,
       isRef: true,
     });
 
-    const actual = schemaMetaDataMap.get(ref);
+    const actual = schemaMetaDataMap.get(id);
     const expected: SchemaMetaData = {
       id: '/components/schemas/Foo',
       uniqueName: 'componentsSchemasFoo',

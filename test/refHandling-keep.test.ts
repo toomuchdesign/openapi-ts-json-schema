@@ -155,7 +155,7 @@ describe('refHandling option === "keep"', () => {
         silent: true,
         refHandling: {
           strategy: 'keep',
-          refMapper: ({ ref }) => `foo_${ref}_bar`,
+          refMapper: ({ id }) => `foo_#${id}_bar`,
         },
       });
 

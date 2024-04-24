@@ -1,38 +1,38 @@
 import { describe, it, expect } from 'vitest';
-import { pathToRef } from '../../src/utils';
+import { pathToId } from '../../src/utils';
 
-describe('pathToRef', () => {
+describe('pathToId', () => {
   it.each([
     {
       schemaRelativeDirName: 'components/schemas',
       schemaName: 'Foo',
-      expected: '#/components/schemas/Foo',
+      expected: '/components/schemas/Foo',
     },
     {
       schemaRelativeDirName: 'components/schemas/',
       schemaName: 'Foo',
-      expected: '#/components/schemas/Foo',
+      expected: '/components/schemas/Foo',
     },
     {
       schemaRelativeDirName: 'components.schemas',
       schemaName: 'Foo',
-      expected: '#/components/schemas/Foo',
+      expected: '/components/schemas/Foo',
     },
     // Windows path separators
     {
       schemaRelativeDirName: 'components\\schemas',
       schemaName: 'Foo',
-      expected: '#/components/schemas/Foo',
+      expected: '/components/schemas/Foo',
     },
     {
       schemaRelativeDirName: 'components\\schemas\\',
       schemaName: 'Foo',
-      expected: '#/components/schemas/Foo',
+      expected: '/components/schemas/Foo',
     },
   ])(
-    'generates expected ref',
+    'generates expected internal id',
     ({ schemaRelativeDirName, schemaName, expected }) => {
-      const actual = pathToRef({
+      const actual = pathToId({
         schemaRelativeDirName,
         schemaName,
       });

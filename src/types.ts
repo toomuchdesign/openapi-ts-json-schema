@@ -6,7 +6,7 @@ export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling =
   | { strategy: 'import' }
   | { strategy: 'inline' }
-  | { strategy: 'keep'; refMapper?: (input: { ref: string }) => string };
+  | { strategy: 'keep'; refMapper?: (input: { id: string }) => string };
 
 import type {
   makeRelativeModulePath,

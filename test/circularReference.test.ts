@@ -62,13 +62,13 @@ describe('Circular reference', () => {
 
         const expectedInlinedRef = `
         nextMonth: {
-          // Circular recursion interrupted (#/components/schemas/February)
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },
         nextMonthTwo: {
-          // Circular recursion interrupted (#/components/schemas/February)
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },
         nextMonthThree: {
-          // Circular recursion interrupted (#/components/schemas/February)
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },`;
 
         expect(februarySchemaAsText).toEqual(
