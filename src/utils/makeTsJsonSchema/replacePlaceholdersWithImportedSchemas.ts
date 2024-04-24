@@ -16,8 +16,8 @@ export function replacePlaceholdersWithImportedSchemas({
   const importStatements = new Set<string>();
 
   // Replace placeholder occurrences with the relevant imported schema name
-  let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, ref) => {
-    const importedSchema = schemaMetaDataMap.get(ref);
+  let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, id) => {
+    const importedSchema = schemaMetaDataMap.get(id);
 
     /* c8 ignore start */
     if (!importedSchema) {

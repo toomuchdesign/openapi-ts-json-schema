@@ -1,32 +1,32 @@
 import mapObject from 'map-obj';
-import { refToPlaceholder } from '..';
-import { getRef } from './getRef';
+import { idToPlaceholder } from '..';
+import { getId } from './getId';
 import type { JSONSchema, JSONSchemaWithPlaceholders } from '../../types';
 
 /**
  * Get any JSON schema node and:
- * - Return ref placeholder is the entity is an inlined ref schema objects (with REF_SYMBOL prop)
+ * - Return ref placeholder is the entity is an inlined ref schema objects (with SCHEMA_ID_SYMBOL prop)
  * - Return provided node in all other cases
  */
 function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
   node: Node,
 ): Node | string {
-  const ref = getRef(node);
-  if (ref === undefined) {
+  const id = getId(node);
+  if (id === undefined) {
     return node;
   }
-  return refToPlaceholder(ref);
+  return idToPlaceholder(id);
 }
 
 /**
  * Iterate a JSON schema to replace inlined ref schema objects
- * (marked with a REF_SYMBOL property holding the original $ref value)
- * with a string placeholder with a reference to the original $ref value ("_OTJS-START_#/ref/value_OTJS-END_")
+ * (marked with a SCHEMA_ID_SYMBOL property holding the original $ref value)
+ * with a string placeholder with a reference to the original $ref value ("_OTJS-START_/id/value_OTJS-END_")
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,
 ): JSONSchemaWithPlaceholders {
-  if (getRef(schema)) {
+  if (getId(schema)) {
     return replaceInlinedSchemaWithPlaceholder(schema);
   }
 

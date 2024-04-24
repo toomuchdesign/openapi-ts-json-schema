@@ -1,5 +1,13 @@
 # Developer's notes
 
+## Internal schema ids
+
+Each processed schemas is assigned with a unique internal id holding schema name and path information `/<path>/<name>`.
+
+Eg: `/components/schemas/SchemaName`.
+
+Internal ids are used to refer to any specific schemas and retrieve schema path and name.
+
 ## Remote $ref handling
 
 Remote/external `$ref`s (`Pet.yaml`, `definitions.json#/Pet`) get always immediately dereferenced by fetching the specs and inlining the relevant schemas.
@@ -11,34 +19,34 @@ Remote/external `$ref`s (`Pet.yaml`, `definitions.json#/Pet`) get always immedia
 At the time of writing the implementation is build around `@apidevtools/json-schema-ref-parser`'s `dereference` method options and works as follows:
 
 1. Schemas get deferenced with `@apidevtools/json-schema-ref-parser`'s `dereference` method which inlines relevant `$ref` schemas
-2. Inlined schemas get marked with a symbol property holding the original `$ref` value (`#/foo/Bar`)
+2. Inlined schemas get marked with a symbol property holding the internal schema id (`/components/schemas/Bar`)
 
 ```ts
 {
   bar: {
-    [Symbol('ref')]: '#/components/schemas/Bar',
+    [Symbol('id')]: '/components/schemas/Bar',
     // ...Inlined schema props
   }
 }
 ```
 
-3. Inlined and dereferenced schemas get traversed and all schemas marked with `Symbol('ref')` prop get replaced with a **string placeholder** holding the original `$ref` value. Note that string placeholders can be safely stringified.
+1. Inlined and dereferenced schemas get traversed and all schemas marked with `Symbol('id')` prop get replaced with a **string placeholder** holding the original internal schema id. Note that string placeholders can be safely stringified.
 
 ```ts
 {
-  bar: '_OTJS-START_#/components/schemas/Bar_OTJS-END_';
+  bar: '_OTJS-START_/components/schemas/Bar_OTJS-END_';
 }
 ```
 
 Note: alias definitions (eg. `Foo: "#components/schemas/Bar"`) will result in a plain **string placeholder**.
 
 ```ts
-'_OTJS-START_#/components/schemas/Bar_OTJS-END_';
+'_OTJS-START_/components/schemas/Bar_OTJS-END_';
 ```
 
-4. Inlined and dereferenced schemas get stringified and parsed to retrieve **string placeholders** and the contained original `$ref` value
+1. Inlined and dereferenced schemas get stringified and parsed to retrieve **string placeholders** and their internal id value
 
-5. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name.
+2. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name.
 
 ```ts
 import Bar from '../foo/Bar';
@@ -47,8 +55,6 @@ export default {
   bar: Bar;
 } as const
 ```
-
-This process could be definitely shorter if `@apidevtools/json-schema-ref-parser`'s `dereference` method allowed to access the parent object holding the `$ref` value to be replaced. In that case step 2 could be skipped and the ref object could be immediately replaced with the relevant **string placeholder**.
 
 ## `refHandling`: keep
 

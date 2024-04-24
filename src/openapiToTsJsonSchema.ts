@@ -5,14 +5,15 @@ import get from 'lodash.get';
 import {
   clearFolder,
   makeTsJsonSchemaFiles,
-  REF_SYMBOL,
+  SCHEMA_ID_SYMBOL,
   convertOpenApiToJsonSchema,
   convertOpenApiPathsParameters,
   addSchemaToMetaData,
-  pathToRef,
+  makeId,
   formatTypeScript,
   saveFile,
   makeRelativeModulePath,
+  refToId,
 } from './utils';
 import type {
   SchemaMetaDataMap,
@@ -82,17 +83,19 @@ export async function openapiToTsJsonSchema(
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
+          const id = refToId(ref);
+
           // Keep track of inlined refs
-          if (!inlinedRefs.has(ref)) {
+          if (!inlinedRefs.has(id)) {
             // Make a shallow copy of the ref schema to save it from the mutations below
-            inlinedRefs.set(ref, { ...inlinedSchema });
+            inlinedRefs.set(id, { ...inlinedSchema });
 
             /**
              * "import" refHandling support:
-             * mark inlined ref objects with a "REF_SYMBOL" to retrieve their
+             * mark inlined ref objects with a "SCHEMA_ID_SYMBOL" to retrieve their
              * original $ref value once inlined
              */
-            inlinedSchema[REF_SYMBOL] = ref;
+            inlinedSchema[SCHEMA_ID_SYMBOL] = id;
 
             /**
              * "inline" refHandling support:
@@ -122,9 +125,9 @@ export async function openapiToTsJsonSchema(
    * $ref schemas to be generated no matter of
    */
   if (refHandling.strategy === 'import' || refHandling.strategy === 'keep') {
-    for (const [ref, schema] of inlinedRefs) {
+    for (const [id, schema] of inlinedRefs) {
       addSchemaToMetaData({
-        ref,
+        id,
         schemaMetaDataMap,
         schema,
         outputPath,
@@ -141,17 +144,17 @@ export async function openapiToTsJsonSchema(
 
     for (const schemaName in definitionSchemas) {
       // Create expected OpenAPI ref
-      const ref = pathToRef({
+      const id = makeId({
         schemaRelativeDirName: definitionPath,
         schemaName,
       });
 
       addSchemaToMetaData({
-        ref,
+        id,
         schemaMetaDataMap,
         schema: definitionSchemas[schemaName],
         outputPath,
-        isRef: inlinedRefs.has(ref),
+        isRef: inlinedRefs.has(id),
       });
     }
   }

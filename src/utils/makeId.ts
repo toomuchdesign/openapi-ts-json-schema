@@ -1,11 +1,11 @@
 import path from 'node:path';
-import { filenamify } from './';
+import { filenamify } from '.';
 
 /**
- * Generate a local OpenAPI ref from a relative path and a schema name
+ * Generate a local OpenAPI ref from a schema internal id
  */
 const TRALING_SLASH_REGEX = /\/$/;
-export function pathToRef({
+export function makeId({
   schemaRelativeDirName,
   schemaName,
 }: {
@@ -13,7 +13,7 @@ export function pathToRef({
   schemaName: string;
 }): string {
   return (
-    '#/' +
+    '/' +
     path
       .normalize(schemaRelativeDirName)
       // Supporting definitionPathsToGenerateFrom dot notation

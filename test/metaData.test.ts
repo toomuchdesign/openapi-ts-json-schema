@@ -15,10 +15,8 @@ describe('Returned "metaData"', async () => {
       silent: true,
     });
 
-    const answerMetaData = metaData.schemas.get('#/components/schemas/Answer');
-    const januaryMetaData = metaData.schemas.get(
-      '#/components/schemas/January',
-    );
+    const answerMetaData = metaData.schemas.get('/components/schemas/Answer');
+    const januaryMetaData = metaData.schemas.get('/components/schemas/January');
 
     expect(answerMetaData).toBeDefined();
     expect(januaryMetaData).toBeDefined();
