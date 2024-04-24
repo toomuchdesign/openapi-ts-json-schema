@@ -1,7 +1,7 @@
 import path from 'node:path';
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
-import { filenamify, idToPath } from '.';
+import { filenamify, parseId } from '.';
 import type { SchemaMetaDataMap, SchemaMetaData, JSONSchema } from '../types';
 
 /*
@@ -23,7 +23,7 @@ export function addSchemaToMetaData({
 }): void {
   // Do not override existing meta info of inlined schemas
   if (!schemaMetaDataMap.has(id)) {
-    const { schemaRelativeDirName, schemaName } = idToPath(id);
+    const { schemaRelativeDirName, schemaName } = parseId(id);
     const absoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName);
     const absoluteImportPath = path.join(absoluteDirName, schemaFileName);

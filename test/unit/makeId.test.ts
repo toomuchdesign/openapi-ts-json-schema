@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { pathToId } from '../../src/utils';
+import { makeId } from '../../src/utils';
 
-describe('pathToId', () => {
+describe('makeId', () => {
   it.each([
     {
       schemaRelativeDirName: 'components/schemas',
@@ -32,7 +32,7 @@ describe('pathToId', () => {
   ])(
     'generates expected internal id',
     ({ schemaRelativeDirName, schemaName, expected }) => {
-      const actual = pathToId({
+      const actual = makeId({
         schemaRelativeDirName,
         schemaName,
       });

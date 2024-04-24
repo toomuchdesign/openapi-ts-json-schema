@@ -5,7 +5,7 @@ import { filenamify } from '.';
  * Generate a local OpenAPI ref from a schema internal id
  */
 const TRALING_SLASH_REGEX = /\/$/;
-export function pathToId({
+export function makeId({
   schemaRelativeDirName,
   schemaName,
 }: {

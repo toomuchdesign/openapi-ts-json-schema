@@ -3,11 +3,9 @@ export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
-export { parseRef } from './parseRef';
 export { parseId } from './parseId';
-export { idToPath } from './idToPath';
 export { refToId } from './refToId';
-export { pathToId } from './pathToId';
+export { makeId } from './makeId';
 export {
   SCHEMA_ID_SYMBOL,
   PLACEHOLDER_REGEX,

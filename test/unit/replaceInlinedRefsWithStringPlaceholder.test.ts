@@ -11,11 +11,11 @@ describe('replaceInlinedRefsWithStringPlaceholder', () => {
         schemas: {
           object: {
             foo: 'bar',
-            [SCHEMA_ID_SYMBOL]: '#/ref/in/object',
+            [SCHEMA_ID_SYMBOL]: '/ref/in/object',
           },
           array: [
             'foo',
-            { hello: 'world', [SCHEMA_ID_SYMBOL]: '#/ref/in/array' },
+            { hello: 'world', [SCHEMA_ID_SYMBOL]: '/ref/in/array' },
             'bar',
           ],
         },
@@ -23,8 +23,8 @@ describe('replaceInlinedRefsWithStringPlaceholder', () => {
 
       const expected = {
         schemas: {
-          object: '_OTJS-START_#/ref/in/object_OTJS-END_',
-          array: ['foo', '_OTJS-START_#/ref/in/array_OTJS-END_', 'bar'],
+          object: '_OTJS-START_/ref/in/object_OTJS-END_',
+          array: ['foo', '_OTJS-START_/ref/in/array_OTJS-END_', 'bar'],
         },
       };
 
@@ -37,9 +37,9 @@ describe('replaceInlinedRefsWithStringPlaceholder', () => {
       // @ts-expect-error SCHEMA_ID_SYMBOL is not a valid JSON schema prop
       const actual = replaceInlinedRefsWithStringPlaceholder({
         type: 'object',
-        [SCHEMA_ID_SYMBOL]: '#/ref/in/root/object',
+        [SCHEMA_ID_SYMBOL]: '/ref/in/root/object',
       });
-      const expected = '_OTJS-START_#/ref/in/root/object_OTJS-END_';
+      const expected = '_OTJS-START_/ref/in/root/object_OTJS-END_';
 
       expect(actual).toEqual(expected);
     });

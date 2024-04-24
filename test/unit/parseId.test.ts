@@ -5,8 +5,11 @@ describe('parseId', () => {
   describe('Valid id', () => {
     it('returns, ref path', () => {
       const actual = parseId('/components/schemas/Foo');
-      const expected = 'components/schemas/Foo';
-      expect(actual).toBe(expected);
+      const expected = {
+        schemaRelativeDirName: 'components/schemas',
+        schemaName: 'Foo',
+      };
+      expect(actual).toEqual(expected);
     });
   });
 

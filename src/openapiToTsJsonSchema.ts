@@ -9,7 +9,7 @@ import {
   convertOpenApiToJsonSchema,
   convertOpenApiPathsParameters,
   addSchemaToMetaData,
-  pathToId,
+  makeId,
   formatTypeScript,
   saveFile,
   makeRelativeModulePath,
@@ -144,7 +144,7 @@ export async function openapiToTsJsonSchema(
 
     for (const schemaName in definitionSchemas) {
       // Create expected OpenAPI ref
-      const id = pathToId({
+      const id = makeId({
         schemaRelativeDirName: definitionPath,
         schemaName,
       });
