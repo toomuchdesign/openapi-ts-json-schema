@@ -1,4 +1,5 @@
 export default {
+  $id: "/components/schemas/Error",
   type: "object",
   required: ["code", "message"],
   properties: {

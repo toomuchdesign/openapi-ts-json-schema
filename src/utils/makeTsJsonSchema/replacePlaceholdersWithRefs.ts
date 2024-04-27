@@ -5,10 +5,10 @@ import { PLACEHOLDER_REGEX } from '..';
  */
 export function replacePlaceholdersWithRefs({
   schemaAsText,
-  refMapper = ({ id }) => `#${id}`,
+  refMapper,
 }: {
   schemaAsText: string;
-  refMapper?: (input: { id: string }) => string;
+  refMapper: (input: { id: string }) => string;
 }): string {
   // Replace placeholder occurrences with a JSON schema $ref object
   let schema = schemaAsText.replaceAll(PLACEHOLDER_REGEX, (_match, id) => {

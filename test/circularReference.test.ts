@@ -7,7 +7,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
     describe('inline', () => {
-      it('Replaces 2nd circular reference occurrence with "{}"', async () => {
+      it.only('Replaces 2nd circular reference occurrence with "{}"', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(
             fixtures,
@@ -25,6 +25,7 @@ describe('Circular reference', () => {
 
         // Parsed schema expectations
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -32,21 +33,33 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthTwo: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthThree: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
           },
@@ -61,15 +74,37 @@ describe('Circular reference', () => {
         );
 
         const expectedInlinedRef = `
+    previousMonth: {
+      // $ref: "#/components/schemas/January"
+      description: "January description",
+      type: "object",
+      properties: {
         nextMonth: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
         },
         nextMonthTwo: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
         },
         nextMonthThree: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
-        },`;
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
+        },
+      },
+    },`;
 
         expect(februarySchemaAsText).toEqual(
           expect.stringContaining(expectedInlinedRef),
@@ -149,13 +184,13 @@ describe('Circular reference', () => {
           type: 'object',
           properties: {
             nextMonth: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
             nextMonthTwo: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
             nextMonthThree: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
           },
         });

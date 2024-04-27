@@ -1,4 +1,5 @@
 export default {
+  $id: "/components/schemas/Owner",
   type: "object",
   required: ["id", "name", "pets"],
   properties: {

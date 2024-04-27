@@ -1,4 +1,5 @@
 export default {
+  $id: "/paths/pets",
   get: {
     summary: "List all pets",
     operationId: "listPets",

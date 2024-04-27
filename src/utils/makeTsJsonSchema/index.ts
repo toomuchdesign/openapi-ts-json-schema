@@ -10,6 +10,7 @@ import type {
   SchemaMetaData,
   SchemaPatcher,
   RefHandling,
+  $idMapper,
 } from '../../types';
 
 export async function makeTsJsonSchema({
@@ -17,19 +18,27 @@ export async function makeTsJsonSchema({
   schemaMetaDataMap,
   refHandling,
   schemaPatcher,
+  $idMapper,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   schemaPatcher?: SchemaPatcher;
+  $idMapper: $idMapper;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName } = metaData;
+  const { originalSchema, absoluteDirName, $id } = metaData;
+
+  // Shall we append $id here or after stringify?
+  const schemaWith$id =
+    refHandling.strategy === 'inline' || refHandling.strategy === 'keep'
+      ? { $id, ...originalSchema }
+      : originalSchema;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
     refHandling.strategy === 'import' || refHandling.strategy === 'keep'
-      ? replaceInlinedRefsWithStringPlaceholder(originalSchema)
-      : originalSchema;
+      ? replaceInlinedRefsWithStringPlaceholder(schemaWith$id)
+      : schemaWith$id;
 
   // Check if this schema is just the reference to another schema
   const isAlias = typeof schemaWithPlaceholders === 'string';
@@ -68,7 +77,7 @@ export async function makeTsJsonSchema({
   if (refHandling.strategy === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
-      refMapper: refHandling.refMapper,
+      refMapper: $idMapper,
     });
   }
 

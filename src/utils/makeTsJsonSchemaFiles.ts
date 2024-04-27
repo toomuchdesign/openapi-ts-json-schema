@@ -1,5 +1,10 @@
 import { makeTsJsonSchema, saveFile } from '.';
-import type { SchemaMetaDataMap, SchemaPatcher, RefHandling } from '../types';
+import type {
+  SchemaMetaDataMap,
+  SchemaPatcher,
+  RefHandling,
+  $idMapper,
+} from '../types';
 
 /**
  * Save TS JSON schema files with the expected naming conventions
@@ -8,10 +13,12 @@ export async function makeTsJsonSchemaFiles({
   schemaMetaDataMap,
   refHandling,
   schemaPatcher,
+  $idMapper,
 }: {
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   schemaPatcher?: SchemaPatcher;
+  $idMapper: $idMapper;
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
     const tsSchema = await makeTsJsonSchema({
@@ -19,6 +26,7 @@ export async function makeTsJsonSchemaFiles({
       schemaMetaDataMap,
       refHandling,
       schemaPatcher,
+      $idMapper,
     });
 
     const { absolutePath } = metaData;

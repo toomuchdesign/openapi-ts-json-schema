@@ -1,4 +1,5 @@
 export default {
+  $id: "/paths/pets_{petId}",
   get: {
     summary: "Info for a specific pet",
     operationId: "showPetById",

@@ -28,6 +28,7 @@ describe('Returned "metaData"', async () => {
 
     const expectedAnswerMetaData: SchemaMetaData = {
       id: '/components/schemas/Answer',
+      $id: '/components/schemas/Answer',
       uniqueName: 'componentsSchemasAnswer',
       originalSchema: expect.any(Object),
       isRef: true,
@@ -48,6 +49,7 @@ describe('Returned "metaData"', async () => {
 
     const expectedJanuaryMetaData: SchemaMetaData = {
       id: '/components/schemas/January',
+      $id: '/components/schemas/January',
       uniqueName: 'componentsSchemasJanuary',
       originalSchema: expect.any(Object),
       isRef: false,

@@ -1,4 +1,5 @@
 export default {
+  $id: "/components/schemas/Pet",
   type: "object",
   required: ["id", "name"],
   properties: {

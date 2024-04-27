@@ -19,6 +19,7 @@ describe('refHandling option === "keep"', () => {
 
     // Expectations against parsed root schema
     expect(path1.default).toEqual({
+      $id: '/paths/v1_path-1',
       get: {
         responses: {
           '200': {
@@ -27,8 +28,8 @@ describe('refHandling option === "keep"', () => {
               'application/json': {
                 schema: {
                   oneOf: [
-                    { $ref: '#/components/schemas/January' },
-                    { $ref: '#/components/schemas/February' },
+                    { $ref: '/components/schemas/January' },
+                    { $ref: '/components/schemas/February' },
                     {
                       description: 'Inline path schema',
                       type: ['integer', 'null'],
@@ -54,6 +55,7 @@ describe('refHandling option === "keep"', () => {
     // Ensure "as const" is present
     const expectedPath1File = await formatTypeScript(`
       export default {
+        $id: '/paths/v1_path-1',
         get: {
           responses: {
             "200": {
@@ -62,8 +64,8 @@ describe('refHandling option === "keep"', () => {
                 "application/json": {
                   schema: {
                     oneOf: [
-                      { $ref: "#/components/schemas/January" },
-                      { $ref: "#/components/schemas/February" },
+                      { $ref: "/components/schemas/January" },
+                      { $ref: "/components/schemas/February" },
                       {
                         type: ['integer', 'null'],
                         enum: [1, 0, null],
@@ -94,11 +96,12 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(januarySchema.default).toEqual({
+      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],
       properties: {
-        isJanuary: { $ref: '#/components/schemas/Answer' },
+        isJanuary: { $ref: '/components/schemas/Answer' },
       },
     });
 
@@ -107,6 +110,7 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(answerSchema.default).toEqual({
+      $id: '/components/schemas/Answer',
       type: ['string', 'null'],
       enum: ['yes', 'no', null],
     });
@@ -127,7 +131,7 @@ describe('refHandling option === "keep"', () => {
       );
 
       expect(answerAliasDefinition.default).toEqual({
-        $ref: '#/components/schemas/Answer',
+        $ref: '/components/schemas/Answer',
       });
 
       // Ensure "as const" is present
@@ -140,13 +144,13 @@ describe('refHandling option === "keep"', () => {
 
       expect(answerAliasDefinitionFile).toEqual(
         await formatTypeScript(`
-          export default { $ref: '#/components/schemas/Answer' } as const;
+          export default { $ref: '/components/schemas/Answer' } as const;
         `),
       );
     });
   });
 
-  describe('"refMapper" option', () => {
+  describe('"$idMapper" option', () => {
     it('customizes "$ref" values', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
@@ -155,8 +159,8 @@ describe('refHandling option === "keep"', () => {
         silent: true,
         refHandling: {
           strategy: 'keep',
-          refMapper: ({ id }) => `foo_#${id}_bar`,
         },
+        $idMapper: ({ id }) => `foo_${id}_bar`,
       });
 
       const actualSchema = await import(
@@ -164,10 +168,11 @@ describe('refHandling option === "keep"', () => {
       );
 
       expect(actualSchema.default).toEqual({
+        $id: 'foo_/components/schemas/January_bar',
         description: 'January description',
         properties: {
           isJanuary: {
-            $ref: 'foo_#/components/schemas/Answer_bar',
+            $ref: 'foo_/components/schemas/Answer_bar',
           },
         },
         required: ['isJanuary'],
