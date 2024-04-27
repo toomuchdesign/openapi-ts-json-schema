@@ -186,7 +186,7 @@ describe('refHandling option === "import"', () => {
   });
 
   describe('Alias definitions', () => {
-    it.fails('re-exports original definition', async () => {
+    it('re-exports original definition', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'alias-definition/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
@@ -204,9 +204,29 @@ describe('refHandling option === "import"', () => {
       );
 
       expect(answerAliasDefinition.default).toEqual({
-        $id: 'components/schemas/AnswerAliasDefinition',
         ...answerSchema.default,
+        $id: '/components/schemas/AnswerAliasDefinition',
       });
+
+      const actualAnswerAliasDefinitionSchemaFile = await fs.readFile(
+        path.resolve(outputPath, 'components/schemas/AnswerAliasDefinition.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedAnswerAliasDefinitionSchemaFile = await formatTypeScript(`
+      import { without$id as componentsSchemasAnswer } from "./Answer";
+
+      const schema = {
+        $id: "/components/schemas/AnswerAliasDefinition",
+        ...componentsSchemasAnswer,
+      } as const;
+      export default schema;`);
+
+      expect(actualAnswerAliasDefinitionSchemaFile).toEqual(
+        expectedAnswerAliasDefinitionSchemaFile,
+      );
     });
   });
 });

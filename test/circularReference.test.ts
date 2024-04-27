@@ -7,7 +7,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
     describe('inline', () => {
-      it.only('Replaces 2nd circular reference occurrence with "{}"', async () => {
+      it('Replaces 2nd circular reference occurrence with "{}"', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(
             fixtures,
@@ -130,6 +130,7 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -180,6 +181,7 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {

@@ -4,49 +4,43 @@ import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 
 describe('External $refs', () => {
-  describe.only('refHandling option === "import"', () => {
+  describe('refHandling option === "import"', () => {
     describe('multiple definitions aliasing same external definition', () => {
-      it.fails(
-        'dedupe imports and resolve against same schema (aliases)',
-        async () => {
-          const { outputPath } = await openapiToTsJsonSchema({
-            openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
-            outputPath: makeTestOutputPath(
-              'external-refs-import-definition-alias',
-            ),
-            definitionPathsToGenerateFrom: ['components.schemas'],
-            refHandling: 'import',
-            silent: true,
-          });
+      it('dedupe imports and resolve against same schema', async () => {
+        const { outputPath } = await openapiToTsJsonSchema({
+          openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
+          outputPath: makeTestOutputPath(
+            'external-refs-import-definition-alias',
+          ),
+          definitionPathsToGenerateFrom: ['components.schemas'],
+          refHandling: 'import',
+          silent: true,
+        });
 
-          const externalDefinitionSchema = await import(
-            path.resolve(outputPath, 'components/schemas/ExternalDefinition')
-          );
+        const externalDefinitionSchema = await import(
+          path.resolve(outputPath, 'components/schemas/ExternalDefinition')
+        );
 
-          const externalDefinitionAliasSchema = await import(
-            path.resolve(
-              outputPath,
-              'components/schemas/ExternalDefinitionAlias',
-            )
-          );
+        const externalDefinitionAliasSchema = await import(
+          path.resolve(outputPath, 'components/schemas/ExternalDefinitionAlias')
+        );
 
-          expect(externalDefinitionSchema.default).toEqual({
-            $id: '/components/schemas/ExternalDefinition',
-            description: 'External Foo description',
-            type: ['string', 'null'],
-            enum: ['yes', 'no', null],
-          });
+        expect(externalDefinitionSchema.default).toEqual({
+          $id: '/components/schemas/ExternalDefinition',
+          description: 'External Foo description',
+          type: ['string', 'null'],
+          enum: ['yes', 'no', null],
+        });
 
-          expect(externalDefinitionAliasSchema.default).toEqual({
-            $id: '/components/schemas/ExternalDefinitionAlias',
-            ...externalDefinitionSchema.default,
-          });
-        },
-      );
+        expect(externalDefinitionAliasSchema.default).toEqual({
+          ...externalDefinitionSchema.default,
+          $id: '/components/schemas/ExternalDefinitionAlias',
+        });
+      });
     });
 
     describe('multiple definitions aliasing same whole document', () => {
-      it.fails('dedupe imports and resolve against same document', async () => {
+      it('dedupe imports and resolve against same document', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
@@ -78,8 +72,8 @@ describe('External $refs', () => {
         });
 
         expect(externalDefinitionWholeDocumentAliasSchema.default).toEqual({
-          $id: '/components/schemas/ExternalDefinitionWholeDocumentAlias',
           ...externalDefinitionWholeDocumentSchema.default,
+          $id: '/components/schemas/ExternalDefinitionWholeDocumentAlias',
         });
       });
     });

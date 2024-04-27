@@ -36,7 +36,7 @@ export async function makeTsJsonSchema({
       ? replaceInlinedRefsWithStringPlaceholder(schemaWith$id)
       : schemaWith$id;
 
-  // Check if this schema is just the reference to another schema
+  // Check if this schema is just a reference to another schema
   const isAlias = typeof schemaWithPlaceholders === 'string';
 
   const patchedSchema = isAlias
@@ -58,12 +58,11 @@ export async function makeTsJsonSchema({
     export default schema;`;
 
   if (refHandling === 'import') {
-    /**
-     * Schemas being just a placeholder are nothing but an alias
-     * of the definition found in the placeholder
-     */
+    // Alias schema handling is a bit rough, right now
     if (isAlias) {
-      tsSchema = `export default ` + stringifiedSchema + ';';
+      tsSchema = `
+      const schema = {$id: "${$id}", ...${stringifiedSchema}} as const;
+      export default schema;`;
     }
 
     tsSchema = replacePlaceholdersWithImportedSchemas({
