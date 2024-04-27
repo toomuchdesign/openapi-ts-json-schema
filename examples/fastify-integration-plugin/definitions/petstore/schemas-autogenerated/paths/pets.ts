@@ -1,4 +1,4 @@
-export default {
+const schema = {
   $id: "/paths/pets",
   get: {
     summary: "List all pets",
@@ -64,3 +64,5 @@ export default {
     },
   },
 } as const;
+
+export default schema;

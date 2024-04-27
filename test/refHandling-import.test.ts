@@ -89,7 +89,7 @@ describe('refHandling option === "import"', () => {
         import componentsSchemasFebruary from "./../components/schemas/February";
         import componentsSchemasJanuary from "./../components/schemas/January";
 
-        export default {
+        const schema = {
           get: {
             responses: {
               "200": {
@@ -112,7 +112,9 @@ describe('refHandling option === "import"', () => {
               },
             },
           },
-        } as const;`);
+        } as const;
+
+        export default schema;`);
 
       expect(actualPath1File).toEqual(expectedPath1File);
     });
@@ -138,14 +140,16 @@ describe('refHandling option === "import"', () => {
     const expectedJanuarySchemaFile = await formatTypeScript(`
       import componentsSchemasAnswer from "./Answer";
 
-      export default {
+      const schema = {
         description: "January description",
         type: "object",
         required: ["isJanuary"],
         properties: {
           isJanuary: componentsSchemasAnswer,
         },
-      } as const;`);
+      } as const;
+
+      export default schema;`);
 
     expect(actualJanuarySchemaFile).toMatch(expectedJanuarySchemaFile);
 
@@ -160,14 +164,16 @@ describe('refHandling option === "import"', () => {
     const expectedFebruarySchemaFile = await formatTypeScript(`
       import componentsSchemasAnswer from "./Answer";
 
-      export default {
+      const schema = {
         description: "February description",
         type: "object",
         required: ["isFebruary"],
         properties: {
           isFebruary: componentsSchemasAnswer,
         },
-      } as const;`);
+      } as const;
+
+      export default schema;`);
 
     expect(actualFebruarySchemaFile).toMatch(expectedFebruarySchemaFile);
   });

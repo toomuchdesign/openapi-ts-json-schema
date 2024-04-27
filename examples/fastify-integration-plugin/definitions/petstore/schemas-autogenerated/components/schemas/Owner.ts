@@ -1,4 +1,4 @@
-export default {
+const schema = {
   $id: "/components/schemas/Owner",
   type: "object",
   required: ["id", "name", "pets"],
@@ -19,3 +19,5 @@ export default {
     },
   },
 } as const;
+
+export default schema;

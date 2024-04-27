@@ -54,7 +54,7 @@ describe('refHandling option === "keep"', () => {
 
     // Ensure "as const" is present
     const expectedPath1File = await formatTypeScript(`
-      export default {
+      const schema = {
         $id: '/paths/v1_path-1',
         get: {
           responses: {
@@ -78,7 +78,9 @@ describe('refHandling option === "keep"', () => {
             },
           },
         },
-      } as const;`);
+      } as const;
+
+      export default schema;`);
 
     expect(actualPath1File).toEqual(expectedPath1File);
   });
@@ -144,7 +146,9 @@ describe('refHandling option === "keep"', () => {
 
       expect(answerAliasDefinitionFile).toEqual(
         await formatTypeScript(`
-          export default { $ref: '/components/schemas/Answer' } as const;
+          const schema = { $ref: '/components/schemas/Answer' } as const;
+
+          export default schema;
         `),
       );
     });
@@ -154,7 +158,7 @@ describe('refHandling option === "keep"', () => {
     it('derives "$ref" values from "$idMapper"', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-keep-idMapper-option'),
+        outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'keep',

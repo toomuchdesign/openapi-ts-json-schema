@@ -57,16 +57,20 @@ export async function makeTsJsonSchema({
     2,
   );
 
-  /**
-   * Schemas being just a placeholder are nothing but an alias
-   * of the definition found in the placeholder
-   */
-  let tsSchema =
-    isAlias && refHandling === 'import'
-      ? `export default ` + stringifiedSchema + ';'
-      : `export default ` + stringifiedSchema + ' as const;';
+  let tsSchema = `
+    const schema = ${stringifiedSchema} as const;
+
+    export default schema;`;
 
   if (refHandling === 'import') {
+    /**
+     * Schemas being just a placeholder are nothing but an alias
+     * of the definition found in the placeholder
+     */
+    if (isAlias) {
+      tsSchema = `export default ` + stringifiedSchema + ';';
+    }
+
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,
