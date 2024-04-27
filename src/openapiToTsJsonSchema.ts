@@ -42,7 +42,7 @@ export async function openapiToTsJsonSchema(
     schemaPatcher,
     outputPath: providedOutputPath,
     silent,
-    refHandling = { strategy: 'import' },
+    refHandling = 'import',
     $idMapper = ({ id }) => id,
   } = options;
 
@@ -103,7 +103,7 @@ export async function openapiToTsJsonSchema(
              * add a $ref comment to each inlined schema with the original ref value.
              * See: https://github.com/kaelzhang/node-comment-json
              */
-            if (refHandling.strategy === 'inline') {
+            if (refHandling === 'inline') {
               inlinedSchema[Symbol.for('before')] = [
                 {
                   type: 'LineComment',
@@ -125,7 +125,7 @@ export async function openapiToTsJsonSchema(
    * It happens only with "import" and "keep" refHandling since they expect
    * $ref schemas to be generated no matter of
    */
-  if (refHandling.strategy === 'import' || refHandling.strategy === 'keep') {
+  if (refHandling === 'import' || refHandling === 'keep') {
     for (const [id, schema] of inlinedRefs) {
       addSchemaToMetaData({
         id,

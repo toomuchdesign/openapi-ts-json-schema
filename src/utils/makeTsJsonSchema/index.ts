@@ -30,13 +30,13 @@ export async function makeTsJsonSchema({
 
   // Shall we append $id here or after stringify?
   const schemaWith$id =
-    refHandling.strategy === 'inline' || refHandling.strategy === 'keep'
+    refHandling === 'inline' || refHandling === 'keep'
       ? { $id, ...originalSchema }
       : originalSchema;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
-    refHandling.strategy === 'import' || refHandling.strategy === 'keep'
+    refHandling === 'import' || refHandling === 'keep'
       ? replaceInlinedRefsWithStringPlaceholder(schemaWith$id)
       : schemaWith$id;
 
@@ -62,11 +62,11 @@ export async function makeTsJsonSchema({
    * of the definition found in the placeholder
    */
   let tsSchema =
-    isAlias && refHandling.strategy === 'import'
+    isAlias && refHandling === 'import'
       ? `export default ` + stringifiedSchema + ';'
       : `export default ` + stringifiedSchema + ' as const;';
 
-  if (refHandling.strategy === 'import') {
+  if (refHandling === 'import') {
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,
@@ -74,7 +74,7 @@ export async function makeTsJsonSchema({
     });
   }
 
-  if (refHandling.strategy === 'keep') {
+  if (refHandling === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
       refMapper: $idMapper,

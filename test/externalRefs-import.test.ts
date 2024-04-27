@@ -13,7 +13,7 @@ describe('External $refs', () => {
             'external-refs-import-definition-alias',
           ),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'import' },
+          refHandling: 'import',
           silent: true,
         });
 
@@ -38,7 +38,7 @@ describe('External $refs', () => {
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'import' },
+          refHandling: 'import',
           silent: true,
         });
 

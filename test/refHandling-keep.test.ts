@@ -12,7 +12,7 @@ describe('refHandling option === "keep"', () => {
       outputPath: makeTestOutputPath('refHandling-keep'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: { strategy: 'keep' },
+      refHandling: 'keep',
     });
 
     const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
@@ -88,7 +88,7 @@ describe('refHandling option === "keep"', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: { strategy: 'keep' },
+      refHandling: 'keep',
     });
 
     const januarySchema = await import(
@@ -123,7 +123,7 @@ describe('refHandling option === "keep"', () => {
         outputPath: makeTestOutputPath('refHandling-keep-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
-        refHandling: { strategy: 'keep' },
+        refHandling: 'keep',
       });
 
       const answerAliasDefinition = await import(
@@ -151,15 +151,13 @@ describe('refHandling option === "keep"', () => {
   });
 
   describe('"$idMapper" option', () => {
-    it('customizes "$ref" values', async () => {
+    it('derives "$ref" values from "$idMapper"', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
+        outputPath: makeTestOutputPath('refHandling-keep-idMapper-option'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
-        refHandling: {
-          strategy: 'keep',
-        },
+        refHandling: 'keep',
         $idMapper: ({ id }) => `foo_${id}_bar`,
       });
 

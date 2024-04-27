@@ -96,7 +96,7 @@ describe('fastifyIntegration plugin', () => {
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('plugin-fastify-schemaFilter-option'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
-        refHandling: { strategy: 'keep' },
+        refHandling: 'keep',
         plugins: [
           fastifyIntegrationPlugin({
             schemaFilter: ({ id }) => id.startsWith('/components/schemas'),

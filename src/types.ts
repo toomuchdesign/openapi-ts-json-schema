@@ -3,10 +3,7 @@ export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
-export type RefHandling =
-  | { strategy: 'import' }
-  | { strategy: 'inline' }
-  | { strategy: 'keep'; refMapper?: (input: { id: string }) => string };
+export type RefHandling = 'import' | 'inline' | 'keep';
 export type $idMapper = (input: { id: string }) => string;
 
 import type {
