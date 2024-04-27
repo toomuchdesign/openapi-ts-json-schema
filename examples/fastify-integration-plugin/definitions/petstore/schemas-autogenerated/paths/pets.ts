@@ -64,5 +64,4 @@ const schema = {
     },
   },
 } as const;
-
 export default schema;

@@ -14,6 +14,7 @@ describe('OpenAPI v2', async () => {
 
     const petSchema = await import(path.resolve(outputPath, 'definitions/Pet'));
     expect(petSchema.default).toEqual({
+      $id: '/definitions/Pet',
       type: 'object',
       required: ['id'],
       properties: {
@@ -24,6 +25,7 @@ describe('OpenAPI v2', async () => {
 
     const petsPathSchema = await import(path.resolve(outputPath, 'paths/pets'));
     expect(petsPathSchema.default).toEqual({
+      $id: '/paths/pets',
       get: {
         description:
           'Returns all pets from the system that the user has access to',
@@ -33,7 +35,7 @@ describe('OpenAPI v2', async () => {
             description: 'A list of pets.',
             schema: {
               type: 'array',
-              items: petSchema.default,
+              items: petSchema.without$id,
             },
           },
         },

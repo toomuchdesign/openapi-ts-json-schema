@@ -26,13 +26,9 @@ export async function makeTsJsonSchema({
   schemaPatcher?: SchemaPatcher;
   $idMapper: $idMapper;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName, $id } = metaData;
+  const { originalSchema, absoluteDirName, $id, isRef } = metaData;
 
-  // Shall we append $id here or after stringify?
-  const schemaWith$id =
-    refHandling === 'inline' || refHandling === 'keep'
-      ? { $id, ...originalSchema }
-      : originalSchema;
+  const schemaWith$id = { $id, ...originalSchema };
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
@@ -59,7 +55,6 @@ export async function makeTsJsonSchema({
 
   let tsSchema = `
     const schema = ${stringifiedSchema} as const;
-
     export default schema;`;
 
   if (refHandling === 'import') {
@@ -75,6 +70,7 @@ export async function makeTsJsonSchema({
       schemaAsText: tsSchema,
       absoluteDirName,
       schemaMetaDataMap,
+      isRef,
     });
   }
 

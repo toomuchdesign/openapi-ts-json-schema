@@ -17,6 +17,7 @@ describe('OpenAPI paths parameters', () => {
     );
 
     expect(pathSchema.default).toEqual({
+      $id: '/paths/v1_path-1',
       parameters: {
         headers: {
           type: 'object',
