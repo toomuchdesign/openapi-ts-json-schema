@@ -4,35 +4,18 @@ import componentsSchemasPets from "./components/schemas/Pets";
 import componentsSchemasError from "./components/schemas/Error";
 import componentsSchemasOwner from "./components/schemas/Owner";
 
-const componentsSchemasPetWithId = {
-  ...componentsSchemasPet,
-  $id: "/components/schemas/Pet",
-} as const;
-const componentsSchemasPetsWithId = {
-  ...componentsSchemasPets,
-  $id: "/components/schemas/Pets",
-} as const;
-const componentsSchemasErrorWithId = {
-  ...componentsSchemasError,
-  $id: "/components/schemas/Error",
-} as const;
-const componentsSchemasOwnerWithId = {
-  ...componentsSchemasOwner,
-  $id: "/components/schemas/Owner",
-} as const;
-
 // RefSchemas type: tuple of $ref schema types to enable json-schema-to-ts hydrate $refs via "references" option
 export type RefSchemas = [
-  typeof componentsSchemasPetWithId,
-  typeof componentsSchemasPetsWithId,
-  typeof componentsSchemasErrorWithId,
-  typeof componentsSchemasOwnerWithId,
+  typeof componentsSchemasPet,
+  typeof componentsSchemasPets,
+  typeof componentsSchemasError,
+  typeof componentsSchemasOwner,
 ];
 
 // schemas: array of JSON schemas to be registered with "fastify.addSchema"
 export const schemas = [
-  componentsSchemasPetWithId,
-  componentsSchemasPetsWithId,
-  componentsSchemasErrorWithId,
-  componentsSchemasOwnerWithId,
+  componentsSchemasPet,
+  componentsSchemasPets,
+  componentsSchemasError,
+  componentsSchemasOwner,
 ];
