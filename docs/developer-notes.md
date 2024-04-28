@@ -46,15 +46,22 @@ Note: alias definitions (eg. `Foo: "#components/schemas/Bar"`) will result in a 
 
 1. Inlined and dereferenced schemas get stringified and parsed to retrieve **string placeholders** and their internal id value
 
-2. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name.
+2. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name. 2 schemas are exported: with and without `$id`.
 
 ```ts
-import Bar from '../foo/Bar';
+import { without$id as componentsSchemasBar } from './Bar';
 
-export default {
-  bar: Bar;
-} as const
+const schema = {
+  $id: '/components/schemas/Foo',
+  bar: componentsSchemasBar,
+} as const;
+export default schema;
+
+const { $id, ...without$id } = schema;
+export { without$id };
 ```
+
+Schemas without $id are the ones used to resolve refs.
 
 ## `refHandling`: keep
 
@@ -66,11 +73,9 @@ export default {
 - [JSON schema `$ref`s documentation](https://json-schema.org/understanding-json-schema/structuring.html#ref)
 - [JSON schema Compound Schema Document `$id` documentation](https://json-schema.org/understanding-json-schema/structuring.html#bundling)
 
-JSON schemas are currently generated without an `$id` prop. `$id`s can currently be generates via plugins (see Fastify integration plugin).
-
 Schemas are internally assigned to a private id with the following structure: `/components/schemas/MySchema`.
 
-We could expose an option to append `$id` props to the generated schemas: this would clash with import `refHandling`, unless we find a way to import schemas with and without `$id`.
+`$ref` values are currently assigned with the same value associated to the relevant schema `$id`.
 
 ## TypeScript cannot import json as const
 

@@ -150,7 +150,6 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
 - Improve external `#ref`s handling (currently being inlined and duplicated)
 - Find a way to merge multiple different OpenApi definitions consistently
-- Consider adding a way to optionally generate `$id` props (this would clash with `import` ref handling)
 - Consider implementing an option to inline circular $refs with a configurable nesting level
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
