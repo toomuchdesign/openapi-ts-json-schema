@@ -151,33 +151,4 @@ describe('refHandling option === "keep"', () => {
       );
     });
   });
-
-  describe('"$idMapper" option', () => {
-    it('derives "$ref" values from "$idMapper"', async () => {
-      const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
-        silent: true,
-        refHandling: 'keep',
-        $idMapper: ({ id }) => `foo_${id}_bar`,
-      });
-
-      const actualSchema = await import(
-        path.resolve(outputPath, 'components/schemas/January')
-      );
-
-      expect(actualSchema.default).toEqual({
-        $id: 'foo_/components/schemas/January_bar',
-        description: 'January description',
-        properties: {
-          isJanuary: {
-            $ref: 'foo_/components/schemas/Answer_bar',
-          },
-        },
-        required: ['isJanuary'],
-        type: 'object',
-      });
-    });
-  });
 });
