@@ -6,14 +6,14 @@ import { openapiToTsJsonSchema } from '../src';
 describe('External $refs', () => {
   describe('refHandling option === "import"', () => {
     describe('multiple definitions aliasing same external definition', () => {
-      it('dedupe imports and resolve against same schema (aliases)', async () => {
+      it('dedupe imports and resolve against same schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath(
             'external-refs-import-definition-alias',
           ),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'import' },
+          refHandling: 'import',
           silent: true,
         });
 
@@ -25,10 +25,17 @@ describe('External $refs', () => {
           path.resolve(outputPath, 'components/schemas/ExternalDefinitionAlias')
         );
 
-        // Same imported schemas should be resolved against the same entity (reference equality)
-        expect(externalDefinitionSchema.default).toBe(
-          externalDefinitionAliasSchema.default,
-        );
+        expect(externalDefinitionSchema.default).toEqual({
+          $id: '/components/schemas/ExternalDefinition',
+          description: 'External Foo description',
+          type: ['string', 'null'],
+          enum: ['yes', 'no', null],
+        });
+
+        expect(externalDefinitionAliasSchema.default).toEqual({
+          ...externalDefinitionSchema.default,
+          $id: '/components/schemas/ExternalDefinitionAlias',
+        });
       });
     });
 
@@ -38,7 +45,7 @@ describe('External $refs', () => {
           openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'import' },
+          refHandling: 'import',
           silent: true,
         });
 
@@ -57,9 +64,17 @@ describe('External $refs', () => {
         );
 
         // Same imported schemas should be resolved against the same entity (reference equality)
-        expect(externalDefinitionWholeDocumentSchema.default).toBe(
-          externalDefinitionWholeDocumentAliasSchema.default,
-        );
+        expect(externalDefinitionWholeDocumentSchema.default).toEqual({
+          $id: '/components/schemas/ExternalDefinitionWholeDocument',
+          description: 'External definition whole document',
+          type: ['string', 'null'],
+          enum: ['yes', 'no', null],
+        });
+
+        expect(externalDefinitionWholeDocumentAliasSchema.default).toEqual({
+          ...externalDefinitionWholeDocumentSchema.default,
+          $id: '/components/schemas/ExternalDefinitionWholeDocumentAlias',
+        });
       });
     });
   });

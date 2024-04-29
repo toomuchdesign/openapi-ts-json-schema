@@ -3,10 +3,8 @@ export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
 export type OpenApiSchema = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
-export type RefHandling =
-  | { strategy: 'import' }
-  | { strategy: 'inline' }
-  | { strategy: 'keep'; refMapper?: (input: { id: string }) => string };
+export type RefHandling = 'import' | 'inline' | 'keep';
+export type $idMapper = (input: { id: string }) => string;
 
 import type {
   makeRelativeModulePath,
@@ -22,11 +20,13 @@ export type Options = {
   plugins?: ReturnType<Plugin>[];
   silent?: boolean;
   refHandling?: RefHandling;
+  $idMapper?: $idMapper;
 };
 
 /**
  * Meta data for representing a specific openApi definition
- * @property `id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
+ * @property `id` - Internal unique schema identifier. Eg `"/components/schemas/MySchema"`
+ * @property `$id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
  * @property `isRef` - True if schemas is used as `$ref`
  * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @property `originalSchema` - Original dereferenced JSON schema
@@ -37,6 +37,7 @@ export type Options = {
  */
 export type SchemaMetaData = {
   id: string;
+  $id: string;
   isRef: boolean;
   uniqueName: string;
   originalSchema: JSONSchema;

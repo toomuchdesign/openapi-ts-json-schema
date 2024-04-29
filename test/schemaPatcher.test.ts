@@ -22,6 +22,7 @@ describe('"schemaPatcher" option', () => {
     );
 
     expect(januarySchema.default).toEqual({
+      $id: '/components/schemas/January',
       description: 'Patched January description',
       type: 'object',
       required: ['isJanuary'],

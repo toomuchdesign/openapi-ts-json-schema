@@ -16,16 +16,8 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
 } = {}) => ({
   onInit: async ({ options }) => {
     // Force "keep" refHandling
-    options.refHandling = {
-      strategy: 'keep',
-      refMapper: ({ id }) => {
-        /**
-         * Replace original $ref values with internal schema id which
-         * the schema is registered with via Fastify's `addSchema`
-         */
-        return id;
-      },
-    };
+    options.refHandling = 'keep';
+    options.$idMapper = ({ id }) => id;
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
@@ -43,6 +35,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
         };
       });
 
+    // @TODO: Shall we include refs of the filtered schemas?
     const exportedSchemas = allSchemas.filter(({ id, isRef }) =>
       schemaFilter({ id, isRef }),
     );
@@ -55,19 +48,12 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
       output += `\n import ${schema.uniqueName} from "${schema.importPath}";`;
     });
 
-    // Generate JSON schema objects with $id prop
-    output += '\n\n';
-    exportedSchemas.forEach((schema) => {
-      // @NOTE schemas internal $refs should match the $id generated here
-      output += `\n const ${schema.uniqueName}WithId = {...${schema.uniqueName}, $id: "${schema.id}"} as const;`;
-    });
-
     // RefSchemas type: generate TS tuple TS type containing the types of all $ref JSON schema
     output += `\n\n
       // RefSchemas type: tuple of $ref schema types to enable json-schema-to-ts hydrate $refs via "references" option
       export type RefSchemas = [
         ${exportedSchemas
-          .map((schema) => `typeof ${schema.uniqueName}WithId`)
+          .map((schema) => `typeof ${schema.uniqueName}`)
           .join(',')}
       ];`;
 
@@ -75,7 +61,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
     output += `\n\n
       // schemas: array of JSON schemas to be registered with "fastify.addSchema"
       export const schemas = [
-        ${exportedSchemas.map((schema) => `${schema.uniqueName}WithId`).join(',')}
+        ${exportedSchemas.map((schema) => `${schema.uniqueName}`).join(',')}
       ];`;
 
     // Format and save file

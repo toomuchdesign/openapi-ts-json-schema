@@ -26,13 +26,14 @@ describe('refHandling option === "import"', () => {
         outputPath: makeTestOutputPath('refHandling-import'),
         definitionPathsToGenerateFrom,
         silent: true,
-        refHandling: { strategy: 'import' },
+        refHandling: 'import',
       });
 
       const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
 
       // Expectations against parsed root schema
       expect(path1.default).toEqual({
+        $id: '/paths/v1_path-1',
         get: {
           responses: {
             '200': {
@@ -86,10 +87,11 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsSchemasFebruary from "./../components/schemas/February";
-        import componentsSchemasJanuary from "./../components/schemas/January";
+        import { without$id as componentsSchemasFebruary } from "./../components/schemas/February";
+        import { without$id as componentsSchemasJanuary } from "./../components/schemas/January";
 
-        export default {
+        const schema = {
+          $id: "/paths/v1_path-1",
           get: {
             responses: {
               "200": {
@@ -112,19 +114,20 @@ describe('refHandling option === "import"', () => {
               },
             },
           },
-        } as const;`);
+        } as const;
+        export default schema;`);
 
       expect(actualPath1File).toEqual(expectedPath1File);
     });
   });
 
-  it('Generates expected $ref schemas', async () => {
+  it('Generates expected $ref schemas (with and without $id)', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: { strategy: 'import' },
+      refHandling: 'import',
     });
 
     // January schema
@@ -136,18 +139,23 @@ describe('refHandling option === "import"', () => {
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import { without$id as componentsSchemasAnswer } from "./Answer";
 
-      export default {
+      const schema = {
+        $id: "/components/schemas/January",
         description: "January description",
         type: "object",
         required: ["isJanuary"],
         properties: {
           isJanuary: componentsSchemasAnswer,
         },
-      } as const;`);
+      } as const;
+      export default schema;
 
-    expect(actualJanuarySchemaFile).toMatch(expectedJanuarySchemaFile);
+      const { $id, ...without$id } = schema;
+      export { without$id };`);
+
+    expect(actualJanuarySchemaFile).toEqual(expectedJanuarySchemaFile);
 
     // February schema
     const actualFebruarySchemaFile = await fs.readFile(
@@ -158,18 +166,23 @@ describe('refHandling option === "import"', () => {
     );
 
     const expectedFebruarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import { without$id as componentsSchemasAnswer } from "./Answer";
 
-      export default {
+      const schema = {
+        $id: "/components/schemas/February",
         description: "February description",
         type: "object",
         required: ["isFebruary"],
         properties: {
           isFebruary: componentsSchemasAnswer,
         },
-      } as const;`);
+      } as const;
+      export default schema;
 
-    expect(actualFebruarySchemaFile).toMatch(expectedFebruarySchemaFile);
+      const { $id, ...without$id } = schema;
+      export { without$id };`);
+
+    expect(actualFebruarySchemaFile).toEqual(expectedFebruarySchemaFile);
   });
 
   describe('Alias definitions', () => {
@@ -179,7 +192,7 @@ describe('refHandling option === "import"', () => {
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
-        refHandling: { strategy: 'import' },
+        refHandling: 'import',
       });
 
       const answerSchema = await import(
@@ -190,8 +203,30 @@ describe('refHandling option === "import"', () => {
         path.resolve(outputPath, 'components/schemas/AnswerAliasDefinition')
       );
 
-      expect(answerSchema.default).toEqual(answerAliasDefinition.default);
-      expect(answerSchema.default).toBe(answerAliasDefinition.default);
+      expect(answerAliasDefinition.default).toEqual({
+        ...answerSchema.default,
+        $id: '/components/schemas/AnswerAliasDefinition',
+      });
+
+      const actualAnswerAliasDefinitionSchemaFile = await fs.readFile(
+        path.resolve(outputPath, 'components/schemas/AnswerAliasDefinition.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedAnswerAliasDefinitionSchemaFile = await formatTypeScript(`
+      import { without$id as componentsSchemasAnswer } from "./Answer";
+
+      const schema = {
+        $id: "/components/schemas/AnswerAliasDefinition",
+        ...componentsSchemasAnswer,
+      } as const;
+      export default schema;`);
+
+      expect(actualAnswerAliasDefinitionSchemaFile).toEqual(
+        expectedAnswerAliasDefinitionSchemaFile,
+      );
     });
   });
 });

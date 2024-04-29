@@ -1,4 +1,5 @@
-export default {
+const schema = {
+  $id: "/paths/pets_{petId}",
   get: {
     summary: "Info for a specific pet",
     operationId: "showPetById",
@@ -34,3 +35,4 @@ export default {
     },
   },
 } as const;
+export default schema;

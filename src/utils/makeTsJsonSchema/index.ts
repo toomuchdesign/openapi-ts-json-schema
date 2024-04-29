@@ -10,6 +10,7 @@ import type {
   SchemaMetaData,
   SchemaPatcher,
   RefHandling,
+  $idMapper,
 } from '../../types';
 
 export async function makeTsJsonSchema({
@@ -17,21 +18,25 @@ export async function makeTsJsonSchema({
   schemaMetaDataMap,
   refHandling,
   schemaPatcher,
+  $idMapper,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   schemaPatcher?: SchemaPatcher;
+  $idMapper: $idMapper;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName } = metaData;
+  const { originalSchema, absoluteDirName, $id, isRef } = metaData;
+
+  const schemaWith$id = { $id, ...originalSchema };
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
-    refHandling.strategy === 'import' || refHandling.strategy === 'keep'
-      ? replaceInlinedRefsWithStringPlaceholder(originalSchema)
-      : originalSchema;
+    refHandling === 'import' || refHandling === 'keep'
+      ? replaceInlinedRefsWithStringPlaceholder(schemaWith$id)
+      : schemaWith$id;
 
-  // Check if this schema is just the reference to another schema
+  // Check if this schema is just a reference to another schema
   const isAlias = typeof schemaWithPlaceholders === 'string';
 
   const patchedSchema = isAlias
@@ -48,27 +53,30 @@ export async function makeTsJsonSchema({
     2,
   );
 
-  /**
-   * Schemas being just a placeholder are nothing but an alias
-   * of the definition found in the placeholder
-   */
-  let tsSchema =
-    isAlias && refHandling.strategy === 'import'
-      ? `export default ` + stringifiedSchema + ';'
-      : `export default ` + stringifiedSchema + ' as const;';
+  let tsSchema = `
+    const schema = ${stringifiedSchema} as const;
+    export default schema;`;
 
-  if (refHandling.strategy === 'import') {
+  if (refHandling === 'import') {
+    // Alias schema handling is a bit rough, right now
+    if (isAlias) {
+      tsSchema = `
+      const schema = {$id: "${$id}", ...${stringifiedSchema}} as const;
+      export default schema;`;
+    }
+
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,
       schemaMetaDataMap,
+      isRef,
     });
   }
 
-  if (refHandling.strategy === 'keep') {
+  if (refHandling === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
-      refMapper: refHandling.refMapper,
+      refMapper: $idMapper,
     });
   }
 

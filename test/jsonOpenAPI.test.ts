@@ -17,6 +17,7 @@ describe('JSON OpenAPI input', async () => {
     );
 
     expect(januarySchema.default).toEqual({
+      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],

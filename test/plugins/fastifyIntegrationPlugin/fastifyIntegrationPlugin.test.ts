@@ -30,41 +30,25 @@ describe('fastifyIntegration plugin', () => {
       import componentsSchemasFebruary from "./components/schemas/February";
       import componentsSchemasMarch from "./components/schemas/March";
 
-      const componentsSchemasAnswerWithId = {
-        ...componentsSchemasAnswer,
-        $id: "/components/schemas/Answer",
-      } as const;
-      const componentsSchemasJanuaryWithId = {
-        ...componentsSchemasJanuary,
-        $id: "/components/schemas/January",
-      } as const;
-      const componentsSchemasFebruaryWithId = {
-        ...componentsSchemasFebruary,
-        $id: "/components/schemas/February",
-      } as const;
-      const componentsSchemasMarchWithId = {
-        ...componentsSchemasMarch,
-        $id: "/components/schemas/March",
-      } as const;
-
       // RefSchemas type: tuple of $ref schema types to enable json-schema-to-ts hydrate $refs via "references" option
       export type RefSchemas = [
-        typeof componentsSchemasAnswerWithId,
-        typeof componentsSchemasJanuaryWithId,
-        typeof componentsSchemasFebruaryWithId,
-        typeof componentsSchemasMarchWithId,
+        typeof componentsSchemasAnswer,
+        typeof componentsSchemasJanuary,
+        typeof componentsSchemasFebruary,
+        typeof componentsSchemasMarch,
       ];
 
       // schemas: array of JSON schemas to be registered with "fastify.addSchema"
       export const schemas = [
-        componentsSchemasAnswerWithId,
-        componentsSchemasJanuaryWithId,
-        componentsSchemasFebruaryWithId,
-        componentsSchemasMarchWithId,
+        componentsSchemasAnswer,
+        componentsSchemasJanuary,
+        componentsSchemasFebruary,
+        componentsSchemasMarch,
       ]`);
 
     expect(actualAsText).toBe(expectedAsText);
 
+    // $ref schemas
     const answerSchema = await import(
       path.resolve(outputPath, 'components/schemas/Answer')
     );
@@ -74,6 +58,7 @@ describe('fastifyIntegration plugin', () => {
     const februarySchema = await import(
       path.resolve(outputPath, 'components/schemas/February')
     );
+    // non-$ref schemas
     const marchSchema = await import(
       path.resolve(outputPath, 'components/schemas/March')
     );
@@ -83,23 +68,23 @@ describe('fastifyIntegration plugin', () => {
     );
 
     expect(actual.schemas).toEqual([
-      { ...answerSchema.default, $id: '/components/schemas/Answer' },
-      { ...januarySchema.default, $id: '/components/schemas/January' },
-      { ...februarySchema.default, $id: '/components/schemas/February' },
-      { ...marchSchema.default, $id: '/components/schemas/March' },
+      answerSchema.default,
+      januarySchema.default,
+      februarySchema.default,
+      marchSchema.default,
     ]);
   });
 
   describe('"schemaFilter" option', () => {
-    it('generates expected file', async () => {
+    it('exposes only filtered schemas', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('plugin-fastify-schemaFilter-option'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
-        refHandling: { strategy: 'keep' },
         plugins: [
           fastifyIntegrationPlugin({
-            schemaFilter: ({ id }) => id.startsWith('/components/schemas'),
+            schemaFilter: ({ id }) =>
+              id.includes('January') || id.includes('March'),
           }),
         ],
         silent: true,
@@ -108,28 +93,16 @@ describe('fastifyIntegration plugin', () => {
       const actual = await import(
         path.resolve(outputPath, 'fastify-integration')
       );
-
-      // $ref schemas
-      const answerSchema = await import(
-        path.resolve(outputPath, 'components/schemas/Answer')
-      );
       const januarySchema = await import(
         path.resolve(outputPath, 'components/schemas/January')
       );
-      const februarySchema = await import(
-        path.resolve(outputPath, 'components/schemas/February')
-      );
-
-      // non-$ref schemas
       const marchSchema = await import(
         path.resolve(outputPath, 'components/schemas/March')
       );
 
       expect(actual.schemas).toEqual([
-        { ...answerSchema.default, $id: '/components/schemas/Answer' },
-        { ...januarySchema.default, $id: '/components/schemas/January' },
-        { ...februarySchema.default, $id: '/components/schemas/February' },
-        { ...marchSchema.default, $id: '/components/schemas/March' },
+        januarySchema.default,
+        marchSchema.default,
       ]);
     });
   });

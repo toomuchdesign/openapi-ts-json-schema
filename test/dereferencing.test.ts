@@ -17,6 +17,7 @@ describe('Dereferencing', () => {
     );
 
     expect(januarySchema.default).toEqual({
+      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],

@@ -11,7 +11,7 @@ describe('Returned "metaData"', async () => {
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('meta-data'),
       definitionPathsToGenerateFrom: ['components.schemas'],
-      refHandling: { strategy: 'import' },
+      refHandling: 'import',
       silent: true,
     });
 
@@ -28,6 +28,7 @@ describe('Returned "metaData"', async () => {
 
     const expectedAnswerMetaData: SchemaMetaData = {
       id: '/components/schemas/Answer',
+      $id: '/components/schemas/Answer',
       uniqueName: 'componentsSchemasAnswer',
       originalSchema: expect.any(Object),
       isRef: true,
@@ -48,6 +49,7 @@ describe('Returned "metaData"', async () => {
 
     const expectedJanuaryMetaData: SchemaMetaData = {
       id: '/components/schemas/January',
+      $id: '/components/schemas/January',
       uniqueName: 'componentsSchemasJanuary',
       originalSchema: expect.any(Object),
       isRef: false,

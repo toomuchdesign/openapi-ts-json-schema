@@ -12,13 +12,14 @@ describe('refHandling option === "keep"', () => {
       outputPath: makeTestOutputPath('refHandling-keep'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: { strategy: 'keep' },
+      refHandling: 'keep',
     });
 
     const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
 
     // Expectations against parsed root schema
     expect(path1.default).toEqual({
+      $id: '/paths/v1_path-1',
       get: {
         responses: {
           '200': {
@@ -27,8 +28,8 @@ describe('refHandling option === "keep"', () => {
               'application/json': {
                 schema: {
                   oneOf: [
-                    { $ref: '#/components/schemas/January' },
-                    { $ref: '#/components/schemas/February' },
+                    { $ref: '/components/schemas/January' },
+                    { $ref: '/components/schemas/February' },
                     {
                       description: 'Inline path schema',
                       type: ['integer', 'null'],
@@ -53,7 +54,8 @@ describe('refHandling option === "keep"', () => {
 
     // Ensure "as const" is present
     const expectedPath1File = await formatTypeScript(`
-      export default {
+      const schema = {
+        $id: '/paths/v1_path-1',
         get: {
           responses: {
             "200": {
@@ -62,8 +64,8 @@ describe('refHandling option === "keep"', () => {
                 "application/json": {
                   schema: {
                     oneOf: [
-                      { $ref: "#/components/schemas/January" },
-                      { $ref: "#/components/schemas/February" },
+                      { $ref: "/components/schemas/January" },
+                      { $ref: "/components/schemas/February" },
                       {
                         type: ['integer', 'null'],
                         enum: [1, 0, null],
@@ -76,7 +78,8 @@ describe('refHandling option === "keep"', () => {
             },
           },
         },
-      } as const;`);
+      } as const;
+      export default schema;`);
 
     expect(actualPath1File).toEqual(expectedPath1File);
   });
@@ -86,7 +89,7 @@ describe('refHandling option === "keep"', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
-      refHandling: { strategy: 'keep' },
+      refHandling: 'keep',
     });
 
     const januarySchema = await import(
@@ -94,11 +97,12 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(januarySchema.default).toEqual({
+      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],
       properties: {
-        isJanuary: { $ref: '#/components/schemas/Answer' },
+        isJanuary: { $ref: '/components/schemas/Answer' },
       },
     });
 
@@ -107,6 +111,7 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(answerSchema.default).toEqual({
+      $id: '/components/schemas/Answer',
       type: ['string', 'null'],
       enum: ['yes', 'no', null],
     });
@@ -119,7 +124,7 @@ describe('refHandling option === "keep"', () => {
         outputPath: makeTestOutputPath('refHandling-keep-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
-        refHandling: { strategy: 'keep' },
+        refHandling: 'keep',
       });
 
       const answerAliasDefinition = await import(
@@ -127,7 +132,7 @@ describe('refHandling option === "keep"', () => {
       );
 
       expect(answerAliasDefinition.default).toEqual({
-        $ref: '#/components/schemas/Answer',
+        $ref: '/components/schemas/Answer',
       });
 
       // Ensure "as const" is present
@@ -140,39 +145,10 @@ describe('refHandling option === "keep"', () => {
 
       expect(answerAliasDefinitionFile).toEqual(
         await formatTypeScript(`
-          export default { $ref: '#/components/schemas/Answer' } as const;
+          const schema = { $ref: '/components/schemas/Answer' } as const;
+          export default schema;
         `),
       );
-    });
-  });
-
-  describe('"refMapper" option', () => {
-    it('customizes "$ref" values', async () => {
-      const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
-        silent: true,
-        refHandling: {
-          strategy: 'keep',
-          refMapper: ({ id }) => `foo_#${id}_bar`,
-        },
-      });
-
-      const actualSchema = await import(
-        path.resolve(outputPath, 'components/schemas/January')
-      );
-
-      expect(actualSchema.default).toEqual({
-        description: 'January description',
-        properties: {
-          isJanuary: {
-            $ref: 'foo_#/components/schemas/Answer_bar',
-          },
-        },
-        required: ['isJanuary'],
-        type: 'object',
-      });
     });
   });
 });

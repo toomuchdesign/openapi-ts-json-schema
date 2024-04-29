@@ -9,6 +9,7 @@ import type { SchemaMetaDataMap, SchemaMetaData, JSONSchema } from '../types';
  */
 export function addSchemaToMetaData({
   id,
+  $id,
   schemaMetaDataMap,
   schema,
   isRef,
@@ -16,6 +17,7 @@ export function addSchemaToMetaData({
   outputPath,
 }: {
   id: string;
+  $id: string;
   schemaMetaDataMap: SchemaMetaDataMap;
   schema: JSONSchema;
   isRef: boolean;
@@ -30,6 +32,7 @@ export function addSchemaToMetaData({
 
     const metaInfo: SchemaMetaData = {
       id,
+      $id,
       uniqueName: namify(id),
       isRef,
       originalSchema: schema,

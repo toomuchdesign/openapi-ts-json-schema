@@ -15,7 +15,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-inline'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'inline' },
+          refHandling: 'inline',
           silent: true,
         });
 
@@ -25,6 +25,7 @@ describe('Circular reference', () => {
 
         // Parsed schema expectations
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -32,21 +33,33 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthTwo: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthThree: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
           },
@@ -61,15 +74,37 @@ describe('Circular reference', () => {
         );
 
         const expectedInlinedRef = `
+    previousMonth: {
+      // $ref: "#/components/schemas/January"
+      description: "January description",
+      type: "object",
+      properties: {
         nextMonth: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
         },
         nextMonthTwo: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
         },
         nextMonthThree: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
-        },`;
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {
+            // Circular recursion interrupted. Schema id: "undefined"
+          },
+        },
+      },
+    },`;
 
         expect(februarySchemaAsText).toEqual(
           expect.stringContaining(expectedInlinedRef),
@@ -86,7 +121,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-import'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'import' },
+          refHandling: 'import',
           silent: true,
         });
 
@@ -95,6 +130,7 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -136,7 +172,7 @@ describe('Circular reference', () => {
           ),
           outputPath: makeTestOutputPath('circular-keep'),
           definitionPathsToGenerateFrom: ['components.schemas'],
-          refHandling: { strategy: 'keep' },
+          refHandling: 'keep',
           silent: true,
         });
 
@@ -145,17 +181,18 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
+          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
             nextMonth: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
             nextMonthTwo: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
             nextMonthThree: {
-              $ref: '#/components/schemas/February',
+              $ref: '/components/schemas/February',
             },
           },
         });

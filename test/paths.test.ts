@@ -30,6 +30,7 @@ describe('OpenAPI paths', () => {
     };
 
     expect(pathSchema.default).toEqual({
+      $id: '/paths/users_{id}',
       get: {
         tags: ['Users'],
         summary: 'Gets a user by ID.',
