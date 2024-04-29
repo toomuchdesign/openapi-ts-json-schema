@@ -1,5 +1,19 @@
 # openapi-ts-json-schema
 
+## 0.10.0
+
+### Minor Changes
+
+- 4e9df30: Fastify plugin: `sharedSchemasFilter` option renamed as `schemaFilter`
+- bfc0f73: Plugins api changed from a single callback function to 2 optional `onInit` and `onBeforeGeneration` methods
+- 89fcf87: `metaData.schemas` entry registered by internal id (`components/schemas/Foo`) instead of `$ref`
+- 395a61e: Provide plugins access to options object
+- 4e9df30: Add `$idMapper` option
+
+### Patch Changes
+
+- 4e9df30: Fastify plugin: generate $ref values that Fastify's `addSchema` can resolve
+
 ## 0.9.2
 
 ### Patch Changes
