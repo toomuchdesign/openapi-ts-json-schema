@@ -88,6 +88,14 @@ Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more
 | `import`             | Replaces `$ref`s with a local variable pointing to the module of the target `$ref` definition                           |
 | `keep`               | Retains `$ref`s values without modification                                                                             |
 
+`inline` and `import` are the more straightforward options, producing outputs that can be readily interpreted and resolved by both JavaScript engines and TypeScript type checkers. Nevertheless, a downside of these approaches is the absence of `$ref` references, causing entities initially designed as shareable (`$ref`-able) components (e.g. `components/schemas/Foo`) to lose their recognizability.
+
+A significant limitation arises from consumer applications being unable to automatically expose an OpenAPI schema with proper shared `components/schemas` definitions, as everything becomes inlined.
+
+One potential solution involves preserving `$ref`s using the `keep` option and crafting a plugin (as discussed in the [Plugins](#plugins) section) to facilitate the interpretation of `$ref` information by JavaScript and TypeScript. The implementation logic of this plugin hinges on the framework through which the generated schemas will be consumed.
+
+`openapi-ts-json-schema` ships with a [`fastify` plugin](/docs/plugins.md) available out of the box, enabling seamless integration of schema types through [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts).
+
 #### Circular `$ref`s
 
 Circular `$ref`s references are supported, too:

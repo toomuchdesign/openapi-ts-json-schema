@@ -58,10 +58,7 @@ export function convertOpenApiToJsonSchema(
   return mapObject(
     schema,
     (key, value) => {
-      if (Array.isArray(value)) {
-        return [key, value.map((entry) => convertToJsonSchema(entry))];
-      }
-
+      // @NOTE map-obj transforms only arrays entries which are objects
       return [key, convertToJsonSchema(value)];
     },
     { deep: true },
