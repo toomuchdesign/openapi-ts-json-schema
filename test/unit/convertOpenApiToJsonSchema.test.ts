@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { convertOpenApiToJsonSchema } from '../../src/utils';
+import * as openapiSchemaToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 
 const openApiDefinition = {
   type: 'string',
@@ -121,6 +122,11 @@ describe('convertOpenApiToJsonSchema', () => {
 
     describe('on error', () => {
       it('returns human friendly error', () => {
+        const spy = vi.spyOn(openapiSchemaToJsonSchema, 'fromSchema');
+        spy.mockImplementationOnce(() => {
+          throw new Error('Error reason');
+        });
+
         expect(() => {
           convertOpenApiToJsonSchema({
             type: 'object',
@@ -129,7 +135,7 @@ describe('convertOpenApiToJsonSchema', () => {
             },
           });
         }).toThrowError(
-          '[openapi-ts-json-schema] OpenApi to JSON schema conversion failed:',
+          '[openapi-ts-json-schema] OpenApi to JSON schema conversion failed: "Error reason"',
         );
       });
     });

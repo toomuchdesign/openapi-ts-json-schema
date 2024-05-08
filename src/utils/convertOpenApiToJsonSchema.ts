@@ -18,27 +18,8 @@ function convertToJsonSchema<Value extends unknown>(
     return value;
   }
 
-  if ('type' in value) {
-    /**
-     * Skip entities with "type" props defined and not a string
-     * (They should have already been converted, anyway)
-     * https://github.com/toomuchdesign/openapi-ts-json-schema/issues/211
-     */
-    if (typeof value.type !== 'string') {
-      return value;
-    }
-
-    /**
-     * Skip security scheme object definitions
-     * https://swagger.io/specification/#security-scheme-object
-     */
-    if (SECURITY_SCHEME_OBJECT_TYPES.includes(value.type)) {
-      return value;
-    }
-  }
-
   try {
-    const schema = fromSchema(value);
+    const schema = fromSchema(value, { strictMode: false });
     // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema
     delete schema.$schema;
     return schema;
@@ -46,7 +27,7 @@ function convertToJsonSchema<Value extends unknown>(
     /* v8 ignore next 1 */
     const errorMessage = error instanceof Error ? error.message : '';
     throw new Error(
-      `[openapi-ts-json-schema] OpenApi to JSON schema conversion failed: "${errorMessage}}"`,
+      `[openapi-ts-json-schema] OpenApi to JSON schema conversion failed: "${errorMessage}"`,
       { cause: value },
     );
   }
