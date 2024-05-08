@@ -3,14 +3,6 @@ import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import { isObject } from './';
 import type { OpenApiSchema, JSONSchema } from '../types';
 
-const SECURITY_SCHEME_OBJECT_TYPES = [
-  'apiKey',
-  'http',
-  'mutualTLS',
-  'oauth2',
-  'openIdConnect',
-];
-
 function convertToJsonSchema<Value extends unknown>(
   value: Value,
 ): JSONSchema | Value {
