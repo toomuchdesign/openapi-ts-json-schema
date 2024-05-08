@@ -10,6 +10,11 @@ function convertToJsonSchema<Value extends unknown>(
     return value;
   }
 
+  // Skip openAPI parameters
+  if ('in' in value) {
+    return value;
+  }
+
   try {
     const schema = fromSchema(value, { strictMode: false });
     // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema

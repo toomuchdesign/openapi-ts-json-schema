@@ -23,12 +23,10 @@ function convertParametersToJsonSchema(
 }
 
 /**
- *
- * We currently only convert parameters found in:
+ * Convert parameters found in:
  * - paths[path].parameters
  * - paths[path][operation].parameters
  *
- * Shared components in "components.parameters" are currently not even converted
  * Shared $ref parameters are currently always inlined
  *
  * OpenAPI parameters docs:
