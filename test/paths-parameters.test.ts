@@ -73,6 +73,7 @@ describe('OpenAPI paths parameters', () => {
               'query-param-1': {
                 type: 'string',
               },
+              // Components parameters are currently always inlined
               'component-parameter-name': {
                 type: ['integer', 'null'],
               },

@@ -27,7 +27,8 @@ function convertParametersToJsonSchema(
  * - paths[path].parameters
  * - paths[path][operation].parameters
  *
- * Shared $ref parameters are currently always inlined
+ * Parameters schema $refs are fully supported
+ * $ref parameters are currently always inlined
  *
  * OpenAPI parameters docs:
  * https://swagger.io/docs/specification/describing-parameters/
