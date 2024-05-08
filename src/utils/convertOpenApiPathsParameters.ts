@@ -23,14 +23,18 @@ function convertParametersToJsonSchema(
 }
 
 /**
- * Paths parameters field can only be found in:
+ *
+ * We currently only convert parameters found in:
  * - paths[path].parameters
  * - paths[path][operation].parameters
  *
+ * Shared components in "components.parameters" are currently not even converted
+ * Shared $ref parameters are currently always inlined
+ *
+ * OpenAPI parameters docs:
  * https://swagger.io/docs/specification/describing-parameters/
  *
- * @NOTE The schema must be dereferenced since openapi-jsonschema-parameters
- * doesn't handle $refs
+ * @NOTE The schema must be dereferenced since openapi-jsonschema-parameters doesn't handle $refs
  */
 export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
   if ('paths' in schema) {

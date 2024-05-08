@@ -2,6 +2,7 @@ import path from 'path';
 import { describe, it, expect } from 'vitest';
 import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
+import { fromParameter } from '@openapi-contrib/openapi-schema-to-json-schema';
 
 describe('OpenAPI paths parameters', () => {
   it('Transforms parameters array into valid JSON schema', async () => {
@@ -9,6 +10,7 @@ describe('OpenAPI paths parameters', () => {
       openApiSchema: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
       outputPath: makeTestOutputPath('paths-parameters'),
       definitionPathsToGenerateFrom: ['paths'],
+      refHandling: 'import',
       silent: true,
     });
 
@@ -85,5 +87,14 @@ describe('OpenAPI paths parameters', () => {
         },
       },
     });
+
+    // @TODO convert shared parameter schemas
+    // const sharedParametersSchema = await import(
+    //   path.resolve(outputPath, 'components/parameters/componentParameter')
+    // );
+
+    // expect(sharedParametersSchema.default).toEqual({
+    //   type: ['integer', 'null'],
+    // });
   });
 });
