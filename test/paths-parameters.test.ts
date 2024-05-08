@@ -71,11 +71,13 @@ describe('OpenAPI paths parameters', () => {
               'query-param-1': {
                 type: 'string',
               },
+              'component-parameter-name': {
+                type: ['integer', 'null'],
+              },
             },
-            required: ['query-param-1'],
+            required: ['query-param-1', 'component-parameter-name'],
           },
         },
-
         responses: {
           '200': {
             content: { 'application/json': { schema: { type: 'string' } } },
