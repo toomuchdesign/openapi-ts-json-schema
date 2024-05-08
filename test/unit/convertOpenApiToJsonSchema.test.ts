@@ -118,5 +118,20 @@ describe('convertOpenApiToJsonSchema', () => {
         expect(actual).toEqual(expected);
       });
     });
+
+    describe('on error', () => {
+      it('returns human friendly error', () => {
+        expect(() => {
+          convertOpenApiToJsonSchema({
+            type: 'object',
+            properties: {
+              bar: { type: 'invalid-type' },
+            },
+          });
+        }).toThrowError(
+          '[openapi-ts-json-schema] OpenApi to JSON schema conversion failed:',
+        );
+      });
+    });
   });
 });

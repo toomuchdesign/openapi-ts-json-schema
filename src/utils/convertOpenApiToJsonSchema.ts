@@ -37,10 +37,19 @@ function convertToJsonSchema<Value extends unknown>(
     }
   }
 
-  const schema = fromSchema(value);
-  // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema
-  delete schema.$schema;
-  return schema;
+  try {
+    const schema = fromSchema(value);
+    // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema
+    delete schema.$schema;
+    return schema;
+  } catch (error) {
+    /* v8 ignore next 1 */
+    const errorMessage = error instanceof Error ? error.message : '';
+    throw new Error(
+      `[openapi-ts-json-schema] OpenApi to JSON schema conversion failed: "${errorMessage}}"`,
+      { cause: value },
+    );
+  }
 }
 
 /**
