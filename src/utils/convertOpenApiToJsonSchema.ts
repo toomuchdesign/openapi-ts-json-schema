@@ -10,7 +10,12 @@ function convertToJsonSchema<Value extends unknown>(
     return value;
   }
 
-  // Skip openAPI parameters
+  /**
+   * Skip openAPI parameters since conversion causes data loss (they are not valid JSON schema)
+   * which makes impossible to aggregate them into JSON schema.
+   *
+   * Conversion is carried out later with "convertOpenApiPathsParameters"
+   */
   if ('in' in value) {
     return value;
   }
@@ -45,6 +50,13 @@ export function convertOpenApiToJsonSchema(
   return mapObject(
     schema,
     (key, value) => {
+      /**
+       * @NOTE map-obj only processes object values separately
+       */
+      if (Array.isArray(value)) {
+        return [key, value.map((entry) => convertToJsonSchema(entry))];
+      }
+
       // @NOTE map-obj transforms only arrays entries which are objects
       return [key, convertToJsonSchema(value)];
     },

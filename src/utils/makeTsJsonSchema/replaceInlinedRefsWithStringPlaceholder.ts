@@ -33,7 +33,10 @@ export function replaceInlinedRefsWithStringPlaceholder(
   return mapObject(
     schema,
     (key, value) => {
-      // @NOTE map-obj transforms only arrays entries which are objects
+      /**
+       * @NOTE map-obj transforms only arrays entries which are objects
+       * @NOTE map-obj only processes object values separately
+       */
       if (Array.isArray(value)) {
         return [
           key,
