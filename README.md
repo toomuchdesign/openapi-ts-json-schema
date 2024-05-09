@@ -161,7 +161,6 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Improve external `#ref`s handling (currently being inlined and duplicated)
 - Find a way to merge multiple different OpenApi definitions consistently
 - Consider implementing an option to inline circular $refs with a configurable nesting level
-- Convert shared parameters in `components.parameters`
 - Handle `$ref` parameters according to `refHandler` options
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg

@@ -1,6 +1,6 @@
 import mapObject from 'map-obj';
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import { isObject } from './';
+import { isObject, isOpenApiParameter } from './';
 import type { OpenApiSchema, JSONSchema } from '../types';
 
 function convertToJsonSchema<Value extends unknown>(
@@ -16,7 +16,7 @@ function convertToJsonSchema<Value extends unknown>(
    *
    * Conversion is carried out later with "convertOpenApiPathsParameters"
    */
-  if ('in' in value) {
+  if (isOpenApiParameter(value)) {
     return value;
   }
 

@@ -1,7 +1,12 @@
 import path from 'node:path';
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
-import { filenamify, parseId } from '.';
+import {
+  filenamify,
+  parseId,
+  isOpenApiParameter,
+  convertOpenApiParameterToJsonSchema,
+} from '.';
 import type { SchemaMetaDataMap, SchemaMetaData, JSONSchema } from '../types';
 
 /*
@@ -29,6 +34,11 @@ export function addSchemaToMetaData({
     const absoluteDirName = path.join(outputPath, schemaRelativeDirName);
     const schemaFileName = filenamify(schemaName);
     const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
+
+    // Convert components.parameters after convertOpenApiPathsParameters is called
+    if (isOpenApiParameter(schema)) {
+      schema = convertOpenApiParameterToJsonSchema(schema);
+    }
 
     const metaInfo: SchemaMetaData = {
       id,
