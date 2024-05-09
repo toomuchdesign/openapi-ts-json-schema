@@ -1,5 +1,16 @@
 # openapi-ts-json-schema
 
+## 0.11.0
+
+### Minor Changes
+
+- 0c68392: Convert components.parameters definitions to JSON schema
+- b556e65: Return human friendly error on convertToJsonSchema failure
+
+### Patch Changes
+
+- ae58641: Skip "type" prop valdation on OpenAPI --> JSON schema conversion
+
 ## 0.10.0
 
 ### Minor Changes
