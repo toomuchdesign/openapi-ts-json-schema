@@ -67,6 +67,27 @@ Schemas without $id are the ones used to resolve refs.
 
 `keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the an actual `$ref` value.
 
+## Shared OpenAPI parameters
+
+OpenAPI parameters can be `$ref`ed in 2 ways:
+
+```yaml
+parameters:
+  # Locally defined parameters with $ref schema
+  - schema:
+      $ref: '#/components/schemas/Answer'
+    in: header
+    name: header-param-2
+    required: true
+    description: header-param-2 description
+  # Full $ref parameters
+  - $ref: '#/components/parameters/componentParameter'
+```
+
+**Locally defined parameter with $ref schema** should be fully supported.
+
+**Full $ref parameters** are currently always inlined since parameters conversion is currently delegated to `openapi-jsonschema-parameters`.
+
 ## OpenAPI $ref vs JSON schema $id
 
 - [OpenAPI `$ref`s documentation](https://swagger.io/docs/specification/using-ref/)

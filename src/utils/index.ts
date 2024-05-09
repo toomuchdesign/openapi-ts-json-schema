@@ -2,6 +2,7 @@ export { patchJsonSchema } from './makeTsJsonSchema/patchJsonSchema';
 export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
 export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
+export { convertOpenApiParameterToJsonSchema } from './convertOpenApiParameterToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
 export { parseId } from './parseId';
 export { refToId } from './refToId';
@@ -16,6 +17,7 @@ export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/repla
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 export { isObject } from './isObject';
 export { filenamify } from './filenamify';
+export { isOpenApiParameter } from './isOpenApiParameter';
 
 export { clearFolder } from './clearFolder';
 export { makeRelativeModulePath } from './makeRelativeModulePath';

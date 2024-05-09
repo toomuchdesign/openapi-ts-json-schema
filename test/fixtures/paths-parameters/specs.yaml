@@ -10,6 +10,14 @@ components:
       enum:
         - yes
         - no
+  parameters:
+    componentParameter:
+      in: query
+      name: component-parameter-name
+      required: true
+      schema:
+        nullable: true
+        type: integer
 
 paths:
   /v1/path-1:
@@ -68,6 +76,8 @@ paths:
           name: query-param-1
           required: true
           description: Query param description
+        # Shared components parameter
+        - $ref: '#/components/parameters/componentParameter'
       responses:
         '200':
           content:

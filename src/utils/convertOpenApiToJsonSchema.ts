@@ -1,20 +1,22 @@
 import mapObject from 'map-obj';
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import { isObject } from './';
+import { isObject, isOpenApiParameter } from './';
 import type { OpenApiSchema, JSONSchema } from '../types';
-
-const SECURITY_SCHEME_OBJECT_TYPES = [
-  'apiKey',
-  'http',
-  'mutualTLS',
-  'oauth2',
-  'openIdConnect',
-];
 
 function convertToJsonSchema<Value extends unknown>(
   value: Value,
 ): JSONSchema | Value {
   if (!isObject(value)) {
+    return value;
+  }
+
+  /**
+   * Skip openAPI parameters since conversion causes data loss (they are not valid JSON schema)
+   * which makes impossible to aggregate them into JSON schema.
+   *
+   * Conversion is carried out later with "convertOpenApiPathsParameters"
+   */
+  if (isOpenApiParameter(value)) {
     return value;
   }
 
@@ -48,6 +50,13 @@ export function convertOpenApiToJsonSchema(
   return mapObject(
     schema,
     (key, value) => {
+      /**
+       * @NOTE map-obj only processes object values separately
+       */
+      if (Array.isArray(value)) {
+        return [key, value.map((entry) => convertToJsonSchema(entry))];
+      }
+
       // @NOTE map-obj transforms only arrays entries which are objects
       return [key, convertToJsonSchema(value)];
     },

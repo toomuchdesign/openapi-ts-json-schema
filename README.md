@@ -22,6 +22,8 @@ Given an OpenAPI definition file, `openapi-ts-json-schema` will:
 
 TypeScript JSON schemas are 100% valid JSON schemas.
 
+`openapi-ts-json-schema` is currently in v0, which means it's still in its testing phase. I'm actively collecting feedback from users to improve its functionality and usability. **Please don't hesitate to open an issue if you encounter any problems or issues while using it.**
+
 ## Installation
 
 ```
@@ -159,6 +161,7 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Improve external `#ref`s handling (currently being inlined and duplicated)
 - Find a way to merge multiple different OpenApi definitions consistently
 - Consider implementing an option to inline circular $refs with a configurable nesting level
+- Handle `$ref` parameters according to `refHandler` options
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
