@@ -19,11 +19,11 @@ describe('OpenAPI paths parameters', () => {
       });
 
       const pathSchema = await import(
-        path.resolve(outputPath, 'paths/v1_path-1')
+        path.resolve(outputPath, 'paths/_v1_path-1')
       );
 
       expect(pathSchema.default).toEqual({
-        $id: '/paths/v1_path-1',
+        $id: '/paths/_v1_path-1',
         parameters: {
           headers: {
             type: 'object',

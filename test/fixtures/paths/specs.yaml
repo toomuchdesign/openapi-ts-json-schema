@@ -5,6 +5,16 @@ info:
   version: 1.0.0
 
 paths:
+  /:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                nullable: true
+                type: string
+
   /users/{id}:
     get:
       tags:

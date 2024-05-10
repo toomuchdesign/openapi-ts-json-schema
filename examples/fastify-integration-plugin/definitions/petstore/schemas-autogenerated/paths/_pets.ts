@@ -1,5 +1,5 @@
 const schema = {
-  $id: "/paths/pets",
+  $id: "/paths/_pets",
   get: {
     summary: "List all pets",
     operationId: "listPets",

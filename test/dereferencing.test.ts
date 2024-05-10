@@ -36,7 +36,7 @@ describe('Dereferencing', () => {
     });
 
     const pathsSchema = await import(
-      path.resolve(outputPath, 'paths/v1_path-1')
+      path.resolve(outputPath, 'paths/_v1_path-1')
     );
 
     expect(

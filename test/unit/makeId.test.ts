@@ -18,6 +18,27 @@ describe('makeId', () => {
       schemaName: 'Foo',
       expected: '/components/schemas/Foo',
     },
+    {
+      schemaRelativeDirName: 'components.schemas',
+      schemaName: 'Foo/bar',
+      expected: '/components/schemas/Foo_bar',
+    },
+    {
+      schemaRelativeDirName: 'components/schemas',
+      schemaName: 'Foo/bar',
+      expected: '/components/schemas/Foo_bar',
+    },
+    {
+      schemaRelativeDirName: 'paths',
+      schemaName: '/users',
+      expected: '/paths/_users',
+    },
+    {
+      schemaRelativeDirName: 'paths',
+      schemaName: '/',
+      expected: '/paths/_',
+    },
+
     // Windows path separators
     {
       schemaRelativeDirName: 'components\\schemas',

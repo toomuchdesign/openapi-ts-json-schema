@@ -5,15 +5,33 @@ import { openapiToTsJsonSchema } from '../src';
 
 describe('OpenAPI paths', () => {
   it('Generates expected paths schemas', async () => {
-    const { outputPath } = await openapiToTsJsonSchema({
+    const { outputPath, metaData } = await openapiToTsJsonSchema({
       openApiSchema: path.resolve(fixtures, 'paths/specs.yaml'),
       outputPath: makeTestOutputPath('paths'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
     });
 
-    const pathSchema = await import(
-      path.resolve(outputPath, 'paths/users_{id}')
+    const rootPathSchema = await import(path.resolve(outputPath, 'paths/_'));
+    expect(rootPathSchema.default).toEqual({
+      $id: '/paths/_',
+      get: {
+        responses: {
+          '200': {
+            content: {
+              'application/json': {
+                schema: {
+                  type: ['string', 'null'],
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const usersPathSchema = await import(
+      path.resolve(outputPath, 'paths/_users_{id}')
     );
 
     const componentsSchemasUser = {
@@ -29,8 +47,8 @@ describe('OpenAPI paths', () => {
       required: ['id', 'name'],
     };
 
-    expect(pathSchema.default).toEqual({
-      $id: '/paths/users_{id}',
+    expect(usersPathSchema.default).toEqual({
+      $id: '/paths/_users_{id}',
       get: {
         tags: ['Users'],
         summary: 'Gets a user by ID.',
