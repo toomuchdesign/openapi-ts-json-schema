@@ -9,6 +9,7 @@ export default defineConfig({
         singleThread: true,
       },
     },
+    exclude: ['*skipped.test*'],
     sequence: {
       hooks: 'stack',
       concurrent: false,
