@@ -96,6 +96,44 @@ describe('convertOpenApiToJsonSchema', () => {
       });
     });
 
+    describe('OpenAPI definition as object prop (entities converted multiple times)', () => {
+      it('convert nested definitions', () => {
+        const actual = convertOpenApiToJsonSchema({
+          schemaName: {
+            type: 'object',
+            properties: {
+              two: {
+                type: 'object',
+                properties: {
+                  three: {
+                    type: 'string',
+                    nullable: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const expected = {
+          schemaName: {
+            properties: {
+              two: {
+                properties: {
+                  three: {
+                    type: ['string', 'null'],
+                  },
+                },
+                type: 'object',
+              },
+            },
+            type: 'object',
+          },
+        };
+        expect(actual).toEqual(expected);
+      });
+    });
+
     describe('Object with "type" prop (#211)', () => {
       it('convert object definitions', () => {
         const actual = convertOpenApiToJsonSchema({

@@ -7,7 +7,6 @@ dist
 coverage
 
 # Trailing dotted files
-!.all-contributorsrc
 !.editorconfig
 !.gitignore
 !.npmignore
