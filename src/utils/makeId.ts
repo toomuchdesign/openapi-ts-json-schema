@@ -2,7 +2,7 @@ import path from 'node:path';
 import { filenamify } from '.';
 
 /**
- * Generate a local OpenAPI ref from a schema internal id
+ * Generate schema internal id
  */
 const TRALING_SLASH_REGEX = /\/$/;
 export function makeId({
@@ -12,15 +12,16 @@ export function makeId({
   schemaRelativeDirName: string;
   schemaName: string;
 }): string {
-  return (
+  const normalizedSchemaRelativeDirName =
     '/' +
     path
       .normalize(schemaRelativeDirName)
       // Supporting definitionPathsToGenerateFrom dot notation
       .replaceAll('.', '/')
+      // Replace windows backslashes \
       .replaceAll('\\', '/')
-      .replace(TRALING_SLASH_REGEX, '') +
-    '/' +
-    filenamify(schemaName)
-  );
+      .replace(TRALING_SLASH_REGEX, '');
+
+  // Shall we replace '/' with a different separator?
+  return normalizedSchemaRelativeDirName + '/' + filenamify(schemaName);
 }
