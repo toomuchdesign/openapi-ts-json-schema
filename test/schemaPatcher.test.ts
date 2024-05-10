@@ -33,7 +33,7 @@ describe('"schemaPatcher" option', () => {
 
     // Testing deep nested props being patched, too
     const pathSchema = await import(
-      path.resolve(outputPath, 'paths/v1_path-1')
+      path.resolve(outputPath, 'paths/_v1_path-1')
     );
 
     expect(

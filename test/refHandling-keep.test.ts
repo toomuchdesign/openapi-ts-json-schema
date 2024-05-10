@@ -15,11 +15,11 @@ describe('refHandling option === "keep"', () => {
       refHandling: 'keep',
     });
 
-    const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
+    const path1 = await import(path.resolve(outputPath, 'paths/_v1_path-1'));
 
     // Expectations against parsed root schema
     expect(path1.default).toEqual({
-      $id: '/paths/v1_path-1',
+      $id: '/paths/_v1_path-1',
       get: {
         responses: {
           '200': {
@@ -46,7 +46,7 @@ describe('refHandling option === "keep"', () => {
 
     // Expectations against actual root schema file
     const actualPath1File = await fs.readFile(
-      path.resolve(outputPath, 'paths/v1_path-1.ts'),
+      path.resolve(outputPath, 'paths/_v1_path-1.ts'),
       {
         encoding: 'utf8',
       },
@@ -55,7 +55,7 @@ describe('refHandling option === "keep"', () => {
     // Ensure "as const" is present
     const expectedPath1File = await formatTypeScript(`
       const schema = {
-        $id: '/paths/v1_path-1',
+        $id: '/paths/_v1_path-1',
         get: {
           responses: {
             "200": {

@@ -23,9 +23,11 @@ describe('OpenAPI v2', async () => {
       },
     });
 
-    const petsPathSchema = await import(path.resolve(outputPath, 'paths/pets'));
+    const petsPathSchema = await import(
+      path.resolve(outputPath, 'paths/_pets')
+    );
     expect(petsPathSchema.default).toEqual({
-      $id: '/paths/pets',
+      $id: '/paths/_pets',
       get: {
         description:
           'Returns all pets from the system that the user has access to',

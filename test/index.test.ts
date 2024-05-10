@@ -21,7 +21,7 @@ describe('openapiToTsJsonSchema', () => {
     );
 
     // definition paths get escaped
-    const path1 = await import(path.resolve(outputPath, 'paths/v1_path-1'));
+    const path1 = await import(path.resolve(outputPath, 'paths/_v1_path-1'));
 
     expect(januarySchema.default).toEqual({
       $id: '/components/schemas/January',
@@ -44,7 +44,7 @@ describe('openapiToTsJsonSchema', () => {
     });
 
     expect(path1.default).toEqual({
-      $id: '/paths/v1_path-1',
+      $id: '/paths/_v1_path-1',
       get: {
         responses: {
           '200': {
