@@ -6,6 +6,8 @@
 
 Generate **TypeScript JSON schema** files (`.ts` modules with `as const` assertions) from **OpenAPI** definitions.
 
+**TypeScript JSON schemas** are 100% valid JSON schemas which serve as the single source of truth for runtime validation and data type inference.
+
 TypeScript JSON schemas serve various purposes, including:
 
 - Validate data and infer validated data TS types with the same JSON schema (with any JSON schema validator like [Ajv](https://ajv.js.org/))
@@ -19,8 +21,6 @@ Given an OpenAPI definition file, `openapi-ts-json-schema` will:
 - Convert to JSON schema with [`@openapi-contrib/openapi-schema-to-json-schema`](https://github.com/openapi-contrib/openapi-schema-to-json-schema) and [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters)
 - Generate a TypeScript JSON schema file for each definition (`.ts` files with `as const` assertion)
 - Organizing schemas in a folder structure mirroring the original OpenAPI definition layout.
-
-TypeScript JSON schemas are 100% valid JSON schemas.
 
 `openapi-ts-json-schema` is currently in v0, which means it's still in its testing phase. I'm actively collecting feedback from users to improve its functionality and usability. **Please don't hesitate to open an issue if you encounter any problems or issues while using it.**
 
