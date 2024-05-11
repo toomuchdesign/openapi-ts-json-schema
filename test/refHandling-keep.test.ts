@@ -19,7 +19,6 @@ describe('refHandling option === "keep"', () => {
 
     // Expectations against parsed root schema
     expect(path1.default).toEqual({
-      $id: '/paths/_v1_path-1',
       get: {
         responses: {
           '200': {
@@ -55,7 +54,6 @@ describe('refHandling option === "keep"', () => {
     // Ensure "as const" is present
     const expectedPath1File = await formatTypeScript(`
       const schema = {
-        $id: '/paths/_v1_path-1',
         get: {
           responses: {
             "200": {
@@ -79,7 +77,10 @@ describe('refHandling option === "keep"', () => {
           },
         },
       } as const;
-      export default schema;`);
+      export default schema;
+
+      const with$id = { $id: "/paths/_v1_path-1", ...schema };
+      export { with$id };`);
 
     expect(actualPath1File).toEqual(expectedPath1File);
   });
@@ -97,7 +98,6 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(januarySchema.default).toEqual({
-      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],
@@ -111,7 +111,6 @@ describe('refHandling option === "keep"', () => {
     );
 
     expect(answerSchema.default).toEqual({
-      $id: '/components/schemas/Answer',
       type: ['string', 'null'],
       enum: ['yes', 'no', null],
     });
@@ -145,9 +144,11 @@ describe('refHandling option === "keep"', () => {
 
       expect(answerAliasDefinitionFile).toEqual(
         await formatTypeScript(`
-          const schema = { $ref: '/components/schemas/Answer' } as const;
+          const schema = { $ref: "/components/schemas/Answer" } as const;
           export default schema;
-        `),
+
+          const with$id = { $id: "/components/schemas/AnswerAliasDefinition", ...schema };
+          export { with$id };`),
       );
     });
   });

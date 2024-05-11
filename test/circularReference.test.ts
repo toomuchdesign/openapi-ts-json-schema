@@ -25,7 +25,6 @@ describe('Circular reference', () => {
 
         // Parsed schema expectations
         expect(januarySchema.default).toEqual({
-          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -33,33 +32,21 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {
-                  description: 'January description',
-                  properties: {},
-                  type: 'object',
-                },
+                previousMonth: {},
               },
             },
             nextMonthTwo: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {
-                  description: 'January description',
-                  properties: {},
-                  type: 'object',
-                },
+                previousMonth: {},
               },
             },
             nextMonthThree: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {
-                  description: 'January description',
-                  properties: {},
-                  type: 'object',
-                },
+                previousMonth: {},
               },
             },
           },
@@ -80,28 +67,13 @@ describe('Circular reference', () => {
       type: "object",
       properties: {
         nextMonth: {
-          // $ref: "#/components/schemas/February"
-          description: "February description",
-          type: "object",
-          properties: {
-            // Circular recursion interrupted. Schema id: "undefined"
-          },
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },
         nextMonthTwo: {
-          // $ref: "#/components/schemas/February"
-          description: "February description",
-          type: "object",
-          properties: {
-            // Circular recursion interrupted. Schema id: "undefined"
-          },
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },
         nextMonthThree: {
-          // $ref: "#/components/schemas/February"
-          description: "February description",
-          type: "object",
-          properties: {
-            // Circular recursion interrupted. Schema id: "undefined"
-          },
+          // Circular recursion interrupted. Schema id: "/components/schemas/February"
         },
       },
     },`;
@@ -130,7 +102,6 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
-          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {
@@ -181,7 +152,6 @@ describe('Circular reference', () => {
         );
 
         expect(januarySchema.default).toEqual({
-          $id: '/components/schemas/January',
           description: 'January description',
           type: 'object',
           properties: {

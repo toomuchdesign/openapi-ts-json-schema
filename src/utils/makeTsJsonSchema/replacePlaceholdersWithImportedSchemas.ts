@@ -8,12 +8,10 @@ export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,
   absoluteDirName,
   schemaMetaDataMap,
-  isRef,
 }: {
   schemaAsText: string;
   absoluteDirName: string;
   schemaMetaDataMap: SchemaMetaDataMap;
-  isRef: boolean;
 }): string {
   const importStatements = new Set<string>();
 
@@ -38,7 +36,7 @@ export function replacePlaceholdersWithImportedSchemas({
     const { uniqueName } = importedSchema;
 
     importStatements.add(
-      `import {without$id as ${uniqueName}} from "${importedSchemaRelativePath}"`,
+      `import ${uniqueName} from "${importedSchemaRelativePath}"`,
     );
 
     return uniqueName;
@@ -51,16 +49,6 @@ export function replacePlaceholdersWithImportedSchemas({
     importStatements.forEach((entry) => {
       output = entry + '\n' + output;
     });
-  }
-
-  /**
-   * Schemas imported as refs by other schemas should be
-   * imported via this export since
-   * JSON schema allows only root level $id
-   */
-  if (isRef) {
-    output = output + '\n\n' + `const { $id, ...without$id } = schema;`;
-    output = output + '\n' + `export { without$id };`;
   }
 
   return output;

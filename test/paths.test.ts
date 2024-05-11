@@ -14,7 +14,6 @@ describe('OpenAPI paths', () => {
 
     const rootPathSchema = await import(path.resolve(outputPath, 'paths/_'));
     expect(rootPathSchema.default).toEqual({
-      $id: '/paths/_',
       get: {
         responses: {
           '200': {
@@ -48,7 +47,6 @@ describe('OpenAPI paths', () => {
     };
 
     expect(usersPathSchema.default).toEqual({
-      $id: '/paths/_users_{id}',
       get: {
         tags: ['Users'],
         summary: 'Gets a user by ID.',

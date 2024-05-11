@@ -1,5 +1,4 @@
 const schema = {
-  $id: "/components/schemas/Error",
   type: "object",
   required: ["code", "message"],
   properties: {
@@ -15,3 +14,6 @@ const schema = {
   },
 } as const;
 export default schema;
+
+const with$id = { $id: "/components/schemas/Error", ...schema };
+export { with$id };

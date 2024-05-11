@@ -1,5 +1,4 @@
 const schema = {
-  $id: "/paths/_pets",
   get: {
     summary: "List all pets",
     operationId: "listPets",
@@ -65,3 +64,6 @@ const schema = {
   },
 } as const;
 export default schema;
+
+const with$id = { $id: "/paths/_pets", ...schema };
+export { with$id };

@@ -17,7 +17,6 @@ describe('openapiToTsJsonSchema', async () => {
     );
 
     const expected = {
-      $id: '/components/schemas/Foo',
       description: 'Foo description',
       type: 'object',
       properties: {

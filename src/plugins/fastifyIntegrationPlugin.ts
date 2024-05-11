@@ -45,7 +45,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
 
     // Generate JSON schemas import statements
     exportedSchemas.forEach((schema) => {
-      output += `\n import ${schema.uniqueName} from "${schema.importPath}";`;
+      output += `\n import { with$id as ${schema.uniqueName} } from "${schema.importPath}";`;
     });
 
     // RefSchemas type: generate TS tuple TS type containing the types of all $ref JSON schema

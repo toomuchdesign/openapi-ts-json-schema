@@ -26,17 +26,18 @@ export async function makeTsJsonSchema({
   schemaPatcher?: SchemaPatcher;
   $idMapper: $idMapper;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName, $id, isRef } = metaData;
-
-  const schemaWith$id = { $id, ...originalSchema };
+  const { originalSchema, absoluteDirName, $id } = metaData;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
     refHandling === 'import' || refHandling === 'keep'
-      ? replaceInlinedRefsWithStringPlaceholder(schemaWith$id)
-      : schemaWith$id;
+      ? replaceInlinedRefsWithStringPlaceholder(originalSchema)
+      : originalSchema;
 
-  // Check if this schema is just a reference to another schema
+  /**
+   * Check if this schema is just a reference to another schema
+   * Eg: _OTJS-START_/components/schemas/Foo_OTJS-END_
+   */
   const isAlias = typeof schemaWithPlaceholders === 'string';
 
   const patchedSchema = isAlias
@@ -61,15 +62,14 @@ export async function makeTsJsonSchema({
     // Alias schema handling is a bit rough, right now
     if (isAlias) {
       tsSchema = `
-      const schema = {$id: "${$id}", ...${stringifiedSchema}} as const;
-      export default schema;`;
+        const schema = ${stringifiedSchema};
+        export default schema;`;
     }
 
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,
       schemaMetaDataMap,
-      isRef,
     });
   }
 
@@ -79,6 +79,12 @@ export async function makeTsJsonSchema({
       refMapper: $idMapper,
     });
   }
+
+  /**
+   * Re-expose schema with $id as "with$id"
+   */
+  tsSchema = tsSchema + '\n\n' + `const with$id = { $id: "${$id}", ...schema }`;
+  tsSchema = tsSchema + '\n' + `export { with$id };`;
 
   const formattedSchema = await formatTypeScript(tsSchema);
   return formattedSchema;
