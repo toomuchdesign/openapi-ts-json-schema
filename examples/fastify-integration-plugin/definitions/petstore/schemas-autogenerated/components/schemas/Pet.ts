@@ -1,5 +1,4 @@
 const schema = {
-  $id: "/components/schemas/Pet",
   type: "object",
   required: ["id", "name"],
   properties: {
@@ -18,3 +17,6 @@ const schema = {
   },
 } as const;
 export default schema;
+
+const with$id = { $id: "/components/schemas/Pet", ...schema };
+export { with$id };

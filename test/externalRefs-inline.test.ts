@@ -20,7 +20,6 @@ describe('External $refs', () => {
       );
 
       expect(externalDefinitionSchema.default).toEqual({
-        $id: '/components/schemas/ExternalDefinition',
         description: 'External Foo description',
         type: ['string', 'null'],
         enum: ['yes', 'no', null],
@@ -35,7 +34,6 @@ describe('External $refs', () => {
       );
 
       expect(externalDefinitionWholeDocumentSchema.default).toEqual({
-        $id: '/components/schemas/ExternalDefinitionWholeDocument',
         description: 'External definition whole document',
         type: ['string', 'null'],
         enum: ['yes', 'no', null],
@@ -50,7 +48,6 @@ describe('External $refs', () => {
       );
 
       expect(externalDefinitionNestedRefsSchema.default).toEqual({
-        $id: '/components/schemas/ExternalDefinitionNestedRefs',
         description: 'External Bar description',
         type: ['string', 'null'],
         enum: ['yes', 'no', null],
@@ -64,22 +61,14 @@ describe('External $refs', () => {
         )
       );
 
-      const { $id: _, ...externalDefinitionSchemaWithout$id } =
-        externalDefinitionSchema.default;
-      const { $id: __, ...externalDefinitionWholeDocumentWithout$id } =
-        externalDefinitionWholeDocumentSchema.default;
-      const { $id: ___, ...externalDefinitionNestedRefsSchemaWithout$id } =
-        externalDefinitionNestedRefsSchema.default;
-
       expect(localDefinitionReferencingExternalSchemas.default).toEqual({
-        $id: '/components/schemas/LocalDefinitionReferencingExternal',
         type: 'object',
         properties: {
-          externalDefinition: externalDefinitionSchemaWithout$id,
+          externalDefinition: externalDefinitionSchema.default,
           externalDefinitionWholeDocument:
-            externalDefinitionWholeDocumentWithout$id,
+            externalDefinitionWholeDocumentSchema.default,
           externalDefinitionNestedRefs:
-            externalDefinitionNestedRefsSchemaWithout$id,
+            externalDefinitionNestedRefsSchema.default,
         },
       });
     });

@@ -7,7 +7,7 @@ import { formatTypeScript } from '../src/utils';
 
 describe('$idMapper option', () => {
   describe('refHandling option === "inline"', () => {
-    it('derives root "$id" value from "$idMapper"', async () => {
+    it('generates with$id schema with relevant $id value', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
@@ -21,7 +21,7 @@ describe('$idMapper option', () => {
         path.resolve(outputPath, 'components/schemas/January')
       );
 
-      expect(actualSchema.default).toEqual({
+      expect(actualSchema.with$id).toEqual({
         $id: 'foo_/components/schemas/January_bar',
         description: 'January description',
         properties: {
@@ -33,11 +33,25 @@ describe('$idMapper option', () => {
         required: ['isJanuary'],
         type: 'object',
       });
+
+      // Check specific with$id schema declaration
+      const actualSchemaFile = await fs.readFile(
+        path.resolve(outputPath, 'components/schemas/January.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedSchemaWith$id = await formatTypeScript(`
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      export { with$id };`);
+
+      expect(actualSchemaFile).toContain(expectedSchemaWith$id);
     });
   });
 
   describe('refHandling option === "import"', () => {
-    it('derives root "$id" value from "$idMapper"', async () => {
+    it('generates with$id schema with relevant $id value', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
@@ -51,7 +65,7 @@ describe('$idMapper option', () => {
         path.resolve(outputPath, 'components/schemas/January')
       );
 
-      expect(actualSchema.default).toEqual({
+      expect(actualSchema.with$id).toEqual({
         $id: 'foo_/components/schemas/January_bar',
         description: 'January description',
         properties: {
@@ -63,11 +77,25 @@ describe('$idMapper option', () => {
         required: ['isJanuary'],
         type: 'object',
       });
+
+      // Check specific with$id schema declaration
+      const actualSchemaFile = await fs.readFile(
+        path.resolve(outputPath, 'components/schemas/January.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedSchemaWith$id = await formatTypeScript(`
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      export { with$id };`);
+
+      expect(actualSchemaFile).toContain(expectedSchemaWith$id);
     });
   });
 
   describe('refHandling option === "keep"', () => {
-    it('derives root "$id" and "$ref" values from "$idMapper"', async () => {
+    it('generates expcted with$id schema and "$ref" values', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-keep-refMapper-option'),
@@ -81,7 +109,7 @@ describe('$idMapper option', () => {
         path.resolve(outputPath, 'components/schemas/January')
       );
 
-      expect(actualSchema.default).toEqual({
+      expect(actualSchema.with$id).toEqual({
         $id: 'foo_/components/schemas/January_bar',
         description: 'January description',
         properties: {
@@ -92,6 +120,20 @@ describe('$idMapper option', () => {
         required: ['isJanuary'],
         type: 'object',
       });
+
+      // Check specific with$id schema declaration
+      const actualSchemaFile = await fs.readFile(
+        path.resolve(outputPath, 'components/schemas/January.ts'),
+        {
+          encoding: 'utf8',
+        },
+      );
+
+      const expectedSchemaWith$id = await formatTypeScript(`
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      export { with$id };`);
+
+      expect(actualSchemaFile).toContain(expectedSchemaWith$id);
     });
   });
 });

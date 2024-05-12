@@ -24,7 +24,6 @@ describe('openapiToTsJsonSchema', () => {
     const path1 = await import(path.resolve(outputPath, 'paths/_v1_path-1'));
 
     expect(januarySchema.default).toEqual({
-      $id: '/components/schemas/January',
       description: 'January description',
       type: 'object',
       required: ['isJanuary'],
@@ -34,7 +33,6 @@ describe('openapiToTsJsonSchema', () => {
     });
 
     expect(februarySchema.default).toEqual({
-      $id: '/components/schemas/February',
       description: 'February description',
       type: 'object',
       required: ['isFebruary'],
@@ -44,7 +42,6 @@ describe('openapiToTsJsonSchema', () => {
     });
 
     expect(path1.default).toEqual({
-      $id: '/paths/_v1_path-1',
       get: {
         responses: {
           '200': {

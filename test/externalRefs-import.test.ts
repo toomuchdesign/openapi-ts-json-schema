@@ -26,16 +26,14 @@ describe('External $refs', () => {
         );
 
         expect(externalDefinitionSchema.default).toEqual({
-          $id: '/components/schemas/ExternalDefinition',
           description: 'External Foo description',
           type: ['string', 'null'],
           enum: ['yes', 'no', null],
         });
 
-        expect(externalDefinitionAliasSchema.default).toEqual({
-          ...externalDefinitionSchema.default,
-          $id: '/components/schemas/ExternalDefinitionAlias',
-        });
+        expect(externalDefinitionAliasSchema.default).toEqual(
+          externalDefinitionSchema.default,
+        );
       });
     });
 
@@ -65,16 +63,14 @@ describe('External $refs', () => {
 
         // Same imported schemas should be resolved against the same entity (reference equality)
         expect(externalDefinitionWholeDocumentSchema.default).toEqual({
-          $id: '/components/schemas/ExternalDefinitionWholeDocument',
           description: 'External definition whole document',
           type: ['string', 'null'],
           enum: ['yes', 'no', null],
         });
 
-        expect(externalDefinitionWholeDocumentAliasSchema.default).toEqual({
-          ...externalDefinitionWholeDocumentSchema.default,
-          $id: '/components/schemas/ExternalDefinitionWholeDocumentAlias',
-        });
+        expect(externalDefinitionWholeDocumentAliasSchema.default).toEqual(
+          externalDefinitionWholeDocumentSchema.default,
+        );
       });
     });
   });
