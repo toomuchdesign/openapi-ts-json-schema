@@ -1,5 +1,16 @@
 # openapi-ts-json-schema
 
+## 0.12.0
+
+### Minor Changes
+
+- 3a77c85: Leading `/` in schema filenames not removed anymore. Path schemas filanames handled as: `/my/path` --> `\_my_path`.
+- ea41ce5: Expose schemas without `$id` as default and schemas with `$id` as `with$id` (sorry for this change of mind!)
+
+### Patch Changes
+
+- 3a77c85: Fix `/` api paths being stored out of paths folder
+
 ## 0.11.0
 
 ### Minor Changes
