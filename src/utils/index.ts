@@ -17,7 +17,7 @@ export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/repla
 export { addSchemaToMetaData } from './addSchemaToMetaData';
 export { isObject } from './isObject';
 export { filenamify } from './filenamify';
-export { isOpenApiParameter } from './isOpenApiParameter';
+export { isOpenApiParameterObject } from './isOpenApiParameterObject';
 
 export { clearFolder } from './clearFolder';
 export { makeRelativeModulePath } from './makeRelativeModulePath';
