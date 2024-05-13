@@ -4,7 +4,7 @@ import namify from 'namify';
 import {
   filenamify,
   parseId,
-  isOpenApiParameter,
+  isOpenApiParameterObject,
   convertOpenApiParameterToJsonSchema,
 } from '.';
 import type { SchemaMetaDataMap, SchemaMetaData, JSONSchema } from '../types';
@@ -36,7 +36,7 @@ export function addSchemaToMetaData({
     const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
 
     // Convert components.parameters after convertOpenApiPathsParameters is called
-    if (isOpenApiParameter(schema)) {
+    if (isOpenApiParameterObject(schema)) {
       schema = convertOpenApiParameterToJsonSchema(schema);
     }
 

@@ -1,31 +1,12 @@
-import {
-  convertParametersToJSONSchema,
-  OpenAPIParametersAsJSONSchema,
-} from 'openapi-jsonschema-parameters';
-import type { JSONSchema } from '../types';
-
-type OpenAPIParameters = Parameters<typeof convertParametersToJSONSchema>[0];
-
-function convertParametersToJsonSchema(
-  openApiParameters: OpenAPIParameters,
-): OpenAPIParametersAsJSONSchema {
-  const parameters = convertParametersToJSONSchema(openApiParameters);
-
-  // Append "type" prop which "openapi-jsonschema-parameters" seems to omit
-  let paramName: keyof OpenAPIParametersAsJSONSchema;
-  for (paramName in parameters) {
-    const schema = parameters[paramName];
-    if (schema && !schema.type) {
-      schema.type = 'object';
-    }
-  }
-  return parameters;
-}
+import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParametersToJsonSchema';
+import type { JSONSchema } from '../../types';
 
 /**
- * Convert parameters found in:
+ * Convert parameter arrays found in:
  * - paths[path].parameters
  * - paths[path][operation].parameters
+ *
+ * ..into records of JSON schemas organized by "in" value
  *
  * Parameters schema $refs are fully supported
  * $ref parameters are currently always inlined
@@ -48,7 +29,7 @@ export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
         'parameters' in pathSchema ? pathSchema.parameters : [];
 
       if (pathParameters.length) {
-        pathSchema.parameters = convertParametersToJsonSchema(
+        pathSchema.parameters = convertOpenApiParametersToJsonSchema(
           pathSchema.parameters,
         );
       }
@@ -61,7 +42,7 @@ export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
         const operationSchema = pathSchema[operation];
         if ('parameters' in operationSchema) {
           // Merge operation and common path parameters
-          operationSchema.parameters = convertParametersToJsonSchema([
+          operationSchema.parameters = convertOpenApiParametersToJsonSchema([
             ...pathParameters,
             ...operationSchema.parameters,
           ]);

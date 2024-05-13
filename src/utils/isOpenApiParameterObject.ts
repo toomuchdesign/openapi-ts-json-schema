@@ -1,11 +1,12 @@
 import { isObject } from '.';
-('./');
+import type { ParameterObject } from 'openapi3-ts/oas31';
 
 const PARAMETERS_IN_VALUES = [
   'query',
-  'header',
   'path',
+  'header',
   'cookie',
+  // oas 2 parameters
   'formData',
   'body',
 ];
@@ -14,9 +15,12 @@ const PARAMETERS_IN_VALUES = [
  * Detect OpenAPI parameters
  * https://swagger.io/docs/specification/describing-parameters/
  */
-export function isOpenApiParameter(schema: unknown): boolean {
+export function isOpenApiParameterObject(
+  schema: unknown,
+): schema is ParameterObject {
   if (
     isObject(schema) &&
+    typeof schema.name === 'string' &&
     typeof schema.in === 'string' &&
     PARAMETERS_IN_VALUES.includes(schema.in)
   ) {
