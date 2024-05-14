@@ -87,10 +87,10 @@ describe('refHandling option === "keep"', () => {
 
   it('Generates expected $ref schemas preserving $ref pointer', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
-      definitionPathsToGenerateFrom: ['paths'],
-      silent: true,
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'keep',
+      silent: true,
     });
 
     const januarySchema = await import(
@@ -103,6 +103,7 @@ describe('refHandling option === "keep"', () => {
       required: ['isJanuary'],
       properties: {
         isJanuary: { $ref: '/components/schemas/Answer' },
+        isFebruary: { $ref: '/components/schemas/Answer' },
       },
     });
 
