@@ -22,6 +22,7 @@ describe('Dereferencing', () => {
       required: ['isJanuary'],
       properties: {
         isJanuary: { type: ['string', 'null'], enum: ['yes', 'no', null] },
+        isFebruary: { type: ['string', 'null'], enum: ['yes', 'no', null] },
       },
     });
   });

@@ -28,6 +28,11 @@ describe('refHandling option === "inline"', () => {
       type: ["string", "null"],
       enum: ["yes", "no", null],
     },
+    isFebruary: {
+      // $ref: "#/components/schemas/Answer"
+      type: ["string", "null"],
+      enum: ["yes", "no", null],
+    },
   },`;
 
     expect(januarySchemaAsText).toEqual(

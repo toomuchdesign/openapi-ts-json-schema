@@ -12,6 +12,10 @@ components:
         - isJanuary
       properties:
         isJanuary:
+          # description: isJanuary description
+          $ref: '#/components/schemas/Answer'
+        isFebruary:
+          # description: isFebruary description
           $ref: '#/components/schemas/Answer'
     Answer:
       type: string
