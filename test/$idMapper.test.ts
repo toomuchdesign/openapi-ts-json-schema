@@ -26,10 +26,12 @@ describe('$idMapper option', () => {
         description: 'January description',
         properties: {
           isJanuary: {
+            description: 'isJanuary description',
             enum: ['yes', 'no', null],
             type: ['string', 'null'],
           },
           isFebruary: {
+            description: 'isFebruary description',
             enum: ['yes', 'no', null],
             type: ['string', 'null'],
           },

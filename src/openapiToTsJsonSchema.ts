@@ -88,29 +88,31 @@ export async function openapiToTsJsonSchema(
 
           // Keep track of inlined refs
           if (!inlinedRefs.has(id)) {
-            // Make a shallow copy of the ref schema to save it from the mutations below
-            inlinedRefs.set(id, { ...inlinedSchema });
+            // Shallow copy the ref schema to avoid the mutations below
+            inlinedRefs.set(id, {
+              // @ts-expect-error Spread types may only be created from object types.
+              ...schemaParser.$refs.get(ref),
+            });
+          }
 
-            /**
-             * "import" refHandling support:
-             * mark inlined ref objects with a "SCHEMA_ID_SYMBOL" to retrieve their
-             * original $ref value once inlined
-             */
-            inlinedSchema[SCHEMA_ID_SYMBOL] = id;
+          /**
+           * mark inlined ref objects with a "SCHEMA_ID_SYMBOL" to retrieve their
+           * original $ref value once inlined
+           */
+          inlinedSchema[SCHEMA_ID_SYMBOL] = id;
 
-            /**
-             * "inline" refHandling support:
-             * add a $ref comment to each inlined schema with the original ref value.
-             * See: https://github.com/kaelzhang/node-comment-json
-             */
-            if (refHandling === 'inline') {
-              inlinedSchema[Symbol.for('before')] = [
-                {
-                  type: 'LineComment',
-                  value: ` $ref: "${ref}"`,
-                },
-              ];
-            }
+          /**
+           * "inline" refHandling support:
+           * add a $ref comment to each inlined schema with the original ref value.
+           * See: https://github.com/kaelzhang/node-comment-json
+           */
+          if (refHandling === 'inline') {
+            inlinedSchema[Symbol.for('before')] = [
+              {
+                type: 'LineComment',
+                value: ` $ref: "${ref}"`,
+              },
+            ];
           }
         },
       },
