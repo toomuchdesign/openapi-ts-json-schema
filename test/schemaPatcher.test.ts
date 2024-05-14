@@ -14,6 +14,7 @@ describe('"schemaPatcher" option', () => {
           schema.description = 'Patched January description';
         }
       },
+      refHandling: 'import',
       silent: true,
     });
 

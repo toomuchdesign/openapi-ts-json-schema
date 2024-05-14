@@ -9,6 +9,7 @@ describe('Dereferencing', () => {
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing'),
       definitionPathsToGenerateFrom: ['components.schemas'],
+      refHandling: 'import',
       silent: true,
     });
 
@@ -32,6 +33,7 @@ describe('Dereferencing', () => {
       openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
       definitionPathsToGenerateFrom: ['paths'],
+      refHandling: 'import',
       silent: true,
     });
 
