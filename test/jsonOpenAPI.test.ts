@@ -9,6 +9,7 @@ describe('JSON OpenAPI input', async () => {
       openApiSchema: path.resolve(fixtures, 'json/specs.json'),
       outputPath: makeTestOutputPath('json'),
       definitionPathsToGenerateFrom: ['components.schemas'],
+      refHandling: 'import',
       silent: true,
     });
 

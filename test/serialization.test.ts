@@ -9,6 +9,7 @@ describe('openapiToTsJsonSchema', async () => {
       openApiSchema: path.resolve(fixtures, 'serialization/specs.yaml'),
       outputPath: makeTestOutputPath('serialization'),
       definitionPathsToGenerateFrom: ['components.schemas'],
+      refHandling: 'import',
       silent: true,
     });
 

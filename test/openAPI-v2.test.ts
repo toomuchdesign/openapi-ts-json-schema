@@ -9,6 +9,7 @@ describe('OpenAPI v2', async () => {
       openApiSchema: path.resolve(fixtures, 'open-api-v2/specs.yaml'),
       outputPath: makeTestOutputPath('open-api-v2'),
       definitionPathsToGenerateFrom: ['definitions', 'paths'],
+      refHandling: 'import',
       silent: true,
     });
 

@@ -13,6 +13,7 @@ describe('GitHub API', () => {
         openApiSchema: path.resolve(fixtures, 'github-api/specs.yaml'),
         outputPath: makeTestOutputPath('github-api'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+        refHandling: 'import',
         silent: true,
       }),
     ).resolves.not.toThrowError();

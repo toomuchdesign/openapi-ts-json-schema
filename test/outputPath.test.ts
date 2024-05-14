@@ -16,6 +16,7 @@ describe('"outputPath" option', () => {
       openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       outputPath: customOutputPath,
+      refHandling: 'import',
       silent: true,
     });
 
@@ -34,6 +35,7 @@ describe('"outputPath" option', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
         definitionPathsToGenerateFrom: ['components.schemas'],
+        refHandling: 'import',
         silent: true,
       });
 

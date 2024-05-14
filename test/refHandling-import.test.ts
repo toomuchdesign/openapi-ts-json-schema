@@ -124,12 +124,32 @@ describe('refHandling option === "import"', () => {
 
   it('Generates expected $ref schemas (with and without $id)', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
-      definitionPathsToGenerateFrom: ['paths'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
       refHandling: 'import',
     });
+
+    // Answer schema
+    const actualAnswerSchemaFile = await fs.readFile(
+      path.resolve(outputPath, 'components/schemas/Answer.ts'),
+      {
+        encoding: 'utf8',
+      },
+    );
+
+    const expectedAnswerSchemaFile = await formatTypeScript(`
+      const schema = {
+        type: ["string", "null"],
+        enum: ["yes", "no", null],
+      } as const;
+      export default schema;
+
+      const with$id = { $id: "/components/schemas/Answer", ...schema };
+      export { with$id };`);
+
+    expect(actualAnswerSchemaFile).toEqual(expectedAnswerSchemaFile);
 
     // January schema
     const actualJanuarySchemaFile = await fs.readFile(
@@ -148,6 +168,7 @@ describe('refHandling option === "import"', () => {
         required: ["isJanuary"],
         properties: {
           isJanuary: componentsSchemasAnswer,
+          isFebruary: componentsSchemasAnswer
         },
       } as const;
       export default schema;
@@ -156,32 +177,6 @@ describe('refHandling option === "import"', () => {
       export { with$id };`);
 
     expect(actualJanuarySchemaFile).toEqual(expectedJanuarySchemaFile);
-
-    // February schema
-    const actualFebruarySchemaFile = await fs.readFile(
-      path.resolve(outputPath, 'components/schemas/February.ts'),
-      {
-        encoding: 'utf8',
-      },
-    );
-
-    const expectedFebruarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
-
-      const schema = {
-        description: "February description",
-        type: "object",
-        required: ["isFebruary"],
-        properties: {
-          isFebruary: componentsSchemasAnswer,
-        },
-      } as const;
-      export default schema;
-
-      const with$id = { $id: "/components/schemas/February", ...schema };
-      export { with$id };`);
-
-    expect(actualFebruarySchemaFile).toEqual(expectedFebruarySchemaFile);
   });
 
   describe('Alias definitions', () => {
