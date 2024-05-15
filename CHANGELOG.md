@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 0.12.1
+
+### Patch Changes
+
+- 6d55193: Fix generated `$ref` schemas when `$ref`ed with different descriptions
+
 ## 0.12.0
 
 ### Minor Changes
