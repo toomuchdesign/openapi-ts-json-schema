@@ -1,7 +1,7 @@
 import { PLACEHOLDER_REGEX } from '..';
 
 /**
- * Replace Refs placeholders with original ref objects
+ * Replace id placeholders with their relevant $ref object
  */
 export function replacePlaceholdersWithRefs({
   schemaAsText,

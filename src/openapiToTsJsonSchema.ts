@@ -75,10 +75,14 @@ export async function openapiToTsJsonSchema(
 
   const openApiParser = new $RefParser();
   const jsonSchemaParser = new $RefParser();
+
+  // Resolve and inline external $ref definitions
   const bundledOpenApiSchema = await openApiParser.bundle(openApiSchemaPath);
+  // Convert oas definitions to JSON schema
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
+  // Inline and collect internal $ref definitions
   const dereferencedJsonSchema = await jsonSchemaParser.dereference(
     initialJsonSchema,
     {
@@ -97,8 +101,8 @@ export async function openapiToTsJsonSchema(
           }
 
           /**
-           * mark inlined ref objects with a "SCHEMA_ID_SYMBOL" to retrieve their
-           * original $ref value once inlined
+           * mark inlined ref objects with a "SCHEMA_ID_SYMBOL"
+           * to retrieve their id once inlined
            */
           inlinedSchema[SCHEMA_ID_SYMBOL] = id;
 

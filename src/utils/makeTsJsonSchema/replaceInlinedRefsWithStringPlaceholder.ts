@@ -5,7 +5,7 @@ import type { JSONSchema, JSONSchemaWithPlaceholders } from '../../types';
 
 /**
  * Get any JSON schema node and:
- * - Return ref placeholder is the entity is an inlined ref schema objects (with SCHEMA_ID_SYMBOL prop)
+ * - Return id placeholder if the entity is an inlined ref schema objects (with SCHEMA_ID_SYMBOL prop)
  * - Return provided node in all other cases
  */
 function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
@@ -21,7 +21,7 @@ function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
 /**
  * Iterate a JSON schema to replace inlined ref schema objects
  * (marked with a SCHEMA_ID_SYMBOL property holding the original $ref value)
- * with a string placeholder with a reference to the original $ref value ("_OTJS-START_/id/value_OTJS-END_")
+ * with a string placeholder with a reference to their internal id ("_OTJS-START_/id/value_OTJS-END_")
  */
 export function replaceInlinedRefsWithStringPlaceholder(
   schema: JSONSchema,

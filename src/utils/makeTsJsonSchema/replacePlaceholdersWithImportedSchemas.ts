@@ -2,7 +2,7 @@ import { makeRelativeModulePath, PLACEHOLDER_REGEX } from '..';
 import type { SchemaMetaDataMap } from '../../types';
 
 /**
- * Replace Refs placeholders with imported schemas
+ * Replace id placeholders with imported schemas
  */
 export function replacePlaceholdersWithImportedSchemas({
   schemaAsText,

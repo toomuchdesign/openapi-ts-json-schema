@@ -36,11 +36,11 @@ function convertToJsonSchema<Value extends unknown>(
 }
 
 /**
- * Traverse the openAPI schema tree an brutally try to convert everything
- * possible to JSON schema. We are probably overdoing since we process any object we find.
+ * Traverse the openAPI schema tree an brutally try to convert every oas definition
+ * to JSON schema. We are probably overdoing since we process any found object.
  *
- * - Is there a way to tell an OpenAPI schema objects convertible to JSON schema from the others?
- * - Could we explicitly convert only the properties where we know conversion is needed?
+ * - Is there a way to tell an OpenAPI definition objects convertible to JSON schema from the others?
+ * - Could we explicitly convert only the properties that need it?
  *
  * @TODO Find a nicer way to convert convert all the expected OpenAPI schemas
  */
