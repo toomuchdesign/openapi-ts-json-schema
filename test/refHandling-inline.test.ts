@@ -25,11 +25,13 @@ describe('refHandling option === "inline"', () => {
   properties: {
     isJanuary: {
       // $ref: "#/components/schemas/Answer"
+      description: "isJanuary description",
       type: ["string", "null"],
       enum: ["yes", "no", null],
     },
     isFebruary: {
       // $ref: "#/components/schemas/Answer"
+      description: "isFebruary description",
       type: ["string", "null"],
       enum: ["yes", "no", null],
     },
