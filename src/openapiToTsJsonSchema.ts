@@ -73,12 +73,13 @@ export async function openapiToTsJsonSchema(
 
   await clearFolder(outputPath);
 
-  const schemaParser = new $RefParser();
-  const bundledOpenApiSchema = await schemaParser.bundle(openApiSchemaPath);
+  const openApiParser = new $RefParser();
+  const jsonSchemaParser = new $RefParser();
+  const bundledOpenApiSchema = await openApiParser.bundle(openApiSchemaPath);
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<string, JSONSchema> = new Map();
-  const dereferencedJsonSchema = await schemaParser.dereference(
+  const dereferencedJsonSchema = await jsonSchemaParser.dereference(
     initialJsonSchema,
     {
       dereference: {
@@ -90,8 +91,8 @@ export async function openapiToTsJsonSchema(
           if (!inlinedRefs.has(id)) {
             // Shallow copy the ref schema to avoid the mutations below
             inlinedRefs.set(id, {
-              // @ts-expect-error Spread types may only be created from object types.
-              ...schemaParser.$refs.get(ref),
+              // @ts-expect-error Spread types may only be created from object types
+              ...jsonSchemaParser.$refs.get(ref),
             });
           }
 
