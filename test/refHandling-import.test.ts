@@ -115,7 +115,7 @@ describe('refHandling option === "import"', () => {
         } as const;
         export default schema;
 
-        const with$id = { $id: "/paths/_v1_path-1", ...schema };
+        const with$id = { $id: "/paths/_v1_path-1", ...schema } as const;
         export { with$id }`);
 
       expect(actualPath1File).toEqual(expectedPath1File);
@@ -146,7 +146,7 @@ describe('refHandling option === "import"', () => {
       } as const;
       export default schema;
 
-      const with$id = { $id: "/components/schemas/Answer", ...schema };
+      const with$id = { $id: "/components/schemas/Answer", ...schema } as const;
       export { with$id };`);
 
     expect(actualAnswerSchemaFile).toEqual(expectedAnswerSchemaFile);
@@ -173,7 +173,7 @@ describe('refHandling option === "import"', () => {
       } as const;
       export default schema;
 
-      const with$id = { $id: "/components/schemas/January", ...schema };
+      const with$id = { $id: "/components/schemas/January", ...schema } as const;
       export { with$id };`);
 
     expect(actualJanuarySchemaFile).toEqual(expectedJanuarySchemaFile);
@@ -214,7 +214,7 @@ describe('refHandling option === "import"', () => {
       const schema = componentsSchemasAnswer;
       export default schema;
 
-      const with$id = { $id: "/components/schemas/AnswerAliasDefinition", ...schema };
+      const with$id = { $id: "/components/schemas/AnswerAliasDefinition", ...schema } as const;
       export { with$id };`);
 
       expect(actualAnswerAliasDefinitionSchemaFile).toEqual(

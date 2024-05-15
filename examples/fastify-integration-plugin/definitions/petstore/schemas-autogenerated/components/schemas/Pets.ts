@@ -5,5 +5,5 @@ const schema = {
 } as const;
 export default schema;
 
-const with$id = { $id: "/components/schemas/Pets", ...schema };
+const with$id = { $id: "/components/schemas/Pets", ...schema } as const;
 export { with$id };
