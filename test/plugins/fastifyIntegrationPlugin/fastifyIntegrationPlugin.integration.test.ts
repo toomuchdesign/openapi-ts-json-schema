@@ -78,7 +78,7 @@ describe('fastifyIntegration plugin', () => {
               parameters: [
                 {
                   schema: { type: 'integer' },
-                  in: 'path',
+                  in: 'query',
                   name: 'id',
                   required: true,
                 },

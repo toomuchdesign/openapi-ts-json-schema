@@ -36,5 +36,5 @@ const schema = {
 } as const;
 export default schema;
 
-const with$id = { $id: "/paths/_pets_{petId}", ...schema };
+const with$id = { $id: "/paths/_pets_{petId}", ...schema } as const;
 export { with$id };

@@ -20,5 +20,5 @@ const schema = {
 } as const;
 export default schema;
 
-const with$id = { $id: "/components/schemas/Owner", ...schema };
+const with$id = { $id: "/components/schemas/Owner", ...schema } as const;
 export { with$id };

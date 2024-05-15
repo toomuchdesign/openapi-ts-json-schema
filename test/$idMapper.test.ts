@@ -49,7 +49,7 @@ describe('$idMapper option', () => {
       );
 
       const expectedSchemaWith$id = await formatTypeScript(`
-      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema } as const;
       export { with$id };`);
 
       expect(actualSchemaFile).toContain(expectedSchemaWith$id);
@@ -97,7 +97,7 @@ describe('$idMapper option', () => {
       );
 
       const expectedSchemaWith$id = await formatTypeScript(`
-      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema } as const;
       export { with$id };`);
 
       expect(actualSchemaFile).toContain(expectedSchemaWith$id);
@@ -143,7 +143,7 @@ describe('$idMapper option', () => {
       );
 
       const expectedSchemaWith$id = await formatTypeScript(`
-      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema };
+      const with$id = { $id: "foo_/components/schemas/January_bar", ...schema } as const;
       export { with$id };`);
 
       expect(actualSchemaFile).toContain(expectedSchemaWith$id);

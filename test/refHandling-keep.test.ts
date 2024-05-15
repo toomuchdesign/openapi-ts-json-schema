@@ -79,7 +79,7 @@ describe('refHandling option === "keep"', () => {
       } as const;
       export default schema;
 
-      const with$id = { $id: "/paths/_v1_path-1", ...schema };
+      const with$id = { $id: "/paths/_v1_path-1", ...schema } as const;
       export { with$id };`);
 
     expect(actualPath1File).toEqual(expectedPath1File);
@@ -148,7 +148,7 @@ describe('refHandling option === "keep"', () => {
           const schema = { $ref: "/components/schemas/Answer" } as const;
           export default schema;
 
-          const with$id = { $id: "/components/schemas/AnswerAliasDefinition", ...schema };
+          const with$id = { $id: "/components/schemas/AnswerAliasDefinition", ...schema } as const;
           export { with$id };`),
       );
     });
