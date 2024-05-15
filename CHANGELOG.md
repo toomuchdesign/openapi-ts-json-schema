@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 0.12.2
+
+### Patch Changes
+
+- 8ef8912: Export `with$id` schema with `as const` notation
+
 ## 0.12.1
 
 ### Patch Changes
