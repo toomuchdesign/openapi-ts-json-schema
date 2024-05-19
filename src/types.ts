@@ -3,7 +3,7 @@ import type { ParameterObject, ReferenceObject } from 'openapi3-ts/oas31';
 
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
-export type OpenApiSchema = Record<string, any>;
+export type OpenApiDocument = Record<string, any>;
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
 export type $idMapper = (input: { id: string }) => string;

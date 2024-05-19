@@ -162,6 +162,7 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Find a way to merge multiple different OpenApi definitions consistently
 - Consider implementing an option to inline circular $refs with a configurable nesting level
 - Handle `$ref` parameters according to `refHandler` options
+- Rename `openApiSchema` --> `OpenApiDocument`
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
