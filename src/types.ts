@@ -1,13 +1,41 @@
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
-import type { ParameterObject, ReferenceObject } from 'openapi3-ts/oas31';
+import type {
+  PathItemObject as PathItemObject_v3_0,
+  SchemaObject as SchemaObject_v3_0,
+  ParameterObject as ParameterObject_v3_0,
+  ReferenceObject as ReferenceObject_v3_0,
+} from 'openapi3-ts/oas30';
+import type {
+  PathItemObject as PathItemObject_v3_1,
+  SchemaObject as SchemaObject_v3_1,
+  ParameterObject as ParameterObject_v3_1,
+  ReferenceObject as ReferenceObject_v3_1,
+} from 'openapi3-ts/oas31';
+
+export type OpenApiDocument = Record<string, any>;
+// This type should represent any generated OpenAPI
+type OpenApiObject_v3_0 =
+  | PathItemObject_v3_0
+  | SchemaObject_v3_0
+  | ParameterObject_v3_0
+  | ReferenceObject_v3_0;
+type OpenApiObject_v3_1 =
+  | PathItemObject_v3_1
+  | SchemaObject_v3_1
+  | ParameterObject_v3_1
+  | ReferenceObject_v3_1;
+export type OpenApiObject = OpenApiObject_v3_0 | OpenApiObject_v3_1;
+
+type OpenApiParameter_v3_0 = ParameterObject_v3_0 | ReferenceObject_v3_0;
+type OpenApiParameter_v3_1 = ParameterObject_v3_1 | ReferenceObject_v3_1;
+export type OpenApiParameter = OpenApiParameter_v3_0 | OpenApiParameter_v3_1;
 
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 export type JSONSchemaWithPlaceholders = JSONSchema | string;
-export type OpenApiDocument = Record<string, any>;
+
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
 export type $idMapper = (input: { id: string }) => string;
-export type OpenApiParameter = ParameterObject | ReferenceObject;
 
 import type {
   makeRelativeModulePath,
@@ -32,6 +60,7 @@ export type Options = {
  * @property `$id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
  * @property `isRef` - True if schemas is used as `$ref`
  * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
+ * @property `openApiDefinition` - Original dereferenced openAPI definition
  * @property `originalSchema` - Original dereferenced JSON schema
  *
  * @property `absoluteDirName` - Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`
@@ -43,6 +72,7 @@ export type SchemaMetaData = {
   $id: string;
   isRef: boolean;
   uniqueName: string;
+  openApiDefinition?: OpenApiObject;
   originalSchema: JSONSchema;
 
   absoluteDirName: string;

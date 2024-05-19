@@ -130,6 +130,8 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
         // JSON schema Compound Schema Document `$id`. Eg: `"/components/schemas/MySchema"`
         uniqueName: string;
         // Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
+        openApiDefinition: OpenApiObject;
+        // Original dereferenced openAPI definition
         originalSchema: JSONSchema | string;
         // Original dereferenced JSON schema
         isRef: boolean;

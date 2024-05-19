@@ -17,6 +17,7 @@ import {
 } from './utils';
 import type {
   SchemaMetaDataMap,
+  OpenApiObject,
   JSONSchema,
   ReturnPayload,
   Options,
@@ -81,7 +82,11 @@ export async function openapiToTsJsonSchema(
   // Convert oas definitions to JSON schema
   const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
 
-  const inlinedRefs: Map<string, JSONSchema> = new Map();
+  const inlinedRefs: Map<
+    string,
+    { openApiDefinition: OpenApiObject; jsonSchema: JSONSchema }
+  > = new Map();
+
   // Inline and collect internal $ref definitions
   const dereferencedJsonSchema = await jsonSchemaParser.dereference(
     initialJsonSchema,
@@ -96,7 +101,11 @@ export async function openapiToTsJsonSchema(
             // Shallow copy the ref schema to avoid the mutations below
             inlinedRefs.set(id, {
               // @ts-expect-error Spread types may only be created from object types
-              ...jsonSchemaParser.$refs.get(ref),
+              openApiDefinition: openApiParser.$refs.get(ref),
+              jsonSchema: {
+                // @ts-expect-error Spread types may only be created from object types
+                ...jsonSchemaParser.$refs.get(ref),
+              },
             });
           }
 
@@ -133,12 +142,13 @@ export async function openapiToTsJsonSchema(
    * $ref schemas to be generated no matter of
    */
   if (refHandling === 'import' || refHandling === 'keep') {
-    for (const [id, schema] of inlinedRefs) {
+    for (const [id, { openApiDefinition, jsonSchema }] of inlinedRefs) {
       addSchemaToMetaData({
         id,
         $id: $idMapper({ id }),
         schemaMetaDataMap,
-        schema,
+        openApiDefinition,
+        jsonSchema,
         outputPath,
         isRef: true,
       });
@@ -149,9 +159,10 @@ export async function openapiToTsJsonSchema(
    * Create meta data for each output schema
    */
   for (const definitionPath of definitionPathsToGenerateFrom) {
-    const definitionSchemas = get(jsonSchema, definitionPath);
+    const jsonSchemaDefinitions = get(jsonSchema, definitionPath);
+    const openApiDefinitions = get(bundledOpenApiSchema, definitionPath);
 
-    for (const schemaName in definitionSchemas) {
+    for (const schemaName in jsonSchemaDefinitions) {
       // Create expected OpenAPI ref
       const id = makeId({
         schemaRelativeDirName: definitionPath,
@@ -162,7 +173,8 @@ export async function openapiToTsJsonSchema(
         id,
         $id: $idMapper({ id }),
         schemaMetaDataMap,
-        schema: definitionSchemas[schemaName],
+        openApiDefinition: openApiDefinitions[schemaName],
+        jsonSchema: jsonSchemaDefinitions[schemaName],
         outputPath,
         isRef: inlinedRefs.has(id),
       });
