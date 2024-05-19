@@ -43,8 +43,8 @@ export function addSchemaToMetaData({
     const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
 
     // Convert components.parameters after convertOpenApiPathsParameters is called
-    if (isOpenApiParameterObject(jsonSchema)) {
-      jsonSchema = convertOpenApiParameterToJsonSchema(jsonSchema);
+    if (isOpenApiParameterObject(openApiDefinition)) {
+      jsonSchema = convertOpenApiParameterToJsonSchema(openApiDefinition);
     }
 
     const metaInfo: SchemaMetaData = {
