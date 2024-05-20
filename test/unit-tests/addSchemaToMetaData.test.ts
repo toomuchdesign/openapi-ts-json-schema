@@ -9,8 +9,14 @@ describe('addSchemaToMetaData', () => {
     const $id = '$/components/schemas/Foo';
     const schemaMetaDataMap = new Map();
     const outputPath = path.normalize('/absolute/output/path');
-    const schema = {
-      description: 'Schema description',
+    const openApiDefinition = {
+      description: 'OpenApi description',
+      type: 'object' as const,
+      required: ['bar'],
+      properties: { bar: { type: 'string' } } as const,
+    };
+    const jsonSchema = {
+      description: 'JsonSchema description',
       type: 'object' as const,
       required: ['bar'],
       properties: { bar: { type: 'string' } } as const,
@@ -20,7 +26,8 @@ describe('addSchemaToMetaData', () => {
       id,
       $id,
       schemaMetaDataMap,
-      schema,
+      openApiDefinition,
+      jsonSchema,
       outputPath,
       isRef: true,
     });
@@ -31,7 +38,8 @@ describe('addSchemaToMetaData', () => {
       $id: '$/components/schemas/Foo',
       uniqueName: 'componentsSchemasFoo',
       isRef: true,
-      originalSchema: schema,
+      openApiDefinition,
+      originalSchema: jsonSchema,
 
       absoluteDirName: '/absolute/output/path/components/schemas'.replaceAll(
         '/',

@@ -7,7 +7,12 @@ import {
   isOpenApiParameterObject,
   convertOpenApiParameterToJsonSchema,
 } from '.';
-import type { SchemaMetaDataMap, SchemaMetaData, JSONSchema } from '../types';
+import type {
+  SchemaMetaDataMap,
+  SchemaMetaData,
+  JSONSchema,
+  OpenApiObject,
+} from '../types';
 
 /*
  * Just an utility function to add entries to SchemaMetaDataMap Map keyed by ref
@@ -16,7 +21,8 @@ export function addSchemaToMetaData({
   id,
   $id,
   schemaMetaDataMap,
-  schema,
+  openApiDefinition,
+  jsonSchema,
   isRef,
   // Options
   outputPath,
@@ -24,7 +30,8 @@ export function addSchemaToMetaData({
   id: string;
   $id: string;
   schemaMetaDataMap: SchemaMetaDataMap;
-  schema: JSONSchema;
+  openApiDefinition: OpenApiObject;
+  jsonSchema: JSONSchema;
   isRef: boolean;
   outputPath: string;
 }): void {
@@ -36,8 +43,8 @@ export function addSchemaToMetaData({
     const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
 
     // Convert components.parameters after convertOpenApiPathsParameters is called
-    if (isOpenApiParameterObject(schema)) {
-      schema = convertOpenApiParameterToJsonSchema(schema);
+    if (isOpenApiParameterObject(openApiDefinition)) {
+      jsonSchema = convertOpenApiParameterToJsonSchema(openApiDefinition);
     }
 
     const metaInfo: SchemaMetaData = {
@@ -45,7 +52,8 @@ export function addSchemaToMetaData({
       $id,
       uniqueName: namify(id),
       isRef,
-      originalSchema: schema,
+      openApiDefinition,
+      originalSchema: jsonSchema,
 
       absoluteDirName,
       absoluteImportPath,

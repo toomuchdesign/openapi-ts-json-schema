@@ -1,7 +1,7 @@
 import mapObject from 'map-obj';
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import { isObject, isOpenApiParameterObject } from './';
-import type { OpenApiSchema, JSONSchema } from '../types';
+import type { OpenApiDocument, JSONSchema } from '../types';
 
 function convertToJsonSchema<Value extends unknown>(
   value: Value,
@@ -45,7 +45,7 @@ function convertToJsonSchema<Value extends unknown>(
  * @TODO Find a nicer way to convert convert all the expected OpenAPI schemas
  */
 export function convertOpenApiToJsonSchema(
-  schema: OpenApiSchema,
+  schema: OpenApiDocument,
 ): Record<string, unknown> {
   return mapObject(
     schema,

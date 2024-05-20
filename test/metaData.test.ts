@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
 import { fixtures, makeTestOutputPath } from './test-utils';
 import type { SchemaMetaData } from '../src/types';
+import { SCHEMA_ID_SYMBOL } from '../src/utils';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
@@ -30,7 +31,15 @@ describe('Returned "metaData"', async () => {
       id: '/components/schemas/Answer',
       $id: '/components/schemas/Answer',
       uniqueName: 'componentsSchemasAnswer',
-      originalSchema: expect.any(Object),
+      openApiDefinition: {
+        type: 'string',
+        nullable: true,
+        enum: ['yes', 'no'],
+      },
+      originalSchema: {
+        enum: ['yes', 'no', null],
+        type: ['string', 'null'],
+      },
       isRef: true,
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
@@ -51,7 +60,42 @@ describe('Returned "metaData"', async () => {
       id: '/components/schemas/January',
       $id: '/components/schemas/January',
       uniqueName: 'componentsSchemasJanuary',
-      originalSchema: expect.any(Object),
+      openApiDefinition: {
+        description: 'January description',
+        type: 'object',
+        required: ['isJanuary'],
+        properties: {
+          isJanuary: {
+            description: 'isJanuary description',
+            $ref: '#/components/schemas/Answer',
+          },
+          isFebruary: {
+            description: 'isFebruary description',
+            $ref: '#/components/schemas/Answer',
+          },
+        },
+      },
+      originalSchema: {
+        description: 'January description',
+        properties: {
+          isFebruary: {
+            // @ts-expect-error the schema holds SCHEMA_ID_SYMBOL symbol props
+            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+            description: 'isFebruary description',
+            enum: ['yes', 'no', null],
+            type: ['string', 'null'],
+          },
+          isJanuary: {
+            // @ts-expect-error the schema holds SCHEMA_ID_SYMBOL symbol props
+            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+            description: 'isJanuary description',
+            enum: ['yes', 'no', null],
+            type: ['string', 'null'],
+          },
+        },
+        required: ['isJanuary'],
+        type: 'object',
+      },
       isRef: false,
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
