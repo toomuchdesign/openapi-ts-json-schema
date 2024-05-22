@@ -30,6 +30,7 @@ describe('addSchemaToMetaData', () => {
       jsonSchema,
       outputPath,
       isRef: true,
+      shouldBeGenerated: true,
     });
 
     const actual = schemaMetaDataMap.get(id);
@@ -38,6 +39,7 @@ describe('addSchemaToMetaData', () => {
       $id: '$/components/schemas/Foo',
       uniqueName: 'componentsSchemasFoo',
       isRef: true,
+      shouldBeGenerated: true,
       openApiDefinition,
       originalSchema: jsonSchema,
 

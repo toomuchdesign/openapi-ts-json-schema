@@ -155,6 +155,7 @@ export async function openapiToTsJsonSchema(
         jsonSchema,
         outputPath,
         isRef: true,
+        shouldBeGenerated: true,
       });
     }
   }
@@ -180,6 +181,7 @@ export async function openapiToTsJsonSchema(
         jsonSchema: jsonSchemaDefinitions[schemaName],
         outputPath,
         isRef: inlinedRefs.has(id),
+        shouldBeGenerated: true,
       });
     }
   }

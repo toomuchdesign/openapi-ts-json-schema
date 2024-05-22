@@ -41,6 +41,7 @@ describe('Returned "metaData"', async () => {
         type: ['string', 'null'],
       },
       isRef: true,
+      shouldBeGenerated: true,
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
@@ -97,6 +98,7 @@ describe('Returned "metaData"', async () => {
         type: 'object',
       },
       isRef: false,
+      shouldBeGenerated: true,
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',

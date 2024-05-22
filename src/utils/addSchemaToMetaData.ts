@@ -24,6 +24,7 @@ export function addSchemaToMetaData({
   openApiDefinition,
   jsonSchema,
   isRef,
+  shouldBeGenerated,
   // Options
   outputPath,
 }: {
@@ -33,6 +34,7 @@ export function addSchemaToMetaData({
   openApiDefinition: OpenApiObject;
   jsonSchema: JSONSchema;
   isRef: boolean;
+  shouldBeGenerated: boolean;
   outputPath: string;
 }): void {
   // Do not override existing meta info of inlined schemas
@@ -52,6 +54,7 @@ export function addSchemaToMetaData({
       $id,
       uniqueName: namify(id),
       isRef,
+      shouldBeGenerated,
       openApiDefinition,
       originalSchema: jsonSchema,
 
