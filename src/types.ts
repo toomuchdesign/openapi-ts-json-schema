@@ -4,15 +4,21 @@ import type {
   SchemaObject as SchemaObject_v3_0,
   ParameterObject as ParameterObject_v3_0,
   ReferenceObject as ReferenceObject_v3_0,
+  OpenAPIObject as OpenAPIObject_v3_0,
 } from 'openapi3-ts/oas30';
 import type {
   PathItemObject as PathItemObject_v3_1,
   SchemaObject as SchemaObject_v3_1,
   ParameterObject as ParameterObject_v3_1,
   ReferenceObject as ReferenceObject_v3_1,
+  OpenAPIObject as OpenAPIObject_v3_1,
 } from 'openapi3-ts/oas31';
 
-export type OpenApiDocument = Record<string, any>;
+export type OpenApiDocument = Omit<
+  OpenAPIObject_v3_0 | OpenAPIObject_v3_1,
+  'openapi' | 'info'
+>;
+
 // This type should represent any generated OpenAPI
 type OpenApiObject_v3_0 =
   | PathItemObject_v3_0

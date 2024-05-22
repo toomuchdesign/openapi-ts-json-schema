@@ -44,9 +44,9 @@ function convertToJsonSchema<Value extends unknown>(
  *
  * @TODO Find a nicer way to convert convert all the expected OpenAPI schemas
  */
-export function convertOpenApiToJsonSchema(
+export function convertOpenApiDocumentToJsonSchema(
   schema: OpenApiDocument,
-): Record<string, unknown> {
+): OpenApiDocument {
   return mapObject(
     schema,
     (key, value) => {
