@@ -37,32 +37,29 @@ export function addSchemaToMetaData({
   shouldBeGenerated: boolean;
   outputPath: string;
 }): void {
-  // Do not override existing meta info of inlined schemas
-  if (!schemaMetaDataMap.has(id)) {
-    const { schemaRelativeDirName, schemaName } = parseId(id);
-    const absoluteDirName = path.join(outputPath, schemaRelativeDirName);
-    const schemaFileName = filenamify(schemaName);
-    const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
+  const { schemaRelativeDirName, schemaName } = parseId(id);
+  const absoluteDirName = path.join(outputPath, schemaRelativeDirName);
+  const schemaFileName = filenamify(schemaName);
+  const absoluteImportPath = path.join(absoluteDirName, schemaFileName);
 
-    // Convert components.parameters after convertOpenApiPathsParameters is called
-    if (isOpenApiParameterObject(openApiDefinition)) {
-      jsonSchema = convertOpenApiParameterToJsonSchema(openApiDefinition);
-    }
-
-    const metaInfo: SchemaMetaData = {
-      id,
-      $id,
-      uniqueName: namify(id),
-      isRef,
-      shouldBeGenerated,
-      openApiDefinition,
-      originalSchema: jsonSchema,
-
-      absoluteDirName,
-      absoluteImportPath,
-      absolutePath: absoluteImportPath + '.ts',
-    };
-
-    schemaMetaDataMap.set(id, metaInfo);
+  // Convert components.parameters after convertOpenApiPathsParameters is called
+  if (isOpenApiParameterObject(openApiDefinition)) {
+    jsonSchema = convertOpenApiParameterToJsonSchema(openApiDefinition);
   }
+
+  const metaInfo: SchemaMetaData = {
+    id,
+    $id,
+    uniqueName: namify(id),
+    isRef,
+    shouldBeGenerated,
+    openApiDefinition,
+    originalSchema: jsonSchema,
+
+    absoluteDirName,
+    absoluteImportPath,
+    absolutePath: absoluteImportPath + '.ts',
+  };
+
+  schemaMetaDataMap.set(id, metaInfo);
 }

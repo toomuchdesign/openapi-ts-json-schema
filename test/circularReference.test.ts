@@ -32,21 +32,33 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthTwo: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthThree: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
           },
@@ -66,9 +78,24 @@ describe('Circular reference', () => {
       description: "January description",
       type: "object",
       properties: {
-        nextMonth: {},
-        nextMonthTwo: {},
-        nextMonthThree: {},
+        nextMonth: {
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
+        },
+        nextMonthTwo: {
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
+        },
+        nextMonthThree: {
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
+        },
       },
     },`;
 
