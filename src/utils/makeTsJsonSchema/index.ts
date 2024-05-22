@@ -1,8 +1,7 @@
-import { stringify } from 'comment-json';
+import { stringify } from './stringify';
 import { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
 import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
-import { makeCircularRefReplacer } from './makeCircularRefReplacer';
 import { patchJsonSchema } from './patchJsonSchema';
 import { formatTypeScript } from '../';
 import type {
@@ -48,11 +47,7 @@ export async function makeTsJsonSchema({
    * Stringifying schema with "comment-json" instead of JSON.stringify
    * to generate inline comments for "inline" refHandling
    */
-  const stringifiedSchema = stringify(
-    patchedSchema,
-    makeCircularRefReplacer(),
-    2,
-  );
+  const stringifiedSchema = stringify(patchedSchema);
 
   let tsSchema = `
     const schema = ${stringifiedSchema} as const;
