@@ -1,7 +1,7 @@
 export { patchJsonSchema } from './makeTsJsonSchema/patchJsonSchema';
 export { makeTsJsonSchema } from './makeTsJsonSchema';
 export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
-export { convertOpenApiToJsonSchema } from './convertOpenApiToJsonSchema';
+export { convertOpenApiDocumentToJsonSchema } from './convertOpenApiDocumentToJsonSchema';
 export { convertOpenApiParameterToJsonSchema } from './convertOpenApiParameterToJsonSchema';
 export { makeTsJsonSchemaFiles } from './makeTsJsonSchemaFiles';
 export { parseId } from './parseId';

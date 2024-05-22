@@ -6,7 +6,7 @@ import {
   clearFolder,
   makeTsJsonSchemaFiles,
   SCHEMA_ID_SYMBOL,
-  convertOpenApiToJsonSchema,
+  convertOpenApiDocumentToJsonSchema,
   convertOpenApiPathsParameters,
   addSchemaToMetaData,
   makeId,
@@ -18,6 +18,7 @@ import {
 import type {
   SchemaMetaDataMap,
   OpenApiObject,
+  OpenApiDocument,
   JSONSchema,
   ReturnPayload,
   Options,
@@ -78,9 +79,13 @@ export async function openapiToTsJsonSchema(
   const jsonSchemaParser = new $RefParser();
 
   // Resolve and inline external $ref definitions
-  const bundledOpenApiSchema = await openApiParser.bundle(openApiSchemaPath);
-  // Convert oas definitions to JSON schema
-  const initialJsonSchema = convertOpenApiToJsonSchema(bundledOpenApiSchema);
+  // @ts-expect-error @apidevtools/json-schema-ref-parser types supports JSON schemas only
+  const bundledOpenApiSchema: OpenApiDocument =
+    await openApiParser.bundle(openApiSchemaPath);
+
+  // Convert oas definitions to JSON schema (excluding paths and parameter objects)
+  const initialJsonSchema =
+    convertOpenApiDocumentToJsonSchema(bundledOpenApiSchema);
 
   const inlinedRefs: Map<
     string,
@@ -88,9 +93,9 @@ export async function openapiToTsJsonSchema(
   > = new Map();
 
   // Inline and collect internal $ref definitions
-  const dereferencedJsonSchema = await jsonSchemaParser.dereference(
-    initialJsonSchema,
-    {
+  // @ts-expect-error @apidevtools/json-schema-ref-parser types supports JSON schemas only
+  const dereferencedJsonSchema: OpenApiDocument =
+    await jsonSchemaParser.dereference(initialJsonSchema, {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
@@ -130,8 +135,7 @@ export async function openapiToTsJsonSchema(
           }
         },
       },
-    },
-  );
+    });
 
   const jsonSchema = convertOpenApiPathsParameters(dereferencedJsonSchema);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
@@ -163,7 +167,6 @@ export async function openapiToTsJsonSchema(
     const openApiDefinitions = get(bundledOpenApiSchema, definitionPath);
 
     for (const schemaName in jsonSchemaDefinitions) {
-      // Create expected OpenAPI ref
       const id = makeId({
         schemaRelativeDirName: definitionPath,
         schemaName,
