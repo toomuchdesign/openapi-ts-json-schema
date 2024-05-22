@@ -66,15 +66,9 @@ describe('Circular reference', () => {
       description: "January description",
       type: "object",
       properties: {
-        nextMonth: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
-        },
-        nextMonthTwo: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
-        },
-        nextMonthThree: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
-        },
+        nextMonth: {},
+        nextMonthTwo: {},
+        nextMonthThree: {},
       },
     },`;
 

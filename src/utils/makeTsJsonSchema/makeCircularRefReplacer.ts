@@ -1,5 +1,3 @@
-import { getId } from './getId';
-
 /**
  * JSON.stringify replacer
  * Replace circular references with {}
@@ -23,16 +21,7 @@ export function makeCircularRefReplacer(): (
 
     // @NOTE Should we make recursion depth configurable?
     if (ancestors.includes(value)) {
-      const id = getId(value);
-      return {
-        // Drop an inline comment about recursion interruption
-        [Symbol.for('before')]: [
-          {
-            type: 'LineComment',
-            value: ` Circular recursion interrupted. Schema id: "${id}"`,
-          },
-        ],
-      };
+      return {};
     }
 
     ancestors.push(value);
