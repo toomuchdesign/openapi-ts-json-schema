@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { makeCircularRefReplacer } from '../src/utils/makeTsJsonSchema/makeCircularRefReplacer';
+import { stringify } from '../../src/utils/makeTsJsonSchema/stringify';
 
-describe('makeCircularRefReplacer', () => {
+describe('stringify', () => {
   it('replaces first nested circular occurrency with "{}"', () => {
     const input: { a: unknown; b: { c: unknown } } = {
       a: 'foo',
@@ -11,7 +11,7 @@ describe('makeCircularRefReplacer', () => {
     };
     input['b']['c'] = input;
 
-    const actual = JSON.parse(JSON.stringify(input, makeCircularRefReplacer()));
+    const actual = JSON.parse(stringify(input));
     const expected = {
       a: 'foo',
       b: { c: {} },

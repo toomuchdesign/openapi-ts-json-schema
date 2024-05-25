@@ -21,15 +21,17 @@ export async function makeTsJsonSchemaFiles({
   $idMapper: $idMapper;
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
-    const tsSchema = await makeTsJsonSchema({
-      metaData,
-      schemaMetaDataMap,
-      refHandling,
-      schemaPatcher,
-      $idMapper,
-    });
+    if (metaData.shouldBeGenerated) {
+      const tsSchema = await makeTsJsonSchema({
+        metaData,
+        schemaMetaDataMap,
+        refHandling,
+        schemaPatcher,
+        $idMapper,
+      });
 
-    const { absolutePath } = metaData;
-    await saveFile({ path: [absolutePath], data: tsSchema });
+      const { absolutePath } = metaData;
+      await saveFile({ path: [absolutePath], data: tsSchema });
+    }
   }
 }

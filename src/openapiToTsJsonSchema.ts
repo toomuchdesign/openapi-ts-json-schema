@@ -141,25 +141,6 @@ export async function openapiToTsJsonSchema(
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**
-   * Create meta data for $ref schemas which have been previously dereferenced.
-   * It happens only with "import" and "keep" refHandling since they expect
-   * $ref schemas to be generated no matter of
-   */
-  if (refHandling === 'import' || refHandling === 'keep') {
-    for (const [id, { openApiDefinition, jsonSchema }] of inlinedRefs) {
-      addSchemaToMetaData({
-        id,
-        $id: $idMapper({ id }),
-        schemaMetaDataMap,
-        openApiDefinition,
-        jsonSchema,
-        outputPath,
-        isRef: true,
-      });
-    }
-  }
-
-  /**
    * Create meta data for each output schema
    */
   for (const definitionPath of definitionPathsToGenerateFrom) {
@@ -180,8 +161,36 @@ export async function openapiToTsJsonSchema(
         jsonSchema: jsonSchemaDefinitions[schemaName],
         outputPath,
         isRef: inlinedRefs.has(id),
+        shouldBeGenerated: true,
       });
     }
+  }
+
+  /**
+   * Create meta data for each $ref schemas which have been previously dereferenced.
+   */
+  for (const [id, { openApiDefinition, jsonSchema }] of inlinedRefs) {
+    /**
+     * In "inline" mode $ref schemas not explicitly marked for generation
+     * should not be generated
+     *
+     * All the other "refHandling" modes generate all $ref schemas
+     */
+    let shouldBeGenerated = true;
+    if (refHandling === 'inline' && !schemaMetaDataMap.has(id)) {
+      shouldBeGenerated = false;
+    }
+
+    addSchemaToMetaData({
+      id,
+      $id: $idMapper({ id }),
+      schemaMetaDataMap,
+      openApiDefinition,
+      jsonSchema,
+      outputPath,
+      isRef: true,
+      shouldBeGenerated,
+    });
   }
 
   const returnPayload: ReturnPayload = {

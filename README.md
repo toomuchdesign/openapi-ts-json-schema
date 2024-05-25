@@ -136,6 +136,8 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
         // Original dereferenced JSON schema
         isRef: boolean;
         // True if schemas is used as a `$ref`
+        shouldBeGenerated: boolean;
+        // True is the schema has to be generated
 
         absoluteDirName: string;
         // Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`

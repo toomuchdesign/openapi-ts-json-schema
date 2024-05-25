@@ -22,7 +22,8 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
     const allSchemas = [...metaData.schemas]
-      .map(([id, schema]) => schema)
+      .map(([_id, schema]) => schema)
+      .filter((schema) => schema.shouldBeGenerated)
       .map(({ absoluteImportPath, uniqueName, id, isRef }) => {
         return {
           importPath: utils.makeRelativeModulePath({

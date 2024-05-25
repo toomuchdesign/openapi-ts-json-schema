@@ -1,14 +1,11 @@
-import { getId } from './getId';
+import { stringify as commentJsonStringify } from 'comment-json';
 
 /**
  * JSON.stringify replacer
  * Replace circular references with {}
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#circular_references
  */
-export function makeCircularRefReplacer(): (
-  key: string,
-  value: unknown,
-) => unknown {
+function makeCircularRefReplacer(): (key: string, value: unknown) => unknown {
   const ancestors: unknown[] = [];
   return function (this: unknown, key: string, value: unknown) {
     if (typeof value !== 'object' || value === null) {
@@ -23,19 +20,16 @@ export function makeCircularRefReplacer(): (
 
     // @NOTE Should we make recursion depth configurable?
     if (ancestors.includes(value)) {
-      const id = getId(value);
-      return {
-        // Drop an inline comment about recursion interruption
-        [Symbol.for('before')]: [
-          {
-            type: 'LineComment',
-            value: ` Circular recursion interrupted. Schema id: "${id}"`,
-          },
-        ],
-      };
+      return {};
     }
 
     ancestors.push(value);
     return value;
   };
+}
+
+const circularReplacer = makeCircularRefReplacer();
+
+export function stringify(input: unknown): string {
+  return commentJsonStringify(input, circularReplacer, 2);
 }

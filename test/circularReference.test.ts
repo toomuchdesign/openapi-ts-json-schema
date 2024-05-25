@@ -32,21 +32,33 @@ describe('Circular reference', () => {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthTwo: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
             nextMonthThree: {
               description: 'February description',
               type: 'object',
               properties: {
-                previousMonth: {},
+                previousMonth: {
+                  description: 'January description',
+                  properties: {},
+                  type: 'object',
+                },
               },
             },
           },
@@ -67,13 +79,22 @@ describe('Circular reference', () => {
       type: "object",
       properties: {
         nextMonth: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
         },
         nextMonthTwo: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
         },
         nextMonthThree: {
-          // Circular recursion interrupted. Schema id: "/components/schemas/February"
+          // $ref: "#/components/schemas/February"
+          description: "February description",
+          type: "object",
+          properties: {},
         },
       },
     },`;

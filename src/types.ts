@@ -65,6 +65,7 @@ export type Options = {
  * @property `id` - Internal unique schema identifier. Eg `"/components/schemas/MySchema"`
  * @property `$id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
  * @property `isRef` - True if schemas is used as `$ref`
+ * @property `shouldBeGenerated` - True is the schema has to be generated
  * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @property `openApiDefinition` - Original dereferenced openAPI definition
  * @property `originalSchema` - Original dereferenced JSON schema
@@ -77,6 +78,7 @@ export type SchemaMetaData = {
   id: string;
   $id: string;
   isRef: boolean;
+  shouldBeGenerated: boolean;
   uniqueName: string;
   openApiDefinition?: OpenApiObject;
   originalSchema: JSONSchema;
