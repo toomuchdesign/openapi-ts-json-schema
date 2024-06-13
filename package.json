@@ -36,7 +36,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@fastify/swagger": "^8.10.1",
-    "@fastify/swagger-ui": "^3.0.0",
+    "@fastify/swagger-ui": "^4.0.0",
     "@fastify/type-provider-json-schema-to-ts": "^3.0.0",
     "@tsconfig/node18": "^18.2.0",
     "@types/lodash.get": "^4.4.7",
