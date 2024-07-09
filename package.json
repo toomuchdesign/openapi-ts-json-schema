@@ -42,7 +42,7 @@
     "@types/lodash.get": "^4.4.7",
     "@vitest/coverage-v8": "^1.1.0",
     "fastify": "^4.23.2",
-    "rimraf": "^5.0.1",
+    "rimraf": "^6.0.0",
     "simple-git-hooks": "^2.9.0",
     "tiny-glob": "^0.2.9",
     "ts-node": "^10.9.1",
