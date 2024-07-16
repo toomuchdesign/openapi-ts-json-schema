@@ -4,7 +4,22 @@ updates:
     directory: '/'
     schedule:
       interval: 'daily'
+    groups:
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      fastify:
+        patterns:
+          - 'fastify'
+          - '@fastify/*'
+
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'daily'
+    groups:
+      upload-download-artifact:
+        patterns:
+          - 'actions/upload-artifact'
+          - 'actions/download-artifact'
