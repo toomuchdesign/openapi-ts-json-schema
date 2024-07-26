@@ -1,5 +1,13 @@
 # openapi-ts-json-schema
 
+## 0.13.0
+
+### Minor Changes
+
+- fe4f838: Add `openApiDefinition` prop to generated metaData
+- e63f47e: `shouldBeGenerated` prop added to `metaData`
+- e63f47e: Recursion comments removed
+
 ## 0.12.2
 
 ### Patch Changes
