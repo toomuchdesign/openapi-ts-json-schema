@@ -7,7 +7,7 @@ import { makeServer } from '../../../examples/fastify-integration-plugin/server'
  */
 describe('fastifyIntegration plugin', () => {
   describe('integration example', () => {
-    it('generates expected OpenAPI definition', async () => {
+    it('generates expected OpenAPI definition with $ref references', async () => {
       const server = await makeServer();
       const response = await server.inject({
         method: 'GET',
@@ -75,6 +75,7 @@ describe('fastifyIntegration plugin', () => {
         paths: {
           '/pet': {
             get: {
+              summary: 'Pet get route',
               parameters: [
                 {
                   schema: { type: 'integer' },
