@@ -1,8 +1,12 @@
-import { defineConfig } from 'vite';
+import { defineConfig, defaultInclude } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    typecheck: { enabled: true },
+    dir: './test',
+    typecheck: {
+      enabled: true,
+      include: defaultInclude,
+    },
     setupFiles: ['vitest.setup.ts'],
     pool: 'forks',
     poolOptions: {
