@@ -5,6 +5,7 @@
 node_modules
 dist
 coverage
+*-temp.json
 
 # Trailing dotted files
 !.editorconfig
