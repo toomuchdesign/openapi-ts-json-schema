@@ -11,9 +11,6 @@ jobs:
   release:
     name: Release new version
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,4 +27,4 @@ jobs:
         with:
           publish: npm run tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
