@@ -13,7 +13,6 @@
     "pretest": "npm run test:build",
     "test:build": "npm --prefix ./examples/fastify-integration-plugin run generate-schemas",
     "prepare": "npx simple-git-hooks && npm run test -- --run && npm run source:check && npm run build",
-    "tag": "node ./scripts/tag.js",
     "prettier:check": "prettier . --check",
     "prettier:fix": "npm run prettier:check -- --write",
     "type:check": "tsc --noEmit",
