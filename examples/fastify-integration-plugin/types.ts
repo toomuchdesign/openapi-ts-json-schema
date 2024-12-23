@@ -10,5 +10,10 @@ export type FromSchemaWithRefs<Schema extends JSONSchema> = FromSchema<
 
 // Enhance JsonSchemaToTsProvider with generated OAS refs
 export type JsonSchemaToTsProviderWithRefs = JsonSchemaToTsProvider<{
-  references: RefSchemas;
+  ValidatorSchemaOptions: {
+    references: RefSchemas;
+  };
+  SerializerSchemaOptions: {
+    references: RefSchemas;
+  };
 }>;
