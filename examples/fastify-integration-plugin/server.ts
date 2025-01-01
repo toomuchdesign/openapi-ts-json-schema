@@ -22,7 +22,7 @@ export async function makeServer() {
       ],
     },
     /**
-     * Register schemas with $id "/components/schemas/xxx" under OpenAPI's "components.schemas"
+     * Register schemas with $id "/components/schemas/xxx" as OpenAPI's "components.schemas"
      * https://github.com/fastify/fastify-swagger?tab=readme-ov-file#managing-your-refs
      */
     refResolver: {

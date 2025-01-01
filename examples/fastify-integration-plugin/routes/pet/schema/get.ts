@@ -10,7 +10,7 @@ export const getSchema = {
         type: 'integer',
       },
     },
-  } as const,
+  },
   response: {
     200: { $ref: '/components/schemas/Pets' },
   },
