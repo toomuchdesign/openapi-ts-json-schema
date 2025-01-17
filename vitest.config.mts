@@ -25,10 +25,4 @@ export default defineConfig({
       reporter: [['lcov', { projectRoot: './' }], ['text']],
     },
   },
-  // https://github.com/vitest-dev/vitest/issues/6152
-  server: {
-    fs: {
-      cachedChecks: false,
-    },
-  },
 });
