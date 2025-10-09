@@ -9,7 +9,7 @@ import type {
   SchemaMetaData,
   SchemaPatcher,
   RefHandling,
-  $idMapper,
+  IdMapper,
 } from '../../types';
 
 export async function makeTsJsonSchema({
@@ -17,13 +17,13 @@ export async function makeTsJsonSchema({
   schemaMetaDataMap,
   refHandling,
   schemaPatcher,
-  $idMapper,
+  idMapper,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   schemaPatcher?: SchemaPatcher;
-  $idMapper: $idMapper;
+  idMapper: IdMapper;
 }): Promise<string> {
   const { originalSchema, absoluteDirName, $id } = metaData;
 
@@ -71,7 +71,7 @@ export async function makeTsJsonSchema({
   if (refHandling === 'keep') {
     tsSchema = replacePlaceholdersWithRefs({
       schemaAsText: tsSchema,
-      refMapper: $idMapper,
+      refMapper: idMapper,
     });
   }
 

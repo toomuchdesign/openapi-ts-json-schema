@@ -3,7 +3,7 @@ import type {
   SchemaMetaDataMap,
   SchemaPatcher,
   RefHandling,
-  $idMapper,
+  IdMapper,
 } from '../types';
 
 /**
@@ -13,12 +13,12 @@ export async function makeTsJsonSchemaFiles({
   schemaMetaDataMap,
   refHandling,
   schemaPatcher,
-  $idMapper,
+  idMapper,
 }: {
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   schemaPatcher?: SchemaPatcher;
-  $idMapper: $idMapper;
+  idMapper: IdMapper;
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
     if (metaData.shouldBeGenerated) {
@@ -27,7 +27,7 @@ export async function makeTsJsonSchemaFiles({
         schemaMetaDataMap,
         refHandling,
         schemaPatcher,
-        $idMapper,
+        idMapper,
       });
 
       const { absolutePath } = metaData;

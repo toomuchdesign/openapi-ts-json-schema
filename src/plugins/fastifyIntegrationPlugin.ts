@@ -17,7 +17,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
   onInit: async ({ options }) => {
     // Force "keep" refHandling
     options.refHandling = 'keep';
-    options.$idMapper = ({ id }) => id;
+    options.idMapper = ({ id }) => id;
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations

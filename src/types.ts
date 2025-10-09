@@ -41,7 +41,7 @@ export type JSONSchemaWithPlaceholders = JSONSchema | string;
 
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
-export type $idMapper = (input: { id: string }) => string;
+export type IdMapper = (input: { id: string }) => string;
 
 import type {
   makeRelativeModulePath,
@@ -57,7 +57,7 @@ export type Options = {
   plugins?: ReturnType<Plugin>[];
   silent?: boolean;
   refHandling?: RefHandling;
-  $idMapper?: $idMapper;
+  idMapper?: IdMapper;
 };
 
 /**

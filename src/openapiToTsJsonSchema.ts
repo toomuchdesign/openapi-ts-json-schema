@@ -45,7 +45,7 @@ export async function openapiToTsJsonSchema(
     outputPath: providedOutputPath,
     silent,
     refHandling = 'import',
-    $idMapper = ({ id }) => id,
+    idMapper = ({ id }) => id,
   } = options;
 
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
@@ -155,7 +155,7 @@ export async function openapiToTsJsonSchema(
 
       addSchemaToMetaData({
         id,
-        $id: $idMapper({ id }),
+        $id: idMapper({ id }),
         schemaMetaDataMap,
         openApiDefinition: openApiDefinitions[schemaName],
         jsonSchema: jsonSchemaDefinitions[schemaName],
@@ -183,7 +183,7 @@ export async function openapiToTsJsonSchema(
 
     addSchemaToMetaData({
       id,
-      $id: $idMapper({ id }),
+      $id: idMapper({ id }),
       schemaMetaDataMap,
       openApiDefinition,
       jsonSchema,
@@ -214,7 +214,7 @@ export async function openapiToTsJsonSchema(
     refHandling,
     schemaMetaDataMap,
     schemaPatcher,
-    $idMapper,
+    idMapper,
   });
 
   if (!silent) {

@@ -5,16 +5,16 @@ import { fixtures, makeTestOutputPath } from './test-utils';
 import { openapiToTsJsonSchema } from '../src';
 import { formatTypeScript } from '../src/utils';
 
-describe('$idMapper option', () => {
+describe('idMapper option', () => {
   describe('refHandling option === "inline"', () => {
     it('generates with$id schema with relevant $id value', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('$idMapper--refHandling-inline'),
+        outputPath: makeTestOutputPath('idMapper--refHandling-inline'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'inline',
-        $idMapper: ({ id }) => `foo_${id}_bar`,
+        idMapper: ({ id }) => `foo_${id}_bar`,
       });
 
       const actualSchema = await import(
@@ -60,11 +60,11 @@ describe('$idMapper option', () => {
     it('generates with$id schema with relevant $id value', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('$idMapper--refHandling-import'),
+        outputPath: makeTestOutputPath('idMapper--refHandling-import'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'import',
-        $idMapper: ({ id }) => `foo_${id}_bar`,
+        idMapper: ({ id }) => `foo_${id}_bar`,
       });
 
       const actualSchema = await import(
@@ -108,11 +108,11 @@ describe('$idMapper option', () => {
     it('generates expcted with$id schema and "$ref" values', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
-        outputPath: makeTestOutputPath('$idMapper--refHandling-keep'),
+        outputPath: makeTestOutputPath('idMapper--refHandling-keep'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,
         refHandling: 'keep',
-        $idMapper: ({ id }) => `foo_${id}_bar`,
+        idMapper: ({ id }) => `foo_${id}_bar`,
       });
 
       const actualSchema = await import(
