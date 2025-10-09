@@ -4,25 +4,86 @@
 [![Npm version][npm-version-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Generate **TypeScript JSON schema** files (`.ts` modules with `as const` assertions) from **OpenAPI** definitions.
+Generate **TypeScript-first JSON Schemas** (`.ts` modules with `as const`) directly from your OpenAPI definitions — so you can use the same schema for both **runtime validation** and **TypeScript type inference**.
 
-**TypeScript JSON schemas** are 100% valid JSON schemas which serve as the single source of truth for runtime validation and data type inference.
+## Why?
 
-TypeScript JSON schemas serve various purposes, including:
+Keeping **OpenAPI specs**, **runtime validators**, and **TypeScript types** in sync is hard.
 
-- Validate data and infer validated data TS types with the same JSON schema (with any JSON schema validator like [Ajv](https://ajv.js.org/))
-- Infer TS type definitions from JSON schemas (with [`json-schema-to-ts`](https://github.com/ThomasAribart/json-schema-to-ts))
-- Fastify integration: infer route handlers input types from their schema (with [`@fastify/type-provider-json-schema-to-ts`](https://github.com/fastify/fastify-type-provider-json-schema-to-ts))
+Many teams end up maintaining the same api models in different formats:
 
-Given an OpenAPI definition file, `openapi-ts-json-schema` will:
+- JSON Schema for runtime validation (`Ajv`, `Fastify`, etc.)
+- TypeScript types for static checking
 
-- Resolve external/remote `$ref`s and dereference them with [`@apidevtools/json-schema-ref-parser`](https://github.com/APIDevTools/json-schema-ref-parser)
-- Optionally inline, import or retain local `$ref`s
-- Convert to JSON schema with [`@openapi-contrib/openapi-schema-to-json-schema`](https://github.com/openapi-contrib/openapi-schema-to-json-schema) and [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters)
-- Generate a TypeScript JSON schema file for each definition (`.ts` files with `as const` assertion)
-- Organizing schemas in a folder structure mirroring the original OpenAPI definition layout.
+`openapi-ts-json-schema` solves this by generating **TypeScript JSON Schemas directly from your OpenAPI definitions**: valid JSON schemas written as **TypeScript modules**, ready for runtime validation and type inference.
 
-`openapi-ts-json-schema` is currently in v0, which means it's still in its testing phase. I'm actively collecting feedback from users to improve its functionality and usability. **Please don't hesitate to open an issue if you encounter any problems or issues while using it.**
+These schemas:
+
+- ✅ are 100% JSON Schema–compatible (usable with `Ajv`, `Fastify`, etc.)
+- ✅ are TypeScript-native (`as const` objects you can import)
+- ✅ can be used for type inference via [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
+- ✅ are generated automatically from your OpenAPI spec
+
+In short: **OpenAPI spec becomes the single source of truth** for both runtime validation and TypeScript typing.
+
+## Example
+
+From this OpenAPI definition:
+
+```yaml
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+      required: [id, name]
+```
+
+You get this TypeScript JSON schema:
+
+```ts
+// components/schemas/User.ts
+export default {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+  },
+  required: ['id', 'name'],
+} as const;
+```
+
+Now you can use it for both runtime validation and type inference:
+
+```ts
+import Ajv from 'ajv';
+import type { FromSchema } from 'json-schema-to-ts';
+import userSchema from './components/schemas/User';
+
+const ajv = new Ajv();
+const validate = ajv.compile<FromSchema<typeof userSchema>>(userSchema);
+
+const data: unknown = {};
+if (validate(data)) {
+  // data is now typed as { id: string; name: string }
+} else {
+  console.error(validate.errors);
+}
+```
+
+## How it works
+
+Given an OpenAPI definition file, `openapi-ts-json-schema`:
+
+- Resolves and dereferences $refs (using [@apidevtools/json-schema-ref-parser](https://github.com/APIDevTools/json-schema-ref-parser))
+- Converts OpenAPI objects to JSON Schema (via [@openapi-contrib/openapi-schema-to-json-schema](https://github.com/APIDevTools/json-schema-ref-parser) & [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters))
+- Generates `.ts` files exporting each schema as `as const`
+- Mirrors the original OpenAPI structure in the generated folder
+- Supports plugins (e.g. for Fastify integration)
+
+Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
 
 ## Installation
 
@@ -43,76 +104,42 @@ const { outputPath } = await openapiToTsJsonSchema({
 });
 ```
 
-...and use them in your TS project:
-
-```ts
-import Ajv from 'ajv';
-import type { FromSchema } from 'json-schema-to-ts';
-import mySchema from 'path/to/generated/schemas/MyModel.ts';
-
-const ajv = new Ajv();
-// Perform data validation and type inference using the same schema
-const validate = ajv.compile<FromSchema<typeof mySchema>>(mySchema);
-const data: unknown = {};
-
-if (validate(data)) {
-  // data gets type inference
-  console.log(data.foo);
-} else {
-  console.log(validate.errors);
-}
-```
+Schemas are generated in a folder mirroring your OpenAPI layout (default: `schemas-autogenerated`).
 
 ## Options
 
-| Property                                       | Type                                       | Description                                                                                                                                                | Default    |
-| ---------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **openApiSchema** _(required)_                 | `string`                                   | Path to the OpenApi file (supports yaml and json).                                                                                                         | -          |
-| **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenApi definition object paths to generate the JSON schemas from. Only matching paths will be generated. Supports dot notation: `["components.schemas"]`. | -          |
-| **refHandling**                                | `"import" \| "inline" \| "keep"`           | `"import"`: generate and import `$ref` schemas.<br/>`"inline"`: inline `$ref` schemas.<br/>`"keep"`: keep `$ref` values.                                   | `"import"` |
-| **$idMapper**                                  | `(params: { id: string }) => string`       | Customize generated schemas `$id`s and `$ref`s                                                                                                             | -          |
-| **schemaPatcher**                              | `(params: { schema: JSONSchema }) => void` | Dynamically patch generated JSON schemas. The provided function will be invoked against every single JSON schema node.                                     | -          |
-| **outputPath**                                 | `string`                                   | Path where the generated schemas will be saved. Defaults to `/schemas-autogenerated` in the same directory of `openApiSchema`.                             | -          |
-| **plugins**                                    | `ReturnType<Plugin>[]`                     | A set of optional plugins to generate extra custom output. See [plugins docs](./docs/plugins.md).                                                          | -          |
-| **silent**                                     | `boolean`                                  | Don't log user messages.                                                                                                                                   | `false`    |
-
-## Notes
-
-Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
+| Property                                       | Type                                       | Description                                                                                                                    | Default    |
+| ---------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **openApiSchema** _(required)_                 | `string`                                   | Path to the OpenApi file (supports yaml and json).                                                                             | -          |
+| **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenAPI object paths to generate schemas from. Eg: `["components.schemas"]`.                                                   | -          |
+| **refHandling**                                | `"import" \| "inline" \| "keep"`           | `"import"`: generate and import `$ref` schemas.<br/>`"inline"`: inline `$ref` schemas.<br/>`"keep"`: keep `$ref` values.       | `"import"` |
+| **$idMapper**                                  | `(params: { id: string }) => string`       | Customize generated schemas `$id`s and `$ref`s                                                                                 | -          |
+| **schemaPatcher**                              | `(params: { schema: JSONSchema }) => void` | Dynamically patch generated JSON schemas. The provided function will be invoked against every single JSON schema node.         | -          |
+| **outputPath**                                 | `string`                                   | Path where the generated schemas will be saved. Defaults to `/schemas-autogenerated` in the same directory of `openApiSchema`. | -          |
+| **plugins**                                    | `ReturnType<Plugin>[]`                     | A set of optional plugins to generate extra custom output. See [plugins docs](./docs/plugins.md).                              | -          |
+| **silent**                                     | `boolean`                                  | Don't log user messages.                                                                                                       | `false`    |
 
 ### `$ref`s handling
 
-`openapi-ts-json-schema` provides 3 `refHandling` strategies for OpenAPI `$ref` properties:
+Three strategies for how `$ref`s are resolved:
 
-| `refHandling` option |                                                                                                                         |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `inline`             | Replaces `$ref`s with inline copies of the target definition, creating self-contained schemas with potential redundancy |
-| `import`             | Replaces `$ref`s with a local variable pointing to the module of the target `$ref` definition                           |
-| `keep`               | Retains `$ref`s values without modification                                                                             |
+| `refHandling` option | description                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------- |
+| `inline`             | Inlines `$refs`s, creating self-contained schemas (no imports, but possible redundancy).       |
+| `import`             | Replaces`$ref`s with imports of the target definition                                          |
+| `keep`               | Leaves `$ref`s untouched — useful if you plan to interpret `$ref`s dynamically or use a plugin |
 
-`inline` and `import` are the more straightforward options, producing outputs that can be readily interpreted and resolved by both JavaScript engines and TypeScript type checkers. Nevertheless, a downside of these approaches is the absence of `$ref` references, causing entities initially designed as shareable (`$ref`-able) components (e.g. `components/schemas/Foo`) to lose their recognizability.
+Circular references are supported:
 
-A significant limitation arises from consumer applications being unable to automatically expose an OpenAPI schema with proper shared `components/schemas` definitions, as everything becomes inlined.
+- `inline`: circular refs are replaced with `{}`
+- `import`: resolves the JSON schema but TypeScript recursion halts (`any` type, TS error 7022)
+- `keep`: circular refs left unresolved
 
-One potential solution involves preserving `$ref`s using the `keep` option and crafting a plugin (as discussed in the [Plugins](#plugins) section) to facilitate the interpretation of `$ref` information by JavaScript and TypeScript. The implementation logic of this plugin hinges on the framework through which the generated schemas will be consumed.
-
-`openapi-ts-json-schema` ships with a [`fastify` plugin](/docs/plugins.md) available out of the box, enabling seamless integration of schema types through [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts).
-
-#### Circular `$ref`s
-
-Circular `$ref`s references are supported, too:
-
-| `refHandling` option |                                                                                                                                                                      |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `inline`             | Nested circular references are replaced with `{}`                                                                                                                    |
-| `import`             | Completely resolves the JSON schema tree. However, the TypeScript engine will halt type recursion and assign the schema type as `any`, resulting in error `ts(7022)` |
-| `keep`               | Does not resolve circular references by definition                                                                                                                   |
-
-For further details, refer to the [relevant tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts).
+See [tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts) for details.
 
 ## Return values
 
-Beside generating the expected schema files under `outputPath`, `openapiToTsJsonSchema` returns the following meta data:
+Along with generated schema files, `openapi-ts-json-schema` returns metadata:
 
 ```ts
 {
@@ -153,11 +180,11 @@ Beside generating the expected schema files under `outputPath`, `openapiToTsJson
 
 ## Plugins
 
-Plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
+Extend `openapi-ts-json-schema` with custom generators.
 
-`openapi-ts-json-schema` currently ships with one plugin specifically designed to better integrate with [Fastify](https://fastify.dev/), but you can write your own!
+A [Fastify](https://fastify.dev/) plugin is included out of the box to automatically wire schema-based types through [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts).
 
-Read [plugins documentation 📖](./docs/plugins.md).
+See the [plugins documentation 📖](./docs/plugins.md).
 
 ## Todo
 
@@ -167,6 +194,10 @@ Read [plugins documentation 📖](./docs/plugins.md).
 - Consider implementing an option to inline circular $refs with a configurable nesting level
 - Handle `$ref` parameters according to `refHandler` options
 - Rename `openApiSchema` --> `OpenApiDocument`
+
+## Contributing
+
+`openapi-ts-json-schema` is currently in v0 (testing phase). Feedback is invaluable — please [open an issue](https://github.com/toomuchdesign/openapi-ts-json-schema/issues) if you hit a bug or have suggestions.
 
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
