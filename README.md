@@ -164,7 +164,8 @@ Along with generated schema files, `openapi-ts-json-schema` returns metadata:
         isRef: boolean;
         // True if schemas is used as a `$ref`
         shouldBeGenerated: boolean;
-        // True is the schema has to be generated
+        // Text content of schema file
+        fileContent?: string;
 
         absoluteDirName: string;
         // Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`

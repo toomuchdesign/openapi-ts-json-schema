@@ -42,6 +42,7 @@ describe('Returned "metaData"', async () => {
       },
       isRef: true,
       shouldBeGenerated: true,
+      fileContent: expect.any(String),
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',
@@ -99,6 +100,7 @@ describe('Returned "metaData"', async () => {
       },
       isRef: false,
       shouldBeGenerated: true,
+      fileContent: expect.any(String),
 
       absoluteDirName: `${outputPath}/components/schemas`.replaceAll(
         '/',

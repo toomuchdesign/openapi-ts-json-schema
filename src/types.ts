@@ -69,6 +69,7 @@ export type Options = {
  * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @property `openApiDefinition` - Original dereferenced openAPI definition
  * @property `originalSchema` - Original dereferenced JSON schema
+ * @property `fileContent` - Text content of schema file
  *
  * @property `absoluteDirName` - Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`
  * @property `absolutePath` - Absolute path pointing to schema file (posix or win32). Eg: `"Users/username/output/path/components/schemas/MySchema.ts"`
@@ -82,6 +83,7 @@ export type SchemaMetaData = {
   uniqueName: string;
   openApiDefinition?: OpenApiObject;
   originalSchema: JSONSchema;
+  fileContent?: string;
 
   absoluteDirName: string;
   absolutePath: string;

@@ -4,7 +4,7 @@ import $RefParser from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 import {
   clearFolder,
-  makeTsJsonSchemaFiles,
+  makeSchemaFileContents,
   SCHEMA_ID_SYMBOL,
   convertOpenApiDocumentToJsonSchema,
   convertOpenApiPathsParameters,
@@ -14,6 +14,7 @@ import {
   saveFile,
   makeRelativeModulePath,
   refToId,
+  saveSchemaFiles,
 } from './utils';
 import type {
   SchemaMetaDataMap,
@@ -210,12 +211,14 @@ export async function openapiToTsJsonSchema(
   }
 
   // Generate schemas
-  await makeTsJsonSchemaFiles({
+  await makeSchemaFileContents({
     refHandling,
     schemaMetaDataMap,
     schemaPatcher,
     idMapper,
   });
+
+  await saveSchemaFiles({ schemaMetaDataMap });
 
   if (!silent) {
     console.log(
