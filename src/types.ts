@@ -113,7 +113,17 @@ type OnBeforeGenerationInput = ReturnPayload & {
   };
 };
 
+type OnBeforeFileSave = ReturnPayload & {
+  options: Options;
+  utils: {
+    makeRelativeModulePath: typeof makeRelativeModulePath;
+    formatTypeScript: typeof formatTypeScript;
+    saveFile: typeof saveFile;
+  };
+};
+
 export type Plugin<PluginOptions = void> = (options: PluginOptions) => {
   onInit?: (input: OnInitInput) => Promise<void>;
   onBeforeGeneration?: (input: OnBeforeGenerationInput) => Promise<void>;
+  onBeforeSaveFile?: (input: OnBeforeFileSave) => Promise<void>;
 };

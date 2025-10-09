@@ -218,6 +218,17 @@ export async function openapiToTsJsonSchema(
     idMapper,
   });
 
+  // Execute plugins onBeforeGeneration method
+  for (const { onBeforeSaveFile } of plugins) {
+    if (onBeforeSaveFile) {
+      await onBeforeSaveFile({
+        ...returnPayload,
+        options,
+        utils: { makeRelativeModulePath, formatTypeScript, saveFile },
+      });
+    }
+  }
+
   await saveSchemaFiles({ schemaMetaDataMap });
 
   if (!silent) {
