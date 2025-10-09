@@ -75,13 +75,6 @@ export async function makeTsJsonSchema({
     });
   }
 
-  /**
-   * Re-expose schema with $id as "with$id"
-   */
-  tsSchema =
-    tsSchema + '\n\n' + `const with$id = { $id: "${$id}", ...schema } as const`;
-  tsSchema = tsSchema + '\n' + `export { with$id };`;
-
   const formattedSchema = await formatTypeScript(tsSchema);
   return formattedSchema;
 }
