@@ -22,7 +22,7 @@ describe('refHandling option === "import"', () => {
   ])('$description', ({ definitionPathsToGenerateFrom }) => {
     it('Generates expected schema', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+        openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import'),
         definitionPathsToGenerateFrom,
         silent: true,
@@ -121,7 +121,7 @@ describe('refHandling option === "import"', () => {
 
   it('Generates expected $ref schemas (with and without $id)', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
@@ -173,7 +173,7 @@ describe('refHandling option === "import"', () => {
   describe('Alias definitions', () => {
     it('re-exports original definition', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'alias-definition/specs.yaml'),
+        openApiDocument: path.resolve(fixtures, 'alias-definition/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,

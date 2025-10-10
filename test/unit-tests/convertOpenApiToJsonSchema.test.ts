@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { convertOpenApiDocumentToJsonSchema } from '../../src/utils';
-import * as openapiSchemaToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
+import * as openApiDocumentToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 
 const openApiDefinition = {
   type: 'string' as const,
@@ -181,7 +181,7 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
 
     describe('on error', () => {
       it('returns human friendly error', () => {
-        const spy = vi.spyOn(openapiSchemaToJsonSchema, 'fromSchema');
+        const spy = vi.spyOn(openApiDocumentToJsonSchema, 'fromSchema');
         spy.mockImplementationOnce(() => {
           throw new Error('Error reason');
         });

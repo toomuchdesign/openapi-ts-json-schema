@@ -50,7 +50,7 @@ import type {
 } from './utils';
 
 export type Options = {
-  openApiSchema: string;
+  openApiDocument: string;
   definitionPathsToGenerateFrom: string[];
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;

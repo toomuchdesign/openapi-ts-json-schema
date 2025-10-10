@@ -9,7 +9,7 @@ describe('Circular reference', () => {
     describe('inline', () => {
       it('Replaces 2nd circular reference occurrence with "{}"', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(
+          openApiDocument: path.resolve(
             fixtures,
             'circular-reference/specs.yaml',
           ),
@@ -108,7 +108,7 @@ describe('Circular reference', () => {
     describe('import', () => {
       it('Generates expected schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(
+          openApiDocument: path.resolve(
             fixtures,
             'circular-reference/specs.yaml',
           ),
@@ -158,7 +158,7 @@ describe('Circular reference', () => {
     describe('keep', () => {
       it('Generates expected schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(
+          openApiDocument: path.resolve(
             fixtures,
             'circular-reference/specs.yaml',
           ),

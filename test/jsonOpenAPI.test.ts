@@ -6,7 +6,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('JSON OpenAPI input', async () => {
   it('generates expected schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'json/specs.json'),
+      openApiDocument: path.resolve(fixtures, 'json/specs.json'),
       outputPath: makeTestOutputPath('json'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',

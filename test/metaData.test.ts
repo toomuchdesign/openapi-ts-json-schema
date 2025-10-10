@@ -9,7 +9,7 @@ import { SCHEMA_ID_SYMBOL } from '../src/utils';
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
     const { metaData, outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('meta-data'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',

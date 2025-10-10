@@ -2,10 +2,11 @@
 
 `openapi-ts-json-schema` plugins are intended as a way to generate extra artifacts based on the same internal metadata created to generate the JSON schema output.
 
+- [Generate schema with $id plugin](#generate-schema-with-id-plugin)
 - [Fastify integration plugin](#fastify-integration-plugin)
 - [Write your own plugin](#write-your-own-plugin)
 
-## Generate schema with $id plugin
+## Generate schema with `$id` plugin
 
 Generate and extra named export exposing the same schema with the [`$id` JSON Schema prop](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-00#rfc.section.8.2.1).
 
@@ -18,7 +19,7 @@ import {
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
-  openApiSchema: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
+  openApiDocument: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   plugins: [generateSchemaWith$idPlugin()],
@@ -51,7 +52,7 @@ import {
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
-  openApiSchema: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
+  openApiDocument: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   plugins: [
@@ -169,7 +170,7 @@ import { openapiToTsJsonSchema } from 'openapi-ts-json-schema';
 import { myPlugin } from '../myPlugin';
 
 await openapiToTsJsonSchema({
-  openApiSchema: 'path/to/open-api-specs.yaml',
+  openApiDocument: 'path/to/open-api-specs.yaml',
   definitionPathsToGenerateFrom: ['components.schemas'],
   plugins: [myPlugin({ optionOne: 'foo', optionTwo: 'bar' })],
 });

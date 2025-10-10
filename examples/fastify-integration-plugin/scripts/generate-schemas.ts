@@ -3,7 +3,7 @@ import { openapiToTsJsonSchema, fastifyIntegrationPlugin } from '../../../src';
 
 async function generate() {
   await openapiToTsJsonSchema({
-    openApiSchema: path.resolve(
+    openApiDocument: path.resolve(
       __dirname,
       '../definitions/petstore/open-api-definition.yaml',
     ),

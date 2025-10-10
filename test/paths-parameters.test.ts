@@ -11,7 +11,7 @@ describe('OpenAPI paths parameters', () => {
   ])('refHandling: "$refHandling"', ({ refHandling }) => {
     it('Transforms parameters array into valid JSON schema', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
+        openApiDocument: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
         outputPath: makeTestOutputPath(`paths-parameters--${refHandling}`),
         definitionPathsToGenerateFrom: ['paths'],
         refHandling,
