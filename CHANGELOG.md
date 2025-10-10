@@ -1,5 +1,15 @@
 # openapi-ts-json-schema
 
+## 0.13.0
+
+### Minor Changes
+
+- [#257](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/257) [`fe4f838`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/fe4f8383a2aa2d7bbc86d1d31ff72ab3457c1adb) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add `openApiDefinition` prop to generated metaData
+
+- [#262](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/262) [`e63f47e`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/e63f47e100687898e30a9ca474f07816d23df5e7) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - `shouldBeGenerated` prop added to `metaData`
+
+- [#262](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/262) [`e63f47e`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/e63f47e100687898e30a9ca474f07816d23df5e7) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Recursion comments removed
+
 ## 0.12.2
 
 ### Patch Changes
