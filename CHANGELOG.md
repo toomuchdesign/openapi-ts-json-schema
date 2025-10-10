@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 1.0.0
+
+### Major Changes
+
+- [#446](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/446) [`e608aa5`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/e608aa5271317b0d2d0db3d2a20e4d16b8a3638b) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Restrict Node support to v20+
+
 ## 0.14.0
 
 ### Minor Changes
