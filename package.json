@@ -27,6 +27,9 @@
     "typescript",
     "openapi to json schema"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toomuchdesign/openapi-ts-json-schema.git"
