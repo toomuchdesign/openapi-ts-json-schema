@@ -1,6 +1,6 @@
 {
   "name": "openapi-ts-json-schema",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "Generate TypeScript-first JSON schemas from OpenAPI definitions",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,6 +13,7 @@
     "pretest": "npm run test:build",
     "test:build": "npm --prefix ./examples/fastify-integration-plugin run generate-schemas",
     "prepare": "npx simple-git-hooks && npm run test -- --run && npm run source:check && npm run build",
+    "release": "npm run prepare && npx changeset publish",
     "prettier:check": "prettier . --check",
     "prettier:fix": "npm run prettier:check -- --write",
     "type:check": "tsc --noEmit",
@@ -26,6 +27,9 @@
     "typescript",
     "openapi to json schema"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toomuchdesign/openapi-ts-json-schema.git"
@@ -33,6 +37,7 @@
   "author": "Andrea Carraro <me@andreacarraro.it>",
   "license": "ISC",
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.26.2",
     "@fastify/swagger": "^9.1.0",
     "@fastify/swagger-ui": "^5.0.1",
