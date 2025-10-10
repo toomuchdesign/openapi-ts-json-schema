@@ -1,5 +1,19 @@
 # openapi-ts-json-schema
 
+## 0.14.0
+
+### Minor Changes
+
+- [#438](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/438) [`b97dcae`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/b97dcae8f60db18db33dac1f59a2eec51e096846) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add support for plugins `onBeforeSaveFile` hook
+
+- [#438](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/438) [`b97dcae`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/b97dcae8f60db18db33dac1f59a2eec51e096846) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Drop `with$id` schema generaion
+
+- [#438](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/438) [`b97dcae`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/b97dcae8f60db18db33dac1f59a2eec51e096846) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Rename `$idMapper` option as `idMapper`
+
+- [#444](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/444) [`47eb157`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/47eb157ad7f00cfc26fe68e47657dd7b8b681353) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Rename `openApiSchema` option as `openApiDocument`
+
+- [#438](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/438) [`b97dcae`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/b97dcae8f60db18db33dac1f59a2eec51e096846) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add `generateSchemaWith$idPlugin` plugin
+
 ## 0.13.0
 
 ### Minor Changes
