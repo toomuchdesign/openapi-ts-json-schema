@@ -8,7 +8,7 @@ describe('External $refs', () => {
     describe('multiple definitions aliasing same external definition', () => {
       it('dedupe imports and resolve against same schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
+          openApiDocument: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath(
             'external-refs-import-definition-alias',
           ),
@@ -40,7 +40,7 @@ describe('External $refs', () => {
     describe('multiple definitions aliasing same whole document', () => {
       it('dedupe imports and resolve against same document', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiSchema: path.resolve(fixtures, 'external-ref/specs.yaml'),
+          openApiDocument: path.resolve(fixtures, 'external-ref/specs.yaml'),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
           definitionPathsToGenerateFrom: ['components.schemas'],
           refHandling: 'import',

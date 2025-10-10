@@ -7,7 +7,7 @@ import { fixtures, makeTestOutputPath } from './test-utils';
 describe('refHandling option === "inline"', () => {
   it('Preserves original "$ref" information as a commented prop', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-inline'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'inline',

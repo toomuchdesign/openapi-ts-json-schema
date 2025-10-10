@@ -6,7 +6,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('"schemaPatcher" option', () => {
   it('transforms generated JSON schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('schema-patcher'),
       definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
       schemaPatcher: ({ schema }) => {

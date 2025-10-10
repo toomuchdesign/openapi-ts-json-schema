@@ -8,7 +8,7 @@ import { formatTypeScript } from '../src/utils';
 describe('refHandling option === "keep"', () => {
   it('Generates expected schemas preserving $ref pointer', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-keep'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,
@@ -84,7 +84,7 @@ describe('refHandling option === "keep"', () => {
 
   it('Generates expected $ref schemas preserving $ref pointer', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'keep',
       silent: true,
@@ -117,7 +117,7 @@ describe('refHandling option === "keep"', () => {
   describe('Alias definitions', () => {
     it('generate expected $ref object', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'alias-definition/specs.yaml'),
+        openApiDocument: path.resolve(fixtures, 'alias-definition/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-keep-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,

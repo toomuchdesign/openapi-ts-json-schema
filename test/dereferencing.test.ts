@@ -6,7 +6,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('Dereferencing', () => {
   it('Dereferences and transforms even from paths not marked for generation', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',
@@ -30,7 +30,7 @@ describe('Dereferencing', () => {
 
   it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
       definitionPathsToGenerateFrom: ['paths'],
       refHandling: 'import',

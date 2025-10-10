@@ -6,7 +6,7 @@ import { openapiToTsJsonSchema } from '../src';
 describe('OpenAPI paths', () => {
   it('Generates expected paths schemas', async () => {
     const { outputPath, metaData } = await openapiToTsJsonSchema({
-      openApiSchema: path.resolve(fixtures, 'paths/specs.yaml'),
+      openApiDocument: path.resolve(fixtures, 'paths/specs.yaml'),
       outputPath: makeTestOutputPath('paths'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: true,

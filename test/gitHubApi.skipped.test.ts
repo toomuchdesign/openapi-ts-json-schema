@@ -10,7 +10,7 @@ describe('GitHub API', () => {
   it("doesn't error", async () => {
     await expect(
       openapiToTsJsonSchema({
-        openApiSchema: path.resolve(fixtures, 'github-api/specs.yaml'),
+        openApiDocument: path.resolve(fixtures, 'github-api/specs.yaml'),
         outputPath: makeTestOutputPath('github-api'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         refHandling: 'import',

@@ -7,7 +7,7 @@ describe('OpenApi special fields', () => {
   it('handles schema correctly', async () => {
     await expect(
       openapiToTsJsonSchema({
-        openApiSchema: path.resolve(
+        openApiDocument: path.resolve(
           fixtures,
           'special-openapi-fields/specs.yaml',
         ),
