@@ -41,7 +41,7 @@ export type JSONSchemaWithPlaceholders = JSONSchema | string;
 
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
-export type $idMapper = (input: { id: string }) => string;
+export type IdMapper = (input: { id: string }) => string;
 
 import type {
   makeRelativeModulePath,
@@ -57,7 +57,7 @@ export type Options = {
   plugins?: ReturnType<Plugin>[];
   silent?: boolean;
   refHandling?: RefHandling;
-  $idMapper?: $idMapper;
+  idMapper?: IdMapper;
 };
 
 /**
@@ -69,6 +69,7 @@ export type Options = {
  * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
  * @property `openApiDefinition` - Original dereferenced openAPI definition
  * @property `originalSchema` - Original dereferenced JSON schema
+ * @property `fileContent` - Text content of schema file
  *
  * @property `absoluteDirName` - Absolute path pointing to schema folder (posix or win32). Eg: `"Users/username/output/path/components/schemas"`
  * @property `absolutePath` - Absolute path pointing to schema file (posix or win32). Eg: `"Users/username/output/path/components/schemas/MySchema.ts"`
@@ -82,6 +83,7 @@ export type SchemaMetaData = {
   uniqueName: string;
   openApiDefinition?: OpenApiObject;
   originalSchema: JSONSchema;
+  fileContent?: string;
 
   absoluteDirName: string;
   absolutePath: string;
@@ -111,7 +113,17 @@ type OnBeforeGenerationInput = ReturnPayload & {
   };
 };
 
+type OnBeforeFileSave = ReturnPayload & {
+  options: Options;
+  utils: {
+    makeRelativeModulePath: typeof makeRelativeModulePath;
+    formatTypeScript: typeof formatTypeScript;
+    saveFile: typeof saveFile;
+  };
+};
+
 export type Plugin<PluginOptions = void> = (options: PluginOptions) => {
   onInit?: (input: OnInitInput) => Promise<void>;
   onBeforeGeneration?: (input: OnBeforeGenerationInput) => Promise<void>;
+  onBeforeSaveFile?: (input: OnBeforeFileSave) => Promise<void>;
 };

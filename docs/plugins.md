@@ -5,6 +5,26 @@
 - [Fastify integration plugin](#fastify-integration-plugin)
 - [Write your own plugin](#write-your-own-plugin)
 
+## Generate schema with $id plugin
+
+Generate and extra named export exposing the same schema with the [`$id` JSON Schema prop](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-00#rfc.section.8.2.1).
+
+### Example
+
+```ts
+import {
+  openapiToTsJsonSchema,
+  generateSchemaWith$idPlugin,
+} from 'openapi-ts-json-schema';
+
+await openapiToTsJsonSchema({
+  openApiSchema: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
+  outputPath: 'path/to/generated/schemas',
+  definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+  plugins: [generateSchemaWith$idPlugin()],
+});
+```
+
 ## Fastify integration plugin
 
 This plugin is an attempt to better integrate Fastify and its [`json-schema-to-ts` type provider](https://github.com/fastify/fastify-type-provider-json-schema-to-ts) to register schemas with `fastify.addSchema` and let `@fastify/swagger` generate a better OpenAPI definition.

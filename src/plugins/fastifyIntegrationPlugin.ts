@@ -1,4 +1,5 @@
 import type { Plugin } from '../types';
+import generateSchemaWith$idPlugin from './generateSchemaWith$idPlugin';
 
 const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';
@@ -17,7 +18,10 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
   onInit: async ({ options }) => {
     // Force "keep" refHandling
     options.refHandling = 'keep';
-    options.$idMapper = ({ id }) => id;
+    options.idMapper = ({ id }) => id;
+
+    // Register Generate schema with $id plugin
+    options.plugins?.push(generateSchemaWith$idPlugin());
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
