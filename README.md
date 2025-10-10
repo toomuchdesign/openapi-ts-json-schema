@@ -197,8 +197,6 @@ See [plugins documentation 📖](./docs/plugins.md).
 
 ## Contributing
 
-`openapi-ts-json-schema` is currently in v0 (testing phase). Feedback is invaluable — please [open an issue](https://github.com/toomuchdesign/openapi-ts-json-schema/issues) if you hit a bug or have suggestions.
-
 [ci-badge]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/toomuchdesign/openapi-ts-json-schema/actions/workflows/ci.yml
 [coveralls-badge]: https://coveralls.io/repos/github/toomuchdesign/openapi-ts-json-schema/badge.svg?branch=master
