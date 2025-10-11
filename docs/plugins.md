@@ -153,10 +153,13 @@ const myPlugin: Plugin<{ optionOne: string; optionTwo: string }> =
   // Factory function with optional options
   ({ optionOne, optionTwo }) => ({
     onInit: async ({ options }) => {
-      // Validate/mutate option values here
+      // Validate/mutate options
     };
     onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
-      // Generate plugin-specific artifacts
+      // Generate plugin-specific artifacts or mutate metaData before generation
+    };
+    onBeforeSaveFile: async ({ outputPath, metaData, options, utils }) => {
+      // Generate plugin-specific artifacts or mutate metaData before schemas are saved in file system
     };
   })
 
