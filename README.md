@@ -184,7 +184,7 @@ Along with generated schema files, `openapi-ts-json-schema` returns metadata:
 Extend `openapi-ts-json-schema` with custom generators. Currently available plugins:
 
 - `generateSchemaWith$idPlugin`
-- `fastifyIntegrationPlugin$idPlugin`
+- `fastifyIntegrationPlugin`
 
 See [plugins documentation 📖](./docs/plugins.md).
 
