@@ -1,5 +1,15 @@
 # openapi-ts-json-schema
 
+## 1.1.0
+
+### Minor Changes
+
+- [#451](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/451) [`2fdab31`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/2fdab31d485c033a259550d146434fcfdbf07cea) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add JSDoc comments
+
+### Patch Changes
+
+- [#453](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/453) [`716ecde`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/716ecde6c025ce9ef31cfa76c19daaafdd927caa) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Fix infinite recursion with `schemaPatcher`, inline `refHandling` and recursive schemas
+
 ## 1.0.0
 
 ### Major Changes
