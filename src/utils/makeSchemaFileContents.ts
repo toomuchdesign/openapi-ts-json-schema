@@ -1,10 +1,5 @@
 import { makeTsJsonSchema } from '.';
-import type {
-  SchemaMetaDataMap,
-  SchemaPatcher,
-  RefHandling,
-  IdMapper,
-} from '../types';
+import type { SchemaMetaDataMap, RefHandling, IdMapper } from '../types';
 
 /**
  * Generate the file content of all expected JSON Schema files
@@ -12,12 +7,10 @@ import type {
 export async function makeSchemaFileContents({
   schemaMetaDataMap,
   refHandling,
-  schemaPatcher,
   idMapper,
 }: {
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
-  schemaPatcher?: SchemaPatcher;
   idMapper: IdMapper;
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
@@ -26,7 +19,6 @@ export async function makeSchemaFileContents({
         metaData,
         schemaMetaDataMap,
         refHandling,
-        schemaPatcher,
         idMapper,
       });
 

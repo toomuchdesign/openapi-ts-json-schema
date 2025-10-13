@@ -15,6 +15,7 @@ import {
   makeRelativeModulePath,
   refToId,
   saveSchemaFiles,
+  patchJsonSchema,
 } from './utils';
 import type {
   SchemaMetaDataMap,
@@ -122,9 +123,11 @@ export async function openapiToTsJsonSchema(
     await openApiParser.bundle(openApiDocumentPath);
 
   // Convert oas definitions to JSON schema (excluding paths and parameter objects)
-  const initialJsonSchema = convertOpenApiDocumentToJsonSchema(
+  let initialJsonSchema = convertOpenApiDocumentToJsonSchema(
     bundledOpenApiDocument,
   );
+
+  const patchedJsonSchema = patchJsonSchema(initialJsonSchema, schemaPatcher);
 
   const inlinedRefs: Map<
     string,
@@ -134,7 +137,7 @@ export async function openapiToTsJsonSchema(
   // Inline and collect internal $ref definitions
   // @ts-expect-error @apidevtools/json-schema-ref-parser types supports JSON schemas only
   const dereferencedJsonSchema: OpenApiDocument =
-    await jsonSchemaParser.dereference(initialJsonSchema, {
+    await jsonSchemaParser.dereference(patchedJsonSchema, {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
@@ -252,7 +255,6 @@ export async function openapiToTsJsonSchema(
   await makeSchemaFileContents({
     refHandling,
     schemaMetaDataMap,
-    schemaPatcher,
     idMapper,
   });
 
