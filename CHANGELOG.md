@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 1.1.0
+
+### Minor Changes
+
+- [#451](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/451) [`2fdab31`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/2fdab31d485c033a259550d146434fcfdbf07cea) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add JSDoc comments
+
 ## 1.0.0
 
 ### Major Changes
