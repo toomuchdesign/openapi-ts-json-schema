@@ -26,7 +26,7 @@ jobs:
 
       - run: npm ci
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
         with:
           name: code-coverage
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: code-coverage
           path: coverage
