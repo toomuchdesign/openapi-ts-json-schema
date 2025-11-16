@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
-import { convertOpenApiDocumentToJsonSchema } from '../../src/utils';
 import * as openApiDocumentToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
+import { describe, expect, it, vi } from 'vitest';
+
+import { convertOpenApiDocumentToJsonSchema } from '../../src/utils';
 
 const openApiDefinition = {
   type: 'string' as const,

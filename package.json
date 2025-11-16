@@ -42,6 +42,7 @@
     "@fastify/swagger": "^9.1.0",
     "@fastify/swagger-ui": "^5.0.1",
     "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@tsconfig/node18": "^18.2.0",
     "@types/lodash.get": "^4.4.7",
     "@vitest/coverage-v8": "^4.0.9",

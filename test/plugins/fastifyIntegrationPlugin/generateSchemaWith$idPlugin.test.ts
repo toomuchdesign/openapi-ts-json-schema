@@ -1,12 +1,14 @@
-import path from 'path';
 import fs from 'fs/promises';
-import { describe, it, expect } from 'vitest';
+import path from 'path';
+
+import { describe, expect, it } from 'vitest';
+
 import {
-  openapiToTsJsonSchema,
   generateSchemaWith$idPlugin,
+  openapiToTsJsonSchema,
 } from '../../../src';
-import { fixtures, makeTestOutputPath } from '../../test-utils';
 import { formatTypeScript } from '../../../src/utils';
+import { fixtures, makeTestOutputPath } from '../../test-utils';
 
 describe('generateSchemaWith$idPlugin plugin', () => {
   describe('refHandling option === "inline"', () => {

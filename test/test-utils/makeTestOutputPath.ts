@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { fixtures } from './fixtures';
 
 /**

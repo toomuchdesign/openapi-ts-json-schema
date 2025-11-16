@@ -14,8 +14,8 @@ Generate and extra named export exposing the same schema with the [`$id` JSON Sc
 
 ```ts
 import {
-  openapiToTsJsonSchema,
   generateSchemaWith$idPlugin,
+  openapiToTsJsonSchema,
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
@@ -47,8 +47,8 @@ Generate TypeScript JSON schemas:
 
 ```ts
 import {
-  openapiToTsJsonSchema,
   fastifyIntegrationPlugin,
+  openapiToTsJsonSchema,
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
@@ -68,6 +68,7 @@ Register generated schemas:
 
 ```ts
 import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
+
 import {
   RefSchemas,
   schemas,
@@ -170,6 +171,7 @@ export myPlugin;
 
 ```ts
 import { openapiToTsJsonSchema } from 'openapi-ts-json-schema';
+
 import { myPlugin } from '../myPlugin';
 
 await openapiToTsJsonSchema({

@@ -1,30 +1,32 @@
 import { existsSync } from 'fs';
 import path from 'node:path';
+
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
+
+import type {
+  JSONSchema,
+  OpenApiDocument,
+  OpenApiObject,
+  Options,
+  ReturnPayload,
+  SchemaMetaDataMap,
+} from './types';
 import {
-  clearFolder,
-  makeSchemaFileContents,
   SCHEMA_ID_SYMBOL,
+  addSchemaToMetaData,
+  clearFolder,
   convertOpenApiDocumentToJsonSchema,
   convertOpenApiPathsParameters,
-  addSchemaToMetaData,
-  makeId,
   formatTypeScript,
-  saveFile,
+  makeId,
   makeRelativeModulePath,
-  refToId,
-  saveSchemaFiles,
+  makeSchemaFileContents,
   patchJsonSchema,
+  refToId,
+  saveFile,
+  saveSchemaFiles,
 } from './utils';
-import type {
-  SchemaMetaDataMap,
-  OpenApiObject,
-  OpenApiDocument,
-  JSONSchema,
-  ReturnPayload,
-  Options,
-} from './types';
 
 /**
  * @package openapi‑ts-json-schema

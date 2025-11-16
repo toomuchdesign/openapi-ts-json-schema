@@ -1,7 +1,8 @@
 import mapObject from 'map-obj';
+
 import { idToPlaceholder } from '..';
-import { getId } from './getId';
 import type { JSONSchema, JSONSchemaWithPlaceholders } from '../../types';
+import { getId } from './getId';
 
 /**
  * Get any JSON schema node and:

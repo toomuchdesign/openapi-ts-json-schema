@@ -1,4 +1,4 @@
-import { defineConfig, defaultInclude } from 'vitest/config';
+import { defaultInclude, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {

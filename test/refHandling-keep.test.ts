@@ -1,9 +1,11 @@
-import path from 'path';
 import fs from 'fs/promises';
-import { describe, it, expect } from 'vitest';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import path from 'path';
+
+import { describe, expect, it } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
 import { formatTypeScript } from '../src/utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('refHandling option === "keep"', () => {
   it('Generates expected schemas preserving $ref pointer', async () => {

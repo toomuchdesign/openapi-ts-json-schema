@@ -1,10 +1,12 @@
-import path from 'path';
 import fs from 'fs';
-import { describe, it, expect } from 'vitest';
+import path from 'path';
+
+import { describe, expect, it } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
 import type { SchemaMetaData } from '../src/types';
 import { SCHEMA_ID_SYMBOL } from '../src/utils';
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {

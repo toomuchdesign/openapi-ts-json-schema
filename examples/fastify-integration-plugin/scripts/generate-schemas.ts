@@ -1,5 +1,6 @@
 import path from 'path';
-import { openapiToTsJsonSchema, fastifyIntegrationPlugin } from '../../../src';
+
+import { fastifyIntegrationPlugin, openapiToTsJsonSchema } from '../../../src';
 
 async function generate() {
   await openapiToTsJsonSchema({

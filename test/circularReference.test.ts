@@ -1,8 +1,10 @@
-import path from 'path';
-import { describe, it, expect } from 'vitest';
 import fs from 'fs/promises';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import path from 'path';
+
+import { describe, expect, it } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
