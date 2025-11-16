@@ -5,12 +5,12 @@ import { describe, expect, it } from 'vitest';
 
 import { fastifyIntegrationPlugin, openapiToTsJsonSchema } from '../../../src';
 import { formatTypeScript } from '../../../src/utils';
-import { fixtures, makeTestOutputPath } from '../../test-utils';
+import { fixturesPath, makeTestOutputPath } from '../../test-utils';
 
 describe('fastifyIntegration plugin', () => {
   it('generates expected file', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('plugin-fastify'),
       definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
       plugins: [fastifyIntegrationPlugin()],
@@ -80,7 +80,7 @@ describe('fastifyIntegration plugin', () => {
   describe('"schemaFilter" option', () => {
     it('exposes only filtered schemas', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
+        openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('plugin-fastify-schemaFilter-option'),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         plugins: [

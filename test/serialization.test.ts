@@ -3,12 +3,12 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('openapiToTsJsonSchema', async () => {
   it('serializes strings as expected', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'serialization/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'serialization/specs.yaml'),
       outputPath: makeTestOutputPath('serialization'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',

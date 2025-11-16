@@ -3,14 +3,17 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('External $refs', () => {
   describe('refHandling option === "import"', () => {
     describe('multiple definitions aliasing same external definition', () => {
       it('dedupe imports and resolve against same schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiDocument: path.resolve(fixtures, 'external-ref/specs.yaml'),
+          openApiDocument: path.resolve(
+            fixturesPath,
+            'external-ref/specs.yaml',
+          ),
           outputPath: makeTestOutputPath(
             'external-refs-import-definition-alias',
           ),
@@ -42,7 +45,10 @@ describe('External $refs', () => {
     describe('multiple definitions aliasing same whole document', () => {
       it('dedupe imports and resolve against same document', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
-          openApiDocument: path.resolve(fixtures, 'external-ref/specs.yaml'),
+          openApiDocument: path.resolve(
+            fixturesPath,
+            'external-ref/specs.yaml',
+          ),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
           definitionPathsToGenerateFrom: ['components.schemas'],
           refHandling: 'import',
