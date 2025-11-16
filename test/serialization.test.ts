@@ -1,5 +1,7 @@
 import path from 'path';
-import { describe, it, expect } from 'vitest';
+
+import { describe, expect, it } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
 import { fixtures, makeTestOutputPath } from './test-utils';
 

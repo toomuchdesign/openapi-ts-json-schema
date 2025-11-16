@@ -1,4 +1,4 @@
-import { makeRelativeModulePath, PLACEHOLDER_REGEX } from '..';
+import { PLACEHOLDER_REGEX, makeRelativeModulePath } from '..';
 import type { SchemaMetaDataMap } from '../../types';
 
 /**

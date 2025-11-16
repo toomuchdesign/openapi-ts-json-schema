@@ -1,5 +1,6 @@
-import { isObject } from '.';
 import type { ParameterObject } from 'openapi3-ts/oas31';
+
+import { isObject } from '.';
 
 const PARAMETERS_IN_VALUES = [
   'query',

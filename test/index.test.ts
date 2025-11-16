@@ -1,8 +1,10 @@
-import path from 'path';
 import { existsSync } from 'fs';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import path from 'path';
+
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
+import { fixtures, makeTestOutputPath } from './test-utils';
 
 describe('openapiToTsJsonSchema', () => {
   it('Generates expected JSON schemas', async () => {

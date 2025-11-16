@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
-import glob from 'tiny-glob';
 import path from 'path';
+
+import glob from 'tiny-glob';
 import { afterAll } from 'vitest';
 
 const testFolder = path.resolve(__dirname, 'test');

@@ -1,4 +1,5 @@
 import { fromParameter } from '@openapi-contrib/openapi-schema-to-json-schema';
+
 import type { JSONSchema, OpenApiParameter } from '../types';
 
 /**

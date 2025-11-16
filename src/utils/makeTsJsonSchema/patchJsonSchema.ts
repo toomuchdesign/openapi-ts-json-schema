@@ -1,4 +1,5 @@
 import traverse from 'json-schema-traverse';
+
 import type { JSONSchema, SchemaPatcher } from '../../types';
 
 /**

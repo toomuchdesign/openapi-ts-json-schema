@@ -60,6 +60,7 @@ Now you can use it for both runtime validation and type inference:
 ```ts
 import Ajv from 'ajv';
 import type { FromSchema } from 'json-schema-to-ts';
+
 import userSchema from './components/schemas/User';
 
 const ajv = new Ajv();

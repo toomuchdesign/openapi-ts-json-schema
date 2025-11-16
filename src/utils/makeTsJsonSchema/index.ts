@@ -1,14 +1,14 @@
-import { stringify } from './stringify';
+import { formatTypeScript } from '../';
+import type {
+  IdMapper,
+  RefHandling,
+  SchemaMetaData,
+  SchemaMetaDataMap,
+} from '../../types';
 import { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
 import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
 import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
-import { formatTypeScript } from '../';
-import type {
-  SchemaMetaDataMap,
-  SchemaMetaData,
-  RefHandling,
-  IdMapper,
-} from '../../types';
+import { stringify } from './stringify';
 
 export async function makeTsJsonSchema({
   metaData,

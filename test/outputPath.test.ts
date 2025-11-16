@@ -1,8 +1,10 @@
-import path from 'path';
 import fs from 'fs';
-import { describe, it, expect } from 'vitest';
-import { fixtures } from './test-utils';
+import path from 'path';
+
+import { describe, expect, it } from 'vitest';
+
 import { openapiToTsJsonSchema } from '../src';
+import { fixtures } from './test-utils';
 
 describe('"outputPath" option', () => {
   it('saves generated schemas to provided path', async () => {

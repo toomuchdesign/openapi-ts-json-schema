@@ -1,17 +1,19 @@
 import path from 'node:path';
+
 // @ts-expect-error no type defs for namify
 import namify from 'namify';
+
 import {
-  filenamify,
-  parseId,
-  isOpenApiParameterObject,
   convertOpenApiParameterToJsonSchema,
+  filenamify,
+  isOpenApiParameterObject,
+  parseId,
 } from '.';
 import type {
-  SchemaMetaDataMap,
-  SchemaMetaData,
   JSONSchema,
   OpenApiObject,
+  SchemaMetaData,
+  SchemaMetaDataMap,
 } from '../types';
 
 /*

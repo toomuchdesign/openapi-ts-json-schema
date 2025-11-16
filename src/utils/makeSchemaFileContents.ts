@@ -1,5 +1,5 @@
 import { makeTsJsonSchema } from '.';
-import type { SchemaMetaDataMap, RefHandling, IdMapper } from '../types';
+import type { IdMapper, RefHandling, SchemaMetaDataMap } from '../types';
 
 /**
  * Generate the file content of all expected JSON Schema files
