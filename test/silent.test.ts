@@ -3,7 +3,7 @@ import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 beforeEach(() => {
   vi.spyOn(console, 'log').mockImplementationOnce(() => undefined);
@@ -16,7 +16,7 @@ afterEach(() => {
 describe('"silent" option', async () => {
   it('console.log user messages', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('silent-option'),
       definitionPathsToGenerateFrom: ['paths'],
       silent: false,

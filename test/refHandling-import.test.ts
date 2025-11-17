@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
 import { formatTypeScript } from '../src/utils';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('refHandling option === "import"', () => {
   describe.each([
@@ -24,7 +24,7 @@ describe('refHandling option === "import"', () => {
   ])('$description', ({ definitionPathsToGenerateFrom }) => {
     it('Generates expected schema', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
+        openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import'),
         definitionPathsToGenerateFrom,
         silent: true,
@@ -123,7 +123,7 @@ describe('refHandling option === "import"', () => {
 
   it('Generates expected $ref schemas (with and without $id)', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       silent: true,
@@ -175,7 +175,10 @@ describe('refHandling option === "import"', () => {
   describe('Alias definitions', () => {
     it('re-exports original definition', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'alias-definition/specs.yaml'),
+        openApiDocument: path.resolve(
+          fixturesPath,
+          'alias-definition/specs.yaml',
+        ),
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,

@@ -19,7 +19,7 @@ import {
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
-  openApiDocument: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
+  openApiDocument: 'path/to/open-api-specs.yaml',
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   plugins: [generateSchemaWith$idPlugin()],
@@ -52,7 +52,7 @@ import {
 } from 'openapi-ts-json-schema';
 
 await openapiToTsJsonSchema({
-  openApiDocument: path.resolve(fixtures, 'path/to/open-api-specs.yaml'),
+  openApiDocument: 'path/to/open-api-specs.yaml',
   outputPath: 'path/to/generated/schemas',
   definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
   plugins: [

@@ -3,12 +3,12 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('Dereferencing', () => {
   it('Dereferences and transforms even from paths not marked for generation', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',
@@ -32,7 +32,7 @@ describe('Dereferencing', () => {
 
   it('Transforms deeply nested schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
       definitionPathsToGenerateFrom: ['paths'],
       refHandling: 'import',

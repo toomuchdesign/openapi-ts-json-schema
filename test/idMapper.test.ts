@@ -3,13 +3,13 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('idMapper option', () => {
   describe('refHandling option === "keep"', () => {
     it('generates expected schema and "$ref" values generated from idMapper option', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
+        openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('idMapper--refHandling-keep'),
         definitionPathsToGenerateFrom: ['components.schemas'],
         silent: true,

@@ -6,12 +6,12 @@ import { describe, expect, it } from 'vitest';
 import { openapiToTsJsonSchema } from '../src';
 import type { SchemaMetaData } from '../src/types';
 import { SCHEMA_ID_SYMBOL } from '../src/utils';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
     const { metaData, outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'ref-property/specs.yaml'),
+      openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('meta-data'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',

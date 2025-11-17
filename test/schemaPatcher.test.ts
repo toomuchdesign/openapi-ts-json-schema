@@ -3,7 +3,7 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('"schemaPatcher" option', () => {
   describe.each([
@@ -13,7 +13,7 @@ describe('"schemaPatcher" option', () => {
   ] as const)('$refHandling', ({ refHandling }) => {
     it('transforms generated JSON schemas', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'complex/specs.yaml'),
+        openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath(`schema-patcher-${refHandling}`),
         definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
         schemaPatcher: ({ schema }) => {
@@ -54,7 +54,7 @@ describe('"schemaPatcher" option', () => {
         await expect(() =>
           openapiToTsJsonSchema({
             openApiDocument: path.resolve(
-              fixtures,
+              fixturesPath,
               'circular-reference/specs.yaml',
             ),
             outputPath: makeTestOutputPath(

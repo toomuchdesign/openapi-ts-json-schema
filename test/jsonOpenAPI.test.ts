@@ -3,12 +3,12 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('JSON OpenAPI input', async () => {
   it('generates expected schemas', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
-      openApiDocument: path.resolve(fixtures, 'json/specs.json'),
+      openApiDocument: path.resolve(fixturesPath, 'json/specs.json'),
       outputPath: makeTestOutputPath('json'),
       definitionPathsToGenerateFrom: ['components.schemas'],
       refHandling: 'import',

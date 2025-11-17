@@ -3,7 +3,7 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('OpenAPI paths parameters', () => {
   describe.each([
@@ -13,7 +13,10 @@ describe('OpenAPI paths parameters', () => {
   ])('refHandling: "$refHandling"', ({ refHandling }) => {
     it('Transforms parameters array into valid JSON schema', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
-        openApiDocument: path.resolve(fixtures, 'paths-parameters/specs.yaml'),
+        openApiDocument: path.resolve(
+          fixturesPath,
+          'paths-parameters/specs.yaml',
+        ),
         outputPath: makeTestOutputPath(`paths-parameters--${refHandling}`),
         definitionPathsToGenerateFrom: ['paths'],
         refHandling,

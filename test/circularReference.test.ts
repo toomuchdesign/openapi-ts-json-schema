@@ -4,7 +4,7 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src';
-import { fixtures, makeTestOutputPath } from './test-utils';
+import { fixturesPath, makeTestOutputPath } from './test-utils';
 
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
@@ -12,7 +12,7 @@ describe('Circular reference', () => {
       it('Replaces 2nd circular reference occurrence with "{}"', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiDocument: path.resolve(
-            fixtures,
+            fixturesPath,
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-inline'),
@@ -111,7 +111,7 @@ describe('Circular reference', () => {
       it('Generates expected schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiDocument: path.resolve(
-            fixtures,
+            fixturesPath,
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-import'),
@@ -161,7 +161,7 @@ describe('Circular reference', () => {
       it('Generates expected schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiDocument: path.resolve(
-            fixtures,
+            fixturesPath,
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-keep'),
