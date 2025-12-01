@@ -24,7 +24,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm ci
+      - run: npm ci --ignore-scripts
+      - run: npm run prepare
 
       - uses: actions/upload-artifact@v5
         if: matrix.node-version == '20.x' && matrix.os == 'ubuntu-latest'
