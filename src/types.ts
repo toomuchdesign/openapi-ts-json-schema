@@ -47,11 +47,13 @@ export type JSONSchemaWithPlaceholders = JSONSchema | string;
 
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
+export type ModuleSystem = 'cjs' | 'esm';
 export type IdMapper = (input: { id: string }) => string;
 
 export type Options = {
   openApiDocument: string;
   definitionPathsToGenerateFrom: string[];
+  moduleSystem?: ModuleSystem;
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   plugins?: ReturnType<Plugin>[];

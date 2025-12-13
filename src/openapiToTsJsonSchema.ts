@@ -86,6 +86,7 @@ export async function openapiToTsJsonSchema(
     outputPath: providedOutputPath,
     silent,
     refHandling = 'import',
+    moduleSystem = 'cjs',
     idMapper = ({ id }) => id,
   } = options;
 
@@ -258,6 +259,7 @@ export async function openapiToTsJsonSchema(
     refHandling,
     schemaMetaDataMap,
     idMapper,
+    moduleSystem,
   });
 
   // Execute plugins onBeforeGeneration method
