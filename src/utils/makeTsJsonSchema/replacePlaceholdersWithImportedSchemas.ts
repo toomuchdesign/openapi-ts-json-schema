@@ -1,5 +1,5 @@
-import { PLACEHOLDER_REGEX, makeRelativeModulePath } from '..';
-import type { ModuleSystem, SchemaMetaDataMap } from '../../types';
+import type { ModuleSystem, SchemaMetaDataMap } from '../../types.js';
+import { PLACEHOLDER_REGEX, makeRelativeModulePath } from '../index.js';
 
 /**
  * Replace id placeholders with imported schemas

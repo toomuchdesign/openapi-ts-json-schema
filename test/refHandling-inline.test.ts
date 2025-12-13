@@ -3,8 +3,8 @@ import path from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import { fixturesPath, makeTestOutputPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('refHandling option === "inline"', () => {
   it('Preserves original "$ref" information as a commented prop', async () => {

@@ -1,4 +1,4 @@
-import type { FromSchemaWithRefs } from '../../../types';
+import type { FromSchemaWithRefs } from '../../../types.js';
 
 export const getSchema = {
   summary: 'Pet get route',

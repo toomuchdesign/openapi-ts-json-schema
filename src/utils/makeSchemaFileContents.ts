@@ -1,10 +1,10 @@
-import { makeTsJsonSchema } from '.';
 import type {
   IdMapper,
   ModuleSystem,
   RefHandling,
   SchemaMetaDataMap,
-} from '../types';
+} from '../types.js';
+import { makeTsJsonSchema } from './index.js';
 
 /**
  * Generate the file content of all expected JSON Schema files

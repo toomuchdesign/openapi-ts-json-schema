@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   SCHEMA_ID_SYMBOL,
   replaceInlinedRefsWithStringPlaceholder,
-} from '../../src/utils';
+} from '../../src/utils/index.js';
 
 describe('replaceInlinedRefsWithStringPlaceholder', () => {
   describe('nested object market with SCHEMA_ID_SYMBOL', () => {

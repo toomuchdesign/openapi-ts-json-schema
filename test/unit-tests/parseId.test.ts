@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseId } from '../../src/utils';
+import { parseId } from '../../src/utils/index.js';
 
 describe('parseId', () => {
   describe('Valid id', () => {

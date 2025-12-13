@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { stringify } from '../../src/utils/makeTsJsonSchema/stringify';
+import { stringify } from '../../src/utils/makeTsJsonSchema/stringify.js';
 
 describe('stringify', () => {
   it('replaces first nested circular occurrency with "{}"', () => {

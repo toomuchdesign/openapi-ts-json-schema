@@ -3,8 +3,8 @@ import path from 'path';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import { fixturesPath, makeTestOutputPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('openapiToTsJsonSchema', () => {
   it('Generates expected JSON schemas', async () => {

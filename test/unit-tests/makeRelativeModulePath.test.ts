@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { makeRelativeModulePath } from '../../src/utils';
+import { makeRelativeModulePath } from '../../src/utils/index.js';
 
 const absoluteDirectoryName = '/project-root/tests';
 
