@@ -13,7 +13,7 @@ import type { ModuleSystem } from '../types.js';
 export function makeRelativeModulePath({
   fromDirectory,
   to,
-  moduleSystem = 'cjs',
+  moduleSystem = 'esm',
 }: {
   fromDirectory: string;
   to: string;

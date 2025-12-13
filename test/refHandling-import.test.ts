@@ -88,8 +88,8 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsSchemasFebruary from "./../components/schemas/February";
-        import componentsSchemasJanuary from "./../components/schemas/January";
+        import componentsSchemasFebruary from "./../components/schemas/February.js";
+        import componentsSchemasJanuary from "./../components/schemas/January.js";
 
         const schema = {
           get: {
@@ -156,7 +156,7 @@ describe('refHandling option === "import"', () => {
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import componentsSchemasAnswer from "./Answer.js";
 
       const schema = {
         description: "January description",
@@ -205,7 +205,7 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedAnswerAliasDefinitionSchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import componentsSchemasAnswer from "./Answer.js";
 
       const schema = componentsSchemasAnswer;
       export default schema;`);
