@@ -1,7 +1,7 @@
 import * as openApiDocumentToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { describe, expect, it, vi } from 'vitest';
 
-import { convertOpenApiDocumentToJsonSchema } from '../../src/utils/index.js';
+import { convertOpenApiDocumentDefinitionsToJsonSchema } from '../../src/utils/index.js';
 
 const openApiDefinition = {
   type: 'string' as const,
@@ -14,10 +14,10 @@ const jsonSchemaDefinition = {
   enum: ['yes', 'no', null],
 };
 
-describe('convertOpenApiDocumentToJsonSchema', () => {
+describe('convertOpenApiDocumentDefinitionsToJsonSchema', () => {
   describe('Nested definitions', () => {
     it('convert nested definitions', () => {
-      const actual = convertOpenApiDocumentToJsonSchema({
+      const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
         components: { schemas: { bar: openApiDefinition } },
       });
       const expected = {
@@ -29,7 +29,7 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
 
   describe('array of definitions', () => {
     it('convert nested definitions', () => {
-      const actual = convertOpenApiDocumentToJsonSchema({
+      const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
         components: {
           schemas: { bar: { oneOf: [openApiDefinition, openApiDefinition] } },
         },
@@ -53,7 +53,8 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
             type: ['string'],
           },
         };
-        const actual = convertOpenApiDocumentToJsonSchema(definition);
+        const actual =
+          convertOpenApiDocumentDefinitionsToJsonSchema(definition);
         expect(actual).toEqual(definition);
       });
     });
@@ -64,7 +65,8 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
           in: 'path',
           name: 'userId',
         };
-        const actual = convertOpenApiDocumentToJsonSchema(definition);
+        const actual =
+          convertOpenApiDocumentDefinitionsToJsonSchema(definition);
         expect(actual).toEqual(definition);
       });
     });
@@ -83,7 +85,8 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
             },
           ],
         };
-        const actual = convertOpenApiDocumentToJsonSchema(definition);
+        const actual =
+          convertOpenApiDocumentDefinitionsToJsonSchema(definition);
         expect(actual).toEqual(definition);
       });
     });
@@ -94,14 +97,15 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
           type: 'http',
           scheme: 'bearer',
         };
-        const actual = convertOpenApiDocumentToJsonSchema(definition);
+        const actual =
+          convertOpenApiDocumentDefinitionsToJsonSchema(definition);
         expect(actual).toEqual(definition);
       });
     });
 
     describe('OpenAPI definition as object prop (entities converted multiple times)', () => {
       it('convert nested definitions', () => {
-        const actual = convertOpenApiDocumentToJsonSchema({
+        const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
           components: {
             schemas: {
               schemaName: {
@@ -147,7 +151,7 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
 
     describe('Object with "type" prop (#211)', () => {
       it('convert object definitions', () => {
-        const actual = convertOpenApiDocumentToJsonSchema({
+        const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
           components: {
             schemas: {
               foo: {
@@ -188,7 +192,7 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
         });
 
         expect(() => {
-          convertOpenApiDocumentToJsonSchema({
+          convertOpenApiDocumentDefinitionsToJsonSchema({
             components: {
               schemas: {
                 foo: {

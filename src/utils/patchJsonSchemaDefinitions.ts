@@ -1,14 +1,14 @@
-import traverse from 'json-schema-traverse';
+import traverse, { type SchemaObject } from 'json-schema-traverse';
 
-import type { JSONSchema, SchemaPatcher } from '../../types.js';
+import type { SchemaPatcher } from '../types.js';
 
 /**
  * Patch generated schemas with a user-provided patch function
  */
-export function patchJsonSchema(
-  schema: JSONSchema,
+export function patchJsonSchemaDefinitions<Schema extends SchemaObject>(
+  schema: Schema,
   schemaPatcher?: SchemaPatcher,
-): JSONSchema {
+): Schema {
   if (schema && schemaPatcher) {
     traverse(schema, {
       allKeys: true,

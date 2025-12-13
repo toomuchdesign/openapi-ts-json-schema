@@ -17,14 +17,14 @@ import {
   SCHEMA_ID_SYMBOL,
   addSchemaToMetaData,
   clearFolder,
-  convertOpenApiDocumentToJsonSchema,
+  convertOpenApiDocumentDefinitionsToJsonSchema,
   convertOpenApiPathsParameters,
   formatTypeScript,
   makeId,
   makeRelativeImportPath,
   makeSchemaFileContents,
   parseSingleDefinitionPath,
-  patchJsonSchema,
+  patchJsonSchemaDefinitions,
   refToId,
   saveFile,
   saveSchemaFiles,
@@ -132,16 +132,18 @@ export async function openapiToTsJsonSchema(
   const jsonSchemaParser = new $RefParser();
 
   // Resolve and inline external $ref definitions
-  // @ts-expect-error @apidevtools/json-schema-ref-parser types supports JSON schemas only
+  // @ts-expect-error @apidevtools/json-schema-ref-parser is meant for JSON schemas but here we use it with OAS documents
   const bundledOpenApiDocument: OpenApiDocument =
     await openApiParser.bundle(openApiDocumentPath);
 
   // Convert oas definitions to JSON schema (excluding paths and parameter objects)
-  let initialJsonSchema = convertOpenApiDocumentToJsonSchema(
-    bundledOpenApiDocument,
-  );
+  const openApiDocumentWithJsonSchemaDefinitions =
+    convertOpenApiDocumentDefinitionsToJsonSchema(bundledOpenApiDocument);
 
-  const patchedJsonSchema = patchJsonSchema(initialJsonSchema, schemaPatcher);
+  const patchedOpenApiDocument = patchJsonSchemaDefinitions(
+    openApiDocumentWithJsonSchemaDefinitions,
+    schemaPatcher,
+  );
 
   const inlinedRefs: Map<
     string,
@@ -149,9 +151,9 @@ export async function openapiToTsJsonSchema(
   > = new Map();
 
   // Inline and collect internal $ref definitions
-  // @ts-expect-error @apidevtools/json-schema-ref-parser types supports JSON schemas only
-  const dereferencedJsonSchema: OpenApiDocument =
-    await jsonSchemaParser.dereference(patchedJsonSchema, {
+  // @ts-expect-error @apidevtools/json-schema-ref-parser is meant for JSON schemas but here we use it with OAS documents
+  const dereferencedOpenApiDocument: OpenApiDocument =
+    await jsonSchemaParser.dereference(patchedOpenApiDocument, {
       dereference: {
         // @ts-expect-error onDereference seems not to be properly typed
         onDereference: (ref, inlinedSchema) => {
@@ -193,7 +195,7 @@ export async function openapiToTsJsonSchema(
       },
     });
 
-  const jsonSchema = convertOpenApiPathsParameters(dereferencedJsonSchema);
+  const jsonSchema = convertOpenApiPathsParameters(dereferencedOpenApiDocument);
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**
