@@ -9,6 +9,7 @@ import type {
   OpenApiDocument,
   OpenApiObject,
   Options,
+  OptionsWithDefaults,
   ReturnPayload,
   SchemaMetaDataMap,
 } from './types.js';
@@ -70,13 +71,21 @@ import {
 export async function openapiToTsJsonSchema(
   options: Options,
 ): Promise<ReturnPayload> {
-  const { plugins = [] } = options;
+  const optionsWithDefaults: OptionsWithDefaults = {
+    refHandling: 'import',
+    moduleSystem: 'esm',
+    idMapper: ({ id }) => id,
+    plugins: [],
+    ...options,
+  };
+
+  const { plugins } = optionsWithDefaults;
 
   // Execute plugins onInit method
   for (const { onInit } of plugins) {
     if (onInit) {
       await onInit({
-        options,
+        options: optionsWithDefaults,
       });
     }
   }
@@ -87,10 +96,10 @@ export async function openapiToTsJsonSchema(
     schemaPatcher,
     outputPath: providedOutputPath,
     silent,
-    refHandling = 'import',
-    moduleSystem = 'esm',
-    idMapper = ({ id }) => id,
-  } = options;
+    refHandling,
+    moduleSystem,
+    idMapper,
+  } = optionsWithDefaults;
 
   if (definitionPathsToGenerateFrom.length === 0 && !silent) {
     console.log(
@@ -286,7 +295,7 @@ export async function openapiToTsJsonSchema(
     if (onBeforeGeneration) {
       await onBeforeGeneration({
         ...returnPayload,
-        options,
+        options: optionsWithDefaults,
         utils: {
           makeRelativeImportPath,
           formatTypeScript,
@@ -309,7 +318,7 @@ export async function openapiToTsJsonSchema(
     if (onBeforeSaveFile) {
       await onBeforeSaveFile({
         ...returnPayload,
-        options,
+        options: optionsWithDefaults,
         utils: {
           makeRelativeImportPath,
           formatTypeScript,

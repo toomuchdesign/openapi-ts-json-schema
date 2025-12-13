@@ -21,7 +21,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
     options.idMapper = ({ id }) => id;
 
     // Register Generate schema with $id plugin
-    options.plugins?.push(generateSchemaWith$idPlugin());
+    options.plugins.push(generateSchemaWith$idPlugin());
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations

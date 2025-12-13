@@ -62,6 +62,16 @@ export type Options = {
   idMapper?: IdMapper;
 };
 
+export type OptionsWithDefaults = Omit<
+  Options,
+  'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'
+> & {
+  refHandling: NonNullable<Options['refHandling']>;
+  moduleSystem: NonNullable<Options['moduleSystem']>;
+  idMapper: NonNullable<Options['idMapper']>;
+  plugins: NonNullable<Options['plugins']>;
+};
+
 /**
  * Meta data for representing a specific openApi definition
  * @property `id` - Internal unique schema identifier. Eg `"/components/schemas/MySchema"`
@@ -103,11 +113,11 @@ export type ReturnPayload = {
 };
 
 type OnInitInput = {
-  options: Options;
+  options: OptionsWithDefaults;
 };
 
 type OnBeforeGenerationInput = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
     makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
@@ -116,7 +126,7 @@ type OnBeforeGenerationInput = ReturnPayload & {
 };
 
 type OnBeforeFileSave = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
     makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
