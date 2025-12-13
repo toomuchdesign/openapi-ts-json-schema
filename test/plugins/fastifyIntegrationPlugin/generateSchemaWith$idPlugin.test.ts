@@ -6,9 +6,9 @@ import { describe, expect, it } from 'vitest';
 import {
   generateSchemaWith$idPlugin,
   openapiToTsJsonSchema,
-} from '../../../src';
-import { formatTypeScript } from '../../../src/utils';
-import { fixturesPath, makeTestOutputPath } from '../../test-utils';
+} from '../../../src/index.js';
+import { formatTypeScript } from '../../../src/utils/index.js';
+import { fixturesPath, makeTestOutputPath } from '../../test-utils/index.js';
 
 describe('generateSchemaWith$idPlugin plugin', () => {
   describe('refHandling option === "inline"', () => {

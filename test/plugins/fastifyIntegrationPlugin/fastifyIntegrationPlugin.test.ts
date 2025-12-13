@@ -3,9 +3,12 @@ import path from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import { fastifyIntegrationPlugin, openapiToTsJsonSchema } from '../../../src';
-import { formatTypeScript } from '../../../src/utils';
-import { fixturesPath, makeTestOutputPath } from '../../test-utils';
+import {
+  fastifyIntegrationPlugin,
+  openapiToTsJsonSchema,
+} from '../../../src/index.js';
+import { formatTypeScript } from '../../../src/utils/index.js';
+import { fixturesPath, makeTestOutputPath } from '../../test-utils/index.js';
 
 describe('fastifyIntegration plugin', () => {
   it('generates expected file', async () => {

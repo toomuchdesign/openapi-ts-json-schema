@@ -1,4 +1,4 @@
-import { PLACEHOLDER_REGEX } from '..';
+import { PLACEHOLDER_REGEX } from '../index.js';
 
 /**
  * Replace id placeholders with their relevant $ref object

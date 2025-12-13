@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { convertOpenApiParametersToJsonSchema } from '../../src/utils/convertOpenApiPathsParameters/convertOpenApiParametersToJsonSchema';
+import { convertOpenApiParametersToJsonSchema } from '../../src/utils/convertOpenApiPathsParameters/convertOpenApiParametersToJsonSchema.js';
 
 describe('convertOpenApiParametersToJsonSchema', () => {
   describe('multiple parameters with same "in" value', () => {

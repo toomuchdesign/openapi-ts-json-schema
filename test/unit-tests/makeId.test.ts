@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { makeId } from '../../src/utils';
+import { makeId } from '../../src/utils/index.js';
 
 describe('makeId', () => {
   it.each([

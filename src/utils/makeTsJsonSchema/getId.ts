@@ -1,4 +1,4 @@
-import { SCHEMA_ID_SYMBOL, isObject } from '..';
+import { SCHEMA_ID_SYMBOL, isObject } from '../index.js';
 
 /**
  * Retrieve SCHEMA_ID_SYMBOL prop value

@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import type { ModuleSystem } from '../types';
+import type { ModuleSystem } from '../types.js';
 
 /**
  * Evaluate the relative import path from a directory to a module

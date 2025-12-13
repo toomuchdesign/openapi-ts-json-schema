@@ -1,6 +1,6 @@
 import traverse from 'json-schema-traverse';
 
-import type { JSONSchema, SchemaPatcher } from '../../types';
+import type { JSONSchema, SchemaPatcher } from '../../types.js';
 
 /**
  * Patch generated schemas with a user-provided patch function

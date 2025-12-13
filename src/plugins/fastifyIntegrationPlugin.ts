@@ -1,5 +1,5 @@
-import type { Plugin } from '../types';
-import generateSchemaWith$idPlugin from './generateSchemaWith$idPlugin';
+import type { Plugin } from '../types.js';
+import generateSchemaWith$idPlugin from './generateSchemaWith$idPlugin.js';
 
 const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';

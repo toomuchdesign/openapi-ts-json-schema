@@ -1,27 +1,28 @@
-export { patchJsonSchema } from './makeTsJsonSchema/patchJsonSchema';
-export { makeTsJsonSchema } from './makeTsJsonSchema';
-export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters';
-export { convertOpenApiDocumentToJsonSchema } from './convertOpenApiDocumentToJsonSchema';
-export { convertOpenApiParameterToJsonSchema } from './convertOpenApiParameterToJsonSchema';
-export { makeSchemaFileContents } from './makeSchemaFileContents';
-export { parseId } from './parseId';
-export { refToId } from './refToId';
-export { makeId } from './makeId';
+export { patchJsonSchema } from './makeTsJsonSchema/patchJsonSchema.js';
+export { makeTsJsonSchema } from './makeTsJsonSchema/index.js';
+export { convertOpenApiPathsParameters } from './convertOpenApiPathsParameters/index.js';
+export { convertOpenApiDocumentToJsonSchema } from './convertOpenApiDocumentToJsonSchema.js';
+export { convertOpenApiParameterToJsonSchema } from './convertOpenApiParameterToJsonSchema.js';
+export { makeSchemaFileContents } from './makeSchemaFileContents.js';
+export { parseId } from './parseId.js';
+export { refToId } from './refToId.js';
+export { makeId } from './makeId.js';
 export {
   SCHEMA_ID_SYMBOL,
   PLACEHOLDER_REGEX,
   idToPlaceholder,
-} from './refReplacementUtils';
-export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/replaceInlinedRefsWithStringPlaceholder';
-export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas';
-export { addSchemaToMetaData } from './addSchemaToMetaData';
-export { isObject } from './isObject';
-export { filenamify } from './filenamify';
-export { isOpenApiParameterObject } from './isOpenApiParameterObject';
-export { parseSingleDefinitionPath } from './parseSingleDefinitionPath';
+} from './refReplacementUtils.js';
 
-export { clearFolder } from './clearFolder';
-export { makeRelativeModulePath } from './makeRelativeModulePath';
-export { formatTypeScript } from './formatTypeScript';
-export { saveFile } from './saveFile';
-export { saveSchemaFiles } from './saveSchemaFiles';
+export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/replaceInlinedRefsWithStringPlaceholder.js';
+export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas.js';
+export { addSchemaToMetaData } from './addSchemaToMetaData.js';
+export { isObject } from './isObject.js';
+export { filenamify } from './filenamify.js';
+export { isOpenApiParameterObject } from './isOpenApiParameterObject.js';
+export { parseSingleDefinitionPath } from './parseSingleDefinitionPath.js';
+
+export { clearFolder } from './clearFolder.js';
+export { makeRelativeModulePath } from './makeRelativeModulePath.js';
+export { formatTypeScript } from './formatTypeScript.js';
+export { saveFile } from './saveFile.js';
+export { saveSchemaFiles } from './saveSchemaFiles.js';

@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import path from 'node:path';
 
-import $RefParser from '@apidevtools/json-schema-ref-parser';
+import { $RefParser } from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 
 import type {
@@ -11,7 +11,7 @@ import type {
   Options,
   ReturnPayload,
   SchemaMetaDataMap,
-} from './types';
+} from './types.js';
 import {
   SCHEMA_ID_SYMBOL,
   addSchemaToMetaData,
@@ -27,7 +27,7 @@ import {
   refToId,
   saveFile,
   saveSchemaFiles,
-} from './utils';
+} from './utils/index.js';
 
 /**
  * @package openapi‑ts-json-schema

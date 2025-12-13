@@ -1,11 +1,14 @@
-import path from 'path';
+import { join } from 'desm';
 
-import { fastifyIntegrationPlugin, openapiToTsJsonSchema } from '../../../src';
+import {
+  fastifyIntegrationPlugin,
+  openapiToTsJsonSchema,
+} from '../../../src/index.js';
 
 async function generate() {
   await openapiToTsJsonSchema({
-    openApiDocument: path.resolve(
-      __dirname,
+    openApiDocument: join(
+      import.meta.url,
       '../definitions/petstore/open-api-definition.yaml',
     ),
     definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
@@ -14,6 +17,7 @@ async function generate() {
         schemaFilter: ({ id }) => id.startsWith('/components/schemas'),
       }),
     ],
+    moduleSystem: 'esm',
   });
 }
 

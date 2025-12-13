@@ -18,7 +18,7 @@ import type {
   formatTypeScript,
   makeRelativeModulePath,
   saveFile,
-} from './utils';
+} from './utils/index.js';
 
 export type OpenApiDocument = Omit<
   OpenAPIObject_v3_0 | OpenAPIObject_v3_1,

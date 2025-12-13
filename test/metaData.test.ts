@@ -3,10 +3,10 @@ import path from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import type { SchemaMetaData } from '../src/types';
-import { SCHEMA_ID_SYMBOL } from '../src/utils';
-import { fixturesPath, makeTestOutputPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import type { SchemaMetaData } from '../src/types.js';
+import { SCHEMA_ID_SYMBOL } from '../src/utils/index.js';
+import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('Returned "metaData"', async () => {
   it('returns expected data', async () => {
