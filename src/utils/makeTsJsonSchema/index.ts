@@ -1,6 +1,7 @@
 import { formatTypeScript } from '../';
 import type {
   IdMapper,
+  ModuleSystem,
   RefHandling,
   SchemaMetaData,
   SchemaMetaDataMap,
@@ -15,11 +16,13 @@ export async function makeTsJsonSchema({
   schemaMetaDataMap,
   refHandling,
   idMapper,
+  moduleSystem,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   idMapper: IdMapper;
+  moduleSystem: ModuleSystem;
 }): Promise<string> {
   const { originalSchema, absoluteDirName, $id } = metaData;
 
@@ -57,6 +60,7 @@ export async function makeTsJsonSchema({
       schemaAsText: tsSchema,
       absoluteDirName,
       schemaMetaDataMap,
+      moduleSystem,
     });
   }
 
