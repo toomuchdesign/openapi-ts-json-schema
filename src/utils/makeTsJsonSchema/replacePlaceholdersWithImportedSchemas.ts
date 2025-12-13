@@ -1,5 +1,5 @@
-import { PLACEHOLDER_REGEX, makeRelativeModulePath } from '..';
-import type { ModuleSystem, SchemaMetaDataMap } from '../../types';
+import type { ModuleSystem, SchemaMetaDataMap } from '../../types.js';
+import { PLACEHOLDER_REGEX, makeRelativeImportPath } from '../index.js';
 
 /**
  * Replace id placeholders with imported schemas
@@ -29,9 +29,9 @@ export function replacePlaceholdersWithImportedSchemas({
     }
 
     // Evaluate imported schema using CJS or ESM import
-    const importedSchemaPath = makeRelativeModulePath({
+    const importedSchemaPath = makeRelativeImportPath({
       fromDirectory: absoluteDirName,
-      to: importedSchema.absoluteImportPath,
+      toModule: importedSchema.absoluteImportPath,
       moduleSystem,
     });
 

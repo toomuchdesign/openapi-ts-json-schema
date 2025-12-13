@@ -1,5 +1,5 @@
-import type { JSONSchema } from '../../types';
-import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParametersToJsonSchema';
+import type { JSONSchema } from '../../types.js';
+import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParametersToJsonSchema.js';
 
 /**
  * Convert parameter arrays found in:

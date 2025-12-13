@@ -3,9 +3,9 @@ import path from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import { formatTypeScript } from '../src/utils';
-import { fixturesPath, makeTestOutputPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import { formatTypeScript } from '../src/utils/index.js';
+import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('refHandling option === "import"', () => {
   describe.each([
@@ -88,8 +88,8 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedPath1File = await formatTypeScript(`
-        import componentsSchemasFebruary from "./../components/schemas/February";
-        import componentsSchemasJanuary from "./../components/schemas/January";
+        import componentsSchemasFebruary from "./../components/schemas/February.js";
+        import componentsSchemasJanuary from "./../components/schemas/January.js";
 
         const schema = {
           get: {
@@ -156,7 +156,7 @@ describe('refHandling option === "import"', () => {
     );
 
     const expectedJanuarySchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import componentsSchemasAnswer from "./Answer.js";
 
       const schema = {
         description: "January description",
@@ -205,7 +205,7 @@ describe('refHandling option === "import"', () => {
       );
 
       const expectedAnswerAliasDefinitionSchemaFile = await formatTypeScript(`
-      import componentsSchemasAnswer from "./Answer";
+      import componentsSchemasAnswer from "./Answer.js";
 
       const schema = componentsSchemasAnswer;
       export default schema;`);

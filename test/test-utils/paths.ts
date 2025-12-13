@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'desm';
 
-export const fixturesPath = path.resolve(__dirname, '../fixtures');
-export const testTempPath = path.resolve(__dirname, '../test-temp');
+export const fixturesPath = join(import.meta.url, '../fixtures');
+export const testTempPath = join(import.meta.url, '../test-temp');

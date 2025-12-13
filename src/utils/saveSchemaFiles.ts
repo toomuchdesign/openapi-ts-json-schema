@@ -1,5 +1,5 @@
-import { saveFile } from '.';
-import type { SchemaMetaDataMap } from '../types';
+import type { SchemaMetaDataMap } from '../types.js';
+import { saveFile } from './index.js';
 
 export async function saveSchemaFiles({
   schemaMetaDataMap,

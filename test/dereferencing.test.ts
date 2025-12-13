@@ -2,8 +2,8 @@ import path from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import { fixturesPath, makeTestOutputPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('Dereferencing', () => {
   it('Dereferences and transforms even from paths not marked for generation', async () => {

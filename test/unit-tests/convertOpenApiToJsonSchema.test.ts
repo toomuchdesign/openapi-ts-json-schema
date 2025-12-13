@@ -1,7 +1,7 @@
 import * as openApiDocumentToJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { describe, expect, it, vi } from 'vitest';
 
-import { convertOpenApiDocumentToJsonSchema } from '../../src/utils';
+import { convertOpenApiDocumentToJsonSchema } from '../../src/utils/index.js';
 
 const openApiDefinition = {
   type: 'string' as const,

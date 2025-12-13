@@ -16,9 +16,9 @@ import type {
 
 import type {
   formatTypeScript,
-  makeRelativeModulePath,
+  makeRelativeImportPath,
   saveFile,
-} from './utils';
+} from './utils/index.js';
 
 export type OpenApiDocument = Omit<
   OpenAPIObject_v3_0 | OpenAPIObject_v3_1,
@@ -62,6 +62,16 @@ export type Options = {
   idMapper?: IdMapper;
 };
 
+export type OptionsWithDefaults = Omit<
+  Options,
+  'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'
+> & {
+  refHandling: NonNullable<Options['refHandling']>;
+  moduleSystem: NonNullable<Options['moduleSystem']>;
+  idMapper: NonNullable<Options['idMapper']>;
+  plugins: NonNullable<Options['plugins']>;
+};
+
 /**
  * Meta data for representing a specific openApi definition
  * @property `id` - Internal unique schema identifier. Eg `"/components/schemas/MySchema"`
@@ -103,22 +113,22 @@ export type ReturnPayload = {
 };
 
 type OnInitInput = {
-  options: Options;
+  options: OptionsWithDefaults;
 };
 
 type OnBeforeGenerationInput = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };
 };
 
 type OnBeforeFileSave = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };

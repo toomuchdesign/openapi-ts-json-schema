@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { makeServer } from '../../../examples/fastify-integration-plugin/server';
+import { makeServer } from '../../../examples/fastify-integration-plugin/server.js';
 
 /**
  * This test runs against the example setup in

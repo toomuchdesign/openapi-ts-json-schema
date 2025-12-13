@@ -1,6 +1,6 @@
 import { fromParameter } from '@openapi-contrib/openapi-schema-to-json-schema';
 
-import type { JSONSchema, OpenApiParameter } from '../types';
+import type { JSONSchema, OpenApiParameter } from '../types.js';
 
 /**
  * Convert one single OpenAPI parameter to JSON schema

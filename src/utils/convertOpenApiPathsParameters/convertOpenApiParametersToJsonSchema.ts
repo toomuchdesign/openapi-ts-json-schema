@@ -1,9 +1,9 @@
 import {
-  OpenAPIParametersAsJSONSchema,
+  type OpenAPIParametersAsJSONSchema,
   convertParametersToJSONSchema,
 } from 'openapi-jsonschema-parameters';
 
-import type { OpenApiParameter } from '../../types';
+import type { OpenApiParameter } from '../../types.js';
 
 /**
  * Convert OpenAPI parameter arrays

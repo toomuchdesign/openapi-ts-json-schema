@@ -1,5 +1,5 @@
-import type { Plugin } from '../types';
-import generateSchemaWith$idPlugin from './generateSchemaWith$idPlugin';
+import type { Plugin } from '../types.js';
+import generateSchemaWith$idPlugin from './generateSchemaWith$idPlugin.js';
 
 const OUTPUT_FILE_NAME = 'fastify-integration.ts';
 const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';
@@ -21,7 +21,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
     options.idMapper = ({ id }) => id;
 
     // Register Generate schema with $id plugin
-    options.plugins?.push(generateSchemaWith$idPlugin());
+    options.plugins.push(generateSchemaWith$idPlugin());
   },
   onBeforeGeneration: async ({ outputPath, metaData, options, utils }) => {
     // Derive the schema data necessary to generate the declarations
@@ -30,9 +30,9 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
       .filter((schema) => schema.shouldBeGenerated)
       .map(({ absoluteImportPath, uniqueName, id, isRef }) => {
         return {
-          importPath: utils.makeRelativeModulePath({
+          importPath: utils.makeRelativeImportPath({
             fromDirectory: outputPath,
-            to: absoluteImportPath,
+            toModule: absoluteImportPath,
             moduleSystem: options.moduleSystem,
           }),
           uniqueName,
