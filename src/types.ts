@@ -16,7 +16,7 @@ import type {
 
 import type {
   formatTypeScript,
-  makeRelativeModulePath,
+  makeRelativeImportPath,
   saveFile,
 } from './utils/index.js';
 
@@ -109,7 +109,7 @@ type OnInitInput = {
 type OnBeforeGenerationInput = ReturnPayload & {
   options: Options;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };
@@ -118,7 +118,7 @@ type OnBeforeGenerationInput = ReturnPayload & {
 type OnBeforeFileSave = ReturnPayload & {
   options: Options;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };

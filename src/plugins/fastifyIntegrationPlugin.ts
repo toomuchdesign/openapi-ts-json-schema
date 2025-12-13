@@ -30,9 +30,9 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
       .filter((schema) => schema.shouldBeGenerated)
       .map(({ absoluteImportPath, uniqueName, id, isRef }) => {
         return {
-          importPath: utils.makeRelativeModulePath({
+          importPath: utils.makeRelativeImportPath({
             fromDirectory: outputPath,
-            to: absoluteImportPath,
+            toModule: absoluteImportPath,
             moduleSystem: options.moduleSystem,
           }),
           uniqueName,

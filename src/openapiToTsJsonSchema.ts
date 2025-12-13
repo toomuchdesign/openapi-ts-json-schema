@@ -20,7 +20,7 @@ import {
   convertOpenApiPathsParameters,
   formatTypeScript,
   makeId,
-  makeRelativeModulePath,
+  makeRelativeImportPath,
   makeSchemaFileContents,
   patchJsonSchema,
   refToId,
@@ -250,7 +250,11 @@ export async function openapiToTsJsonSchema(
       await onBeforeGeneration({
         ...returnPayload,
         options,
-        utils: { makeRelativeModulePath, formatTypeScript, saveFile },
+        utils: {
+          makeRelativeImportPath,
+          formatTypeScript,
+          saveFile,
+        },
       });
     }
   }
@@ -269,7 +273,11 @@ export async function openapiToTsJsonSchema(
       await onBeforeSaveFile({
         ...returnPayload,
         options,
-        utils: { makeRelativeModulePath, formatTypeScript, saveFile },
+        utils: {
+          makeRelativeImportPath,
+          formatTypeScript,
+          saveFile,
+        },
       });
     }
   }

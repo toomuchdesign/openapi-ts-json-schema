@@ -20,7 +20,7 @@ export { filenamify } from './filenamify.js';
 export { isOpenApiParameterObject } from './isOpenApiParameterObject.js';
 
 export { clearFolder } from './clearFolder.js';
-export { makeRelativeModulePath } from './makeRelativeModulePath.js';
+export { makeRelativeImportPath } from './makeRelativeImportPath.js';
 export { formatTypeScript } from './formatTypeScript.js';
 export { saveFile } from './saveFile.js';
 export { saveSchemaFiles } from './saveSchemaFiles.js';
