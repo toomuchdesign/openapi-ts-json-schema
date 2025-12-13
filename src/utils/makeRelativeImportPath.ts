@@ -5,25 +5,22 @@ import type { ModuleSystem } from '../types.js';
 /**
  * Evaluate the relative import path from a directory to a module
  * Accepts posix and win32 absolute urls and returns a relative import path ("./foo/bar")
- *
- * @TODO rename as makeRelativeImportPath
- * @TODO rename `to` as `toModule`
- * @TODO make `moduleSystem` required or pre-configured in InputPlugin
  */
-export function makeRelativeModulePath({
+export function makeRelativeImportPath({
   fromDirectory,
-  to,
+  toModule,
   moduleSystem = 'esm',
 }: {
   fromDirectory: string;
-  to: string;
+  toModule: string;
   moduleSystem?: ModuleSystem;
 }): string {
-  if (moduleSystem === 'esm' && !to.endsWith('.js')) {
-    to += '.js';
+  if (moduleSystem === 'esm' && !toModule.endsWith('.js')) {
+    toModule += '.js';
   }
 
   return (
-    './' + path.relative(fromDirectory, to).replaceAll(path.sep, path.posix.sep)
+    './' +
+    path.relative(fromDirectory, toModule).replaceAll(path.sep, path.posix.sep)
   );
 }
