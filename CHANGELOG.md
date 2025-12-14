@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 1.2.0
+
+### Minor Changes
+
+- [#486](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/486) [`0a9d3b9`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/0a9d3b9140ee91ebd59ed612b44c7630059bc893) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Add `moduleSystem` option to handle CJS and ESM import syntax
+
 ## 1.1.0
 
 ### Minor Changes
