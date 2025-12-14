@@ -13,7 +13,7 @@ import type {
   ReferenceObject as ReferenceObject_v3_1,
   SchemaObject as SchemaObject_v3_1,
 } from 'openapi3-ts/oas31';
-import type { OmitIndexSignature } from 'type-fest';
+import type { OmitIndexSignature, SetRequired } from 'type-fest';
 
 import type {
   formatTypeScript,
@@ -64,15 +64,10 @@ export type Options = {
   idMapper?: IdMapper;
 };
 
-export type OptionsWithDefaults = Omit<
+export type OptionsWithDefaults = SetRequired<
   Options,
   'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'
-> & {
-  refHandling: NonNullable<Options['refHandling']>;
-  moduleSystem: NonNullable<Options['moduleSystem']>;
-  idMapper: NonNullable<Options['idMapper']>;
-  plugins: NonNullable<Options['plugins']>;
-};
+>;
 
 /**
  * Meta data for representing a specific openApi definition
