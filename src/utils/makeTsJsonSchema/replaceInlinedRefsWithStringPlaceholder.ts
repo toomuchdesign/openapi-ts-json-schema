@@ -1,6 +1,5 @@
 import mapObject from 'map-obj';
 
-import type { JSONSchema, JSONSchemaWithPlaceholders } from '../../types.js';
 import { idToPlaceholder } from '../index.js';
 import { getId } from './getId.js';
 
@@ -20,13 +19,13 @@ function replaceInlinedSchemaWithPlaceholder<Node extends unknown>(
 }
 
 /**
- * Iterate a JSON schema to replace inlined ref schema objects
+ * Iterate any object (in reality a JSON schema) to replace inlined ref schema objects
  * (marked with a SCHEMA_ID_SYMBOL property holding the original $ref value)
  * with a string placeholder with a reference to their internal id ("_OTJS-START_/id/value_OTJS-END_")
  */
 export function replaceInlinedRefsWithStringPlaceholder(
-  schema: JSONSchema,
-): JSONSchemaWithPlaceholders {
+  schema: Record<string | symbol, unknown>,
+): string | Record<string | symbol, unknown> {
   if (getId(schema)) {
     return replaceInlinedSchemaWithPlaceholder(schema);
   }

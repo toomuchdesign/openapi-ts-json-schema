@@ -35,7 +35,6 @@ describe('replaceInlinedRefsWithStringPlaceholder', () => {
 
   describe('root object market with SCHEMA_ID_SYMBOL (alias definitions)', () => {
     it('replaces object with expected string placeholder', () => {
-      // @ts-expect-error SCHEMA_ID_SYMBOL is not a valid JSON schema prop
       const actual = replaceInlinedRefsWithStringPlaceholder({
         type: 'object',
         [SCHEMA_ID_SYMBOL]: '/ref/in/root/object',

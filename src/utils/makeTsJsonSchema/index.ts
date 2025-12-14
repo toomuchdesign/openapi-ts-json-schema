@@ -24,7 +24,7 @@ export async function makeTsJsonSchema({
   idMapper: IdMapper;
   moduleSystem: ModuleSystem;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName, $id } = metaData;
+  const { originalSchema, absoluteDirName } = metaData;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
