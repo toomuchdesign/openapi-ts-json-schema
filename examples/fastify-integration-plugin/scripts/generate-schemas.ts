@@ -17,7 +17,6 @@ async function generate() {
         schemaFilter: ({ id }) => id.startsWith('/components/schemas'),
       }),
     ],
-    moduleSystem: 'esm',
   });
 }
 
