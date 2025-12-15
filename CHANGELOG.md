@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 1.3.0
+
+### Minor Changes
+
+- [#488](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/488) [`b751baf`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/b751baf57d2effa2d16d1f3553909c7a8be59825) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Allow generating specific `paths` entries via `definitionPathsToGenerateFrom` option
+
 ## 1.2.0
 
 ### Minor Changes
