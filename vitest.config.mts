@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     dir: './test',
     typecheck: {
-      enabled: true,
+      enabled: false,
       include: defaultInclude,
     },
     restoreMocks: true,

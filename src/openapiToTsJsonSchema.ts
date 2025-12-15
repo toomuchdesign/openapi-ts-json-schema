@@ -189,12 +189,32 @@ export async function openapiToTsJsonSchema(
    * Create meta data for each output schema
    */
   for (const definitionPath of definitionPathsToGenerateFrom) {
+    /**
+     * Eg: "paths./users" or "components.schemas.User"
+     * @TODO evaluate a more robust/generic way to identify single definition paths
+     * @NOTE all referenced "components.schemas" get generated, too. It's a known shortcoming
+     */
+    const isSingleDefinitionPath =
+      definitionPath.startsWith('paths.') ||
+      definitionPath.startsWith('components.schemas.');
+
     const jsonSchemaDefinitions = get(jsonSchema, definitionPath);
     const openApiDefinitions = get(bundledOpenApiDocument, definitionPath);
 
-    for (const schemaName in jsonSchemaDefinitions) {
+    // definitionPath points to a single definition
+    if (isSingleDefinitionPath) {
+      const definitionPathTokens = definitionPath.split('.');
+      const schemaRelativeDirName = definitionPathTokens.slice(0, -1).join('.');
+      const schemaName = definitionPathTokens.at(-1);
+
+      if (!schemaName) {
+        throw new Error(
+          `[openapi-ts-json-schema] Malformed "definitionPathsToGenerateFrom" entry found: "${definitionPath}"`,
+        );
+      }
+
       const id = makeId({
-        schemaRelativeDirName: definitionPath,
+        schemaRelativeDirName,
         schemaName,
       });
 
@@ -202,12 +222,32 @@ export async function openapiToTsJsonSchema(
         id,
         $id: idMapper({ id }),
         schemaMetaDataMap,
-        openApiDefinition: openApiDefinitions[schemaName],
-        jsonSchema: jsonSchemaDefinitions[schemaName],
+        openApiDefinition: openApiDefinitions,
+        jsonSchema: jsonSchemaDefinitions,
         outputPath,
         isRef: inlinedRefs.has(id),
         shouldBeGenerated: true,
       });
+    }
+    // definitionPath points to an object of definitions
+    else {
+      for (const schemaName in jsonSchemaDefinitions) {
+        const id = makeId({
+          schemaRelativeDirName: definitionPath,
+          schemaName,
+        });
+
+        addSchemaToMetaData({
+          id,
+          $id: idMapper({ id }),
+          schemaMetaDataMap,
+          openApiDefinition: openApiDefinitions[schemaName],
+          jsonSchema: jsonSchemaDefinitions[schemaName],
+          outputPath,
+          isRef: inlinedRefs.has(id),
+          shouldBeGenerated: true,
+        });
+      }
     }
   }
 
