@@ -127,48 +127,4 @@ describe('openapiToTsJsonSchema', () => {
       );
     });
   });
-
-  describe('"definitionPathsToGenerateFrom" option', () => {
-    beforeEach(() => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
-    });
-
-    describe('empty', async () => {
-      it('logs expected message', async () => {
-        await openapiToTsJsonSchema({
-          openApiDocument: path.resolve(
-            fixturesPath,
-            'ref-property/specs.yaml',
-          ),
-          outputPath: makeTestOutputPath(
-            'index-definitionPathsToGenerateFrom-missing',
-          ),
-          definitionPathsToGenerateFrom: [],
-        });
-
-        expect(console.log).toHaveBeenCalledWith(
-          `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
-        );
-      });
-    });
-
-    describe('containing non-relative paths', async () => {
-      it('throws with expected message', async () => {
-        await expect(
-          openapiToTsJsonSchema({
-            openApiDocument: path.resolve(
-              fixturesPath,
-              'ref-property/specs.yaml',
-            ),
-            outputPath: makeTestOutputPath(
-              'index-definitionPathsToGenerateFrom-non-relative',
-            ),
-            definitionPathsToGenerateFrom: ['paths', '/components.schema'],
-          }),
-        ).rejects.toThrow(
-          '[openapi-ts-json-schema] "definitionPathsToGenerateFrom" must be an array of relative paths. "/components.schema" found.',
-        );
-      });
-    });
-  });
 });

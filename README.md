@@ -112,7 +112,7 @@ Schemas are generated in a folder mirroring your OpenAPI layout (default: `schem
 | Property                                       | Type                                       | Description                                                                                                                                                              | Default    |
 | ---------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
 | **openApiDocument** _(required)_               | `string`                                   | Path to the OpenApi file (supports yaml and json).                                                                                                                       | -          |
-| **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenAPI object paths to generate schemas from. Eg: `["components.schemas"]`.                                                                                             | -          |
+| **definitionPathsToGenerateFrom** _(required)_ | `string[]`                                 | OpenAPI object paths to generate schemas from _(dot notation)_. Eg: `["components.schemas", "paths"]` or `["paths./users/{id}", "paths./basket"]`.                       | -          |
 | **refHandling**                                | `"import" \| "inline" \| "keep"`           | `"import"`: generate and import `$ref` schemas.<br/>`"inline"`: inline `$ref` schemas.<br/>`"keep"`: keep `$ref` values.                                                 | `"import"` |
 | **moduleSystem**                               | `"cjs" \| "esm"`                           | Controls how import specifiers are written in generated artifacts. Configure this option based on whether the consuming project is using CommonJS or ECMAScript modules. | `"cjs"`    |
 | **idMapper**                                   | `(params: { id: string }) => string`       | Customize generated schemas `$id`s and `$ref`s values                                                                                                                    | -          |
@@ -192,7 +192,7 @@ See [plugins documentation 📖](./docs/plugins.md).
 
 ## Todo
 
-- Consider removing required `definitionPathsToGenerateFrom` option in favour of exporting the whole OpenAPI definitions based on the structure defined in specs
+- Evaluate replacing `definitionPathsToGenerateFrom` with a more granular and flexible schema path selection strategy
 - Improve external `#ref`s handling (currently being inlined and duplicated)
 - Find a way to merge multiple different OpenApi definitions consistently
 - Consider implementing an option to inline circular $refs with a configurable nesting level

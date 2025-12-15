@@ -22,7 +22,7 @@ components:
         isFebruary:
           $ref: '#/components/schemas/Answer'
     March:
-      description: March description
+      description: March description (unfeferenced component)
       type: object
       required:
         - isMarch
