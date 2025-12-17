@@ -201,7 +201,7 @@ describe('convertOpenApiDocumentToJsonSchema', () => {
               },
             },
           });
-        }).toThrowError(
+        }).toThrow(
           '[openapi-ts-json-schema] OpenApi to JSON schema conversion failed: "Error reason"',
         );
       });

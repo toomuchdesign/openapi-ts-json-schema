@@ -18,6 +18,6 @@ describe('GitHub API', () => {
         refHandling: 'import',
         silent: true,
       }),
-    ).resolves.not.toThrowError();
+    ).resolves.not.toThrow();
   }, 20000);
 });

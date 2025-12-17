@@ -22,6 +22,7 @@ import {
   makeId,
   makeRelativeModulePath,
   makeSchemaFileContents,
+  parseSingleDefinitionPath,
   patchJsonSchema,
   refToId,
   saveFile,
@@ -189,30 +190,26 @@ export async function openapiToTsJsonSchema(
    * Create meta data for each output schema
    */
   for (const definitionPath of definitionPathsToGenerateFrom) {
-    /**
-     * Eg: "paths./users" or "components.schemas.User"
-     * @TODO evaluate a more robust/generic way to identify single definition paths
-     * @NOTE all referenced "components.schemas" get generated, too. It's a known shortcoming
-     */
-    const isSingleDefinitionPath =
-      definitionPath.startsWith('paths.') ||
-      definitionPath.startsWith('components.schemas.');
-
     const jsonSchemaDefinitions = get(jsonSchema, definitionPath);
     const openApiDefinitions = get(bundledOpenApiDocument, definitionPath);
 
+    if (!openApiDefinitions) {
+      throw new Error(
+        `[openapi-ts-json-schema] "definitionPathsToGenerateFrom" entry not found in OAS definition: "${definitionPath}"`,
+      );
+    }
+
+    /**
+     * Eg: "paths./users" or "components.schemas.User"
+     * @TODO evaluate a more robust/generic way to identify/define single definition paths
+     * @NOTE all referenced "components.schemas" get generated, too. It's a known shortcoming
+     */
+    const { isSingleDefinitionPath, result } =
+      parseSingleDefinitionPath(definitionPath);
+
     // definitionPath points to a single definition
     if (isSingleDefinitionPath) {
-      const definitionPathTokens = definitionPath.split('.');
-      const schemaRelativeDirName = definitionPathTokens.slice(0, -1).join('.');
-      const schemaName = definitionPathTokens.at(-1);
-
-      if (!schemaName) {
-        throw new Error(
-          `[openapi-ts-json-schema] Malformed "definitionPathsToGenerateFrom" entry found: "${definitionPath}"`,
-        );
-      }
-
+      const { schemaName, schemaRelativeDirName } = result;
       const id = makeId({
         schemaRelativeDirName,
         schemaName,
