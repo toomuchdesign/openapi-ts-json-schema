@@ -1,5 +1,6 @@
 {
   "name": "openapi-ts-json-schema",
+  "type": "module",
   "version": "1.3.0",
   "description": "Generate TypeScript-first JSON schemas from OpenAPI definitions",
   "main": "./dist/index.js",
@@ -9,8 +10,7 @@
   ],
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json",
-    "test": "vitest --config ./vitest.config.mts",
-    "pretest": "npm run test:build",
+    "test": "npm run test:build && vitest --config ./vitest.config.mts",
     "test:build": "npm --prefix ./examples/fastify-integration-plugin run generate-schemas",
     "prepare": "npx simple-git-hooks && npm run test -- --run && npm run source:check && npm run build",
     "release": "npm run prepare && npx changeset publish",
@@ -43,15 +43,16 @@
     "@fastify/swagger-ui": "^5.0.1",
     "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
-    "@tsconfig/node18": "^18.2.0",
+    "@tsconfig/node20": "^20.1.8",
     "@types/lodash.get": "^4.4.7",
     "@vitest/coverage-v8": "^4.0.9",
+    "desm": "^1.3.1",
     "expect-type": "^1.1.0",
     "fastify": "^5.0.0",
     "json-schema-to-ts": "^3.1.1",
     "rimraf": "^6.0.0",
     "simple-git-hooks": "^2.9.0",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.1.6",
     "vitest": "^4.0.9"
   },
@@ -62,17 +63,17 @@
     "pre-commit": "npm run source:check && npm test -- --run"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^14.0.1",
+    "@apidevtools/json-schema-ref-parser": "^15.1.3",
     "@openapi-contrib/openapi-schema-to-json-schema": "^5.1.0",
-    "@types/json-schema": "^7.0.15",
     "comment-json": "^4.2.3",
-    "filenamify": "^4.3.0",
+    "filenamify": "^7.0.1",
     "json-schema-traverse": "^1.0.0",
     "lodash.get": "^4.4.2",
-    "map-obj": "^4.3.0",
+    "map-obj": "^6.0.0",
     "namify": "^0.1.3",
     "openapi-jsonschema-parameters": "^12.1.3",
     "openapi3-ts": "^4.3.1",
-    "prettier": "^3.0.1"
+    "prettier": "^3.0.1",
+    "type-fest": "^5.3.1"
   }
 }

@@ -2,8 +2,8 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { SchemaMetaData } from '../../src/types';
-import { addSchemaToMetaData } from '../../src/utils';
+import type { SchemaMetaData } from '../../src/types.js';
+import { addSchemaToMetaData } from '../../src/utils/index.js';
 
 describe('addSchemaToMetaData', () => {
   it('generates expected metadata', () => {

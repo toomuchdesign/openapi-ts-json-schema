@@ -1,9 +1,10 @@
 {
   "name": "fastify-integration-plugin",
+  "type": "module",
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "ts-node index.ts",
-    "generate-schemas": "ts-node ./scripts/generate-schemas.ts"
+    "start": "tsx index.ts",
+    "generate-schemas": "tsx ./scripts/generate-schemas.ts"
   }
 }

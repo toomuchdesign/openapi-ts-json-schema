@@ -1,5 +1,5 @@
-import type { JSONSchema } from '../../types';
-import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParametersToJsonSchema';
+import type { OpenApiDocument } from '../../types.js';
+import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParametersToJsonSchema.js';
 
 /**
  * Convert parameter arrays found in:
@@ -16,36 +16,42 @@ import { convertOpenApiParametersToJsonSchema } from './convertOpenApiParameters
  *
  * @NOTE The schema must be dereferenced since openapi-jsonschema-parameters doesn't handle $refs
  */
-export function convertOpenApiPathsParameters(schema: JSONSchema): JSONSchema {
-  if ('paths' in schema) {
+export function convertOpenApiPathsParameters(
+  schema: OpenApiDocument,
+): OpenApiDocument {
+  if (schema.paths) {
     for (const path in schema.paths) {
       const pathSchema = schema.paths[path];
 
-      /**
-       * Common path parameters
-       * https://swagger.io/docs/specification/describing-parameters/#common-for-path
-       */
-      const pathParameters =
-        'parameters' in pathSchema ? pathSchema.parameters : [];
+      if (pathSchema) {
+        /**
+         * Common path parameters
+         * https://swagger.io/docs/specification/describing-parameters/#common-for-path
+         */
+        const originalPathParameters = pathSchema.parameters ?? [];
 
-      if (pathParameters.length) {
-        pathSchema.parameters = convertOpenApiParametersToJsonSchema(
-          pathSchema.parameters,
-        );
-      }
+        if (pathSchema.parameters) {
+          // @ts-expect-error we are replacing OAS parameters array with JSON Schema record
+          pathSchema.parameters = convertOpenApiParametersToJsonSchema(
+            pathSchema.parameters,
+          );
+        }
 
-      /**
-       * Operation path parameters
-       * https://swagger.io/docs/specification/describing-parameters/#path-parameters
-       */
-      for (const operation in pathSchema) {
-        const operationSchema = pathSchema[operation];
-        if ('parameters' in operationSchema) {
-          // Merge operation and common path parameters
-          operationSchema.parameters = convertOpenApiParametersToJsonSchema([
-            ...pathParameters,
-            ...operationSchema.parameters,
-          ]);
+        /**
+         * Operation path parameters
+         * https://swagger.io/docs/specification/describing-parameters/#path-parameters
+         */
+        for (const operation in pathSchema) {
+          const operationSchema =
+            pathSchema[operation as keyof typeof pathSchema];
+
+          if (operationSchema.parameters) {
+            // Merge operation and common path parameters
+            operationSchema.parameters = convertOpenApiParametersToJsonSchema([
+              ...originalPathParameters,
+              ...operationSchema.parameters,
+            ]);
+          }
         }
       }
     }

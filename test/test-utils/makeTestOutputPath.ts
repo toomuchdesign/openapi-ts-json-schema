@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { testTempPath } from './paths';
+import { testTempPath } from './paths.js';
 
 /**
  * Generate output paths in test-temp folder

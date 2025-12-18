@@ -4,8 +4,8 @@ import path from 'path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { openapiToTsJsonSchema } from '../src';
-import { fixturesPath, testTempPath } from './test-utils';
+import { openapiToTsJsonSchema } from '../src/index.js';
+import { fixturesPath, testTempPath } from './test-utils/index.js';
 
 describe('"outputPath" option', () => {
   it('saves generated schemas to provided path', async () => {

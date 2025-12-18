@@ -1,15 +1,15 @@
-import { formatTypeScript } from '../';
 import type {
   IdMapper,
   ModuleSystem,
   RefHandling,
   SchemaMetaData,
   SchemaMetaDataMap,
-} from '../../types';
-import { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder';
-import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas';
-import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs';
-import { stringify } from './stringify';
+} from '../../types.js';
+import { formatTypeScript } from '../index.js';
+import { replaceInlinedRefsWithStringPlaceholder } from './replaceInlinedRefsWithStringPlaceholder.js';
+import { replacePlaceholdersWithImportedSchemas } from './replacePlaceholdersWithImportedSchemas.js';
+import { replacePlaceholdersWithRefs } from './replacePlaceholdersWithRefs.js';
+import { stringify } from './stringify.js';
 
 export async function makeTsJsonSchema({
   metaData,
@@ -24,7 +24,7 @@ export async function makeTsJsonSchema({
   idMapper: IdMapper;
   moduleSystem: ModuleSystem;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName, $id } = metaData;
+  const { originalSchema, absoluteDirName } = metaData;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =

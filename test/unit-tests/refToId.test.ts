@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { refToId } from '../../src/utils';
+import { refToId } from '../../src/utils/index.js';
 
 describe('refToId', () => {
   describe('Valid ref', () => {

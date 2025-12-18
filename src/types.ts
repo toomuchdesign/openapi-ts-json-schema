@@ -13,12 +13,13 @@ import type {
   ReferenceObject as ReferenceObject_v3_1,
   SchemaObject as SchemaObject_v3_1,
 } from 'openapi3-ts/oas31';
+import type { OmitIndexSignature, SetRequired } from 'type-fest';
 
 import type {
   formatTypeScript,
-  makeRelativeModulePath,
+  makeRelativeImportPath,
   saveFile,
-} from './utils';
+} from './utils/index.js';
 
 export type OpenApiDocument = Omit<
   OpenAPIObject_v3_0 | OpenAPIObject_v3_1,
@@ -42,8 +43,9 @@ type OpenApiParameter_v3_0 = ParameterObject_v3_0 | ReferenceObject_v3_0;
 type OpenApiParameter_v3_1 = ParameterObject_v3_1 | ReferenceObject_v3_1;
 export type OpenApiParameter = OpenApiParameter_v3_0 | OpenApiParameter_v3_1;
 
-export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
-export type JSONSchemaWithPlaceholders = JSONSchema | string;
+export type JSONSchema = OmitIndexSignature<
+  JSONSchema4 | JSONSchema6 | JSONSchema7
+>;
 
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
@@ -61,6 +63,11 @@ export type Options = {
   refHandling?: RefHandling;
   idMapper?: IdMapper;
 };
+
+export type OptionsWithDefaults = SetRequired<
+  Options,
+  'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'
+>;
 
 /**
  * Meta data for representing a specific openApi definition
@@ -103,22 +110,22 @@ export type ReturnPayload = {
 };
 
 type OnInitInput = {
-  options: Options;
+  options: OptionsWithDefaults;
 };
 
 type OnBeforeGenerationInput = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };
 };
 
 type OnBeforeFileSave = ReturnPayload & {
-  options: Options;
+  options: OptionsWithDefaults;
   utils: {
-    makeRelativeModulePath: typeof makeRelativeModulePath;
+    makeRelativeImportPath: typeof makeRelativeImportPath;
     formatTypeScript: typeof formatTypeScript;
     saveFile: typeof saveFile;
   };

@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { filenamify } from '.';
+import { filenamify } from './index.js';
 
 /**
  * Generate schema internal id

@@ -1,2 +1,2 @@
-export { fixturesPath, testTempPath } from './paths';
-export { makeTestOutputPath } from './makeTestOutputPath';
+export { fixturesPath, testTempPath } from './paths.js';
+export { makeTestOutputPath } from './makeTestOutputPath.js';

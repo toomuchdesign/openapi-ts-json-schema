@@ -1,4 +1,4 @@
-import { makeServer } from './server';
+import { makeServer } from './server.js';
 
 async function start() {
   const server = await makeServer();
