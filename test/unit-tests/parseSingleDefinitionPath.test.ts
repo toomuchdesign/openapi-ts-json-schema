@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseSingleDefinitionPath } from '../../src/utils/parseSingleDefinitionPath';
+import { parseSingleDefinitionPath } from '../../src/utils/parseSingleDefinitionPath.js';
 
 type TestCase = {
   input: string;
