@@ -33,6 +33,23 @@ describe('definitionPathsToGenerateFrom option', () => {
 
       expect(usersPathSchema.default).toEqual(expect.any(Object));
     });
+
+    describe('non-existing path', () => {
+      it('Throws expected error', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiDocument: path.resolve(fixturesPath, 'paths/specs.yaml'),
+            outputPath: makeTestOutputPath(
+              'definitionPathsToGenerateFrom-non-existing-specific-path',
+            ),
+            definitionPathsToGenerateFrom: ['paths./non-existing-path'],
+            silent: true,
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] "definitionPathsToGenerateFrom" entry not found in OAS definition: "paths./non-existing-path"',
+        );
+      });
+    });
   });
 
   describe('specific "components" paths generation', () => {
@@ -81,7 +98,7 @@ describe('definitionPathsToGenerateFrom option', () => {
           silent: true,
         }),
       ).rejects.toThrow(
-        '[openapi-ts-json-schema] Malformed "definitionPathsToGenerateFrom" entry found: "components.schemas."',
+        '[openapi-ts-json-schema] "definitionPathsToGenerateFrom" entry not found in OAS definition: "components.schemas."',
       );
     });
   });
@@ -96,6 +113,26 @@ describe('definitionPathsToGenerateFrom option', () => {
 
       expect(console.log).toHaveBeenCalledWith(
         `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
+      );
+    });
+  });
+
+  describe('non-existing definition object path', () => {
+    it('Throws expected error', async () => {
+      await expect(
+        openapiToTsJsonSchema({
+          openApiDocument: path.resolve(
+            fixturesPath,
+            'ref-property/specs.yaml',
+          ),
+          outputPath: makeTestOutputPath(
+            'definitionPathsToGenerateFrom-non-existing-definition-object-path',
+          ),
+          definitionPathsToGenerateFrom: ['paths'],
+          silent: true,
+        }),
+      ).rejects.toThrow(
+        '[openapi-ts-json-schema] "definitionPathsToGenerateFrom" entry not found in OAS definition: "paths"',
       );
     });
   });

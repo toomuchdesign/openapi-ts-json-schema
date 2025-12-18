@@ -51,7 +51,7 @@ describe('"schemaPatcher" option', () => {
 
     describe('circular reference', () => {
       it('transforms generated JSON schemas', async () => {
-        await expect(() =>
+        await expect(
           openapiToTsJsonSchema({
             openApiDocument: path.resolve(
               fixturesPath,
@@ -60,7 +60,7 @@ describe('"schemaPatcher" option', () => {
             outputPath: makeTestOutputPath(
               `schema-patcher-circular-reference-${refHandling}`,
             ),
-            definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+            definitionPathsToGenerateFrom: ['components.schemas'],
             schemaPatcher: ({ schema }) => {
               if (schema.description === 'January description') {
                 schema.description = 'Patched January description';
@@ -69,7 +69,7 @@ describe('"schemaPatcher" option', () => {
             refHandling,
             silent: true,
           }),
-        ).not.toThrow();
+        ).resolves.not.toThrow();
       });
     });
   });

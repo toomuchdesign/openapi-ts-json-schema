@@ -18,7 +18,7 @@ describe('"silent" option', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('silent-option'),
-      definitionPathsToGenerateFrom: ['paths'],
+      definitionPathsToGenerateFrom: ['components.schemas'],
       silent: false,
     });
 

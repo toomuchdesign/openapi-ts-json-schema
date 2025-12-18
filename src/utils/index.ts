@@ -18,6 +18,7 @@ export { addSchemaToMetaData } from './addSchemaToMetaData';
 export { isObject } from './isObject';
 export { filenamify } from './filenamify';
 export { isOpenApiParameterObject } from './isOpenApiParameterObject';
+export { parseSingleDefinitionPath } from './parseSingleDefinitionPath';
 
 export { clearFolder } from './clearFolder';
 export { makeRelativeModulePath } from './makeRelativeModulePath';
