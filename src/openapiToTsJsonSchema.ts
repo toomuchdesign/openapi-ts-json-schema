@@ -23,7 +23,7 @@ import {
   makeId,
   makeRelativeImportPath,
   makeSchemaFileContents,
-  parseSingleDefinitionPath,
+  parseSingleItemPath,
   patchJsonSchemaDefinitions,
   refToId,
   saveFile,
@@ -42,7 +42,11 @@ import {
  *
  * @param options - Configuration for the conversion
  * @param options.openApiDocument - Path (string) or parsed object of the OpenAPI specification (JSON or YAML)
- * @param options.definitionPathsToGenerateFrom - Array of OpenAPI object paths (e.g. `["components.schemas"]`) from which to generate schemas
+ *
+ * @param options.targets - Specifies which parts of the OpenAPI document to convert
+ * @param options.targets.collections - Array of paths pointing to objects/records of definitions, where each entry will be generated (eg: `["components.schemas"]`)
+ * @param options.targets.single - Array of paths pointing to individual definitions to generate (eg: `["paths./users/{id}"]`)
+ *
  * @param options.refHandling - Strategy for `$ref` processing (`"import"` | `"inline"` | `"keep"`) (default: `"import"`)
  * @param options.moduleSystem - Controls how import specifiers are written in generated artifacts. Configure this option based on whether the consuming project is using CommonJS or ECMAScript modules
  * @param options.idMapper - Optional function to map internal schema id strings to custom `$id` or import names
@@ -62,7 +66,9 @@ import {
  * async function run() {
  *   const result = await openapiToTsJsonSchema({
  *     openApiDocument: "path/to/spec.yaml",
- *     definitionPathsToGenerateFrom: ["components.schemas", "paths"],
+ *     targets: {
+ *       collections: ["paths"],
+ *     },
  *   });
  * }
  * run();
@@ -77,6 +83,10 @@ export async function openapiToTsJsonSchema(
     idMapper: ({ id }) => id,
     plugins: [],
     ...options,
+    targets: {
+      collections: options.targets.collections ?? [],
+      single: options.targets.single ?? [],
+    },
   };
 
   const { plugins } = optionsWithDefaults;
@@ -92,25 +102,29 @@ export async function openapiToTsJsonSchema(
 
   const {
     openApiDocument: openApiDocumentRelative,
-    definitionPathsToGenerateFrom,
     schemaPatcher,
     outputPath: providedOutputPath,
     silent,
     refHandling,
     moduleSystem,
     idMapper,
+    targets,
   } = optionsWithDefaults;
 
-  if (definitionPathsToGenerateFrom.length === 0 && !silent) {
+  if (
+    targets.collections.length === 0 &&
+    targets.single.length === 0 &&
+    !silent
+  ) {
     console.log(
-      `[openapi-ts-json-schema] ⚠️ No schemas will be generated since definitionPathsToGenerateFrom option is empty`,
+      `[openapi-ts-json-schema] ⚠️ No schemas will be generated since targets option is empty`,
     );
   }
 
-  definitionPathsToGenerateFrom.forEach((defPath) => {
-    if (path.isAbsolute(defPath)) {
+  [...targets.collections, ...targets.single].forEach((targetPath) => {
+    if (path.isAbsolute(targetPath)) {
       throw new Error(
-        `[openapi-ts-json-schema] "definitionPathsToGenerateFrom" must be an array of relative paths. "${defPath}" found.`,
+        `[openapi-ts-json-schema] "targets" must define relative paths. "${targetPath}" found.`,
       );
     }
   });
@@ -199,31 +213,51 @@ export async function openapiToTsJsonSchema(
   const schemaMetaDataMap: SchemaMetaDataMap = new Map();
 
   /**
-   * Create meta data for each output schema
+   * Create meta data for each target
    */
-  for (const definitionPath of definitionPathsToGenerateFrom) {
-    const jsonSchemaDefinitions = get(jsonSchema, definitionPath);
-    const openApiDefinitions = get(bundledOpenApiDocument, definitionPath);
+  for (const path of targets.single) {
+    const jsonSchemaDefinition = get(jsonSchema, path);
+    const openApiDefinition = get(bundledOpenApiDocument, path);
 
-    if (!openApiDefinitions) {
+    if (!openApiDefinition) {
       throw new Error(
-        `[openapi-ts-json-schema] "definitionPathsToGenerateFrom" entry not found in OAS definition: "${definitionPath}"`,
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
       );
     }
 
-    /**
-     * Eg: "paths./users" or "components.schemas.User"
-     * @TODO evaluate a more robust/generic way to identify/define single definition paths
-     * @NOTE all referenced "components.schemas" get generated, too. It's a known shortcoming
-     */
-    const { isSingleDefinitionPath, result } =
-      parseSingleDefinitionPath(definitionPath);
+    // Handle single definition path
+    const { schemaName, schemaRelativeDirName } = parseSingleItemPath(path);
+    const id = makeId({
+      schemaRelativeDirName,
+      schemaName,
+    });
 
-    // definitionPath points to a single definition
-    if (isSingleDefinitionPath) {
-      const { schemaName, schemaRelativeDirName } = result;
+    addSchemaToMetaData({
+      id,
+      $id: idMapper({ id }),
+      schemaMetaDataMap,
+      openApiDefinition,
+      jsonSchema: jsonSchemaDefinition,
+      outputPath,
+      isRef: inlinedRefs.has(id),
+      shouldBeGenerated: true,
+    });
+  }
+
+  for (const path of targets.collections) {
+    const jsonSchemaDefinitions = get(jsonSchema, path);
+    const openApiDefinitions = get(bundledOpenApiDocument, path);
+
+    if (!openApiDefinitions) {
+      throw new Error(
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
+      );
+    }
+
+    // Handle collection definition path
+    for (const schemaName in jsonSchemaDefinitions) {
       const id = makeId({
-        schemaRelativeDirName,
+        schemaRelativeDirName: path,
         schemaName,
       });
 
@@ -231,32 +265,12 @@ export async function openapiToTsJsonSchema(
         id,
         $id: idMapper({ id }),
         schemaMetaDataMap,
-        openApiDefinition: openApiDefinitions,
-        jsonSchema: jsonSchemaDefinitions,
+        openApiDefinition: openApiDefinitions[schemaName],
+        jsonSchema: jsonSchemaDefinitions[schemaName],
         outputPath,
         isRef: inlinedRefs.has(id),
         shouldBeGenerated: true,
       });
-    }
-    // definitionPath points to an object of definitions
-    else {
-      for (const schemaName in jsonSchemaDefinitions) {
-        const id = makeId({
-          schemaRelativeDirName: definitionPath,
-          schemaName,
-        });
-
-        addSchemaToMetaData({
-          id,
-          $id: idMapper({ id }),
-          schemaMetaDataMap,
-          openApiDefinition: openApiDefinitions[schemaName],
-          jsonSchema: jsonSchemaDefinitions[schemaName],
-          outputPath,
-          isRef: inlinedRefs.has(id),
-          shouldBeGenerated: true,
-        });
-      }
     }
   }
 

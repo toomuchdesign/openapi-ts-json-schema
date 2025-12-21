@@ -19,7 +19,7 @@ export { addSchemaToMetaData } from './addSchemaToMetaData.js';
 export { isObject } from './isObject.js';
 export { filenamify } from './filenamify.js';
 export { isOpenApiParameterObject } from './isOpenApiParameterObject.js';
-export { parseSingleDefinitionPath } from './parseSingleDefinitionPath.js';
+export { parseSingleItemPath } from './parseSingleItemPath.js';
 
 export { clearFolder } from './clearFolder.js';
 export { makeRelativeImportPath } from './makeRelativeImportPath.js';

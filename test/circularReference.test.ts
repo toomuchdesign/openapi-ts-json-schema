@@ -16,7 +16,9 @@ describe('Circular reference', () => {
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-inline'),
-          definitionPathsToGenerateFrom: ['components.schemas'],
+          targets: {
+            collections: ['components.schemas'],
+          },
           refHandling: 'inline',
           silent: true,
         });
@@ -115,7 +117,9 @@ describe('Circular reference', () => {
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-import'),
-          definitionPathsToGenerateFrom: ['components.schemas'],
+          targets: {
+            collections: ['components.schemas'],
+          },
           refHandling: 'import',
           silent: true,
         });
@@ -165,7 +169,9 @@ describe('Circular reference', () => {
             'circular-reference/specs.yaml',
           ),
           outputPath: makeTestOutputPath('circular-keep'),
-          definitionPathsToGenerateFrom: ['components.schemas'],
+          targets: {
+            collections: ['components.schemas'],
+          },
           refHandling: 'keep',
           silent: true,
         });

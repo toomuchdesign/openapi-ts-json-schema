@@ -11,7 +11,9 @@ async function generate() {
       import.meta.url,
       '../definitions/petstore/open-api-definition.yaml',
     ),
-    definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
+    targets: {
+      collections: ['paths', 'components.schemas'],
+    },
     plugins: [
       fastifyIntegrationPlugin({
         schemaFilter: ({ id }) => id.startsWith('/components/schemas'),

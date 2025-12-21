@@ -11,7 +11,9 @@ describe('openapiToTsJsonSchema', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('index'),
-      definitionPathsToGenerateFrom: ['paths', 'components.schemas'],
+      targets: {
+        collections: ['components.schemas', 'paths'],
+      },
       silent: true,
     });
 
@@ -93,7 +95,9 @@ describe('openapiToTsJsonSchema', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('index-delete-old'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       silent: true,
     });
 
@@ -108,7 +112,9 @@ describe('openapiToTsJsonSchema', () => {
     await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath,
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       silent: true,
     });
   });
@@ -119,7 +125,9 @@ describe('openapiToTsJsonSchema', () => {
         openapiToTsJsonSchema({
           openApiDocument: path.resolve(fixturesPath, 'does-not-exist.yaml'),
           outputPath: makeTestOutputPath('index-non-existing-openAPI'),
-          definitionPathsToGenerateFrom: ['components'],
+          targets: {
+            collections: ['components'],
+          },
           silent: true,
         }),
       ).rejects.toThrow(

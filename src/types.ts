@@ -13,7 +13,7 @@ import type {
   ReferenceObject as ReferenceObject_v3_1,
   SchemaObject as SchemaObject_v3_1,
 } from 'openapi3-ts/oas31';
-import type { OmitIndexSignature, SetRequired } from 'type-fest';
+import type { Merge, OmitIndexSignature, SetRequired } from 'type-fest';
 
 import type {
   formatTypeScript,
@@ -54,7 +54,10 @@ export type IdMapper = (input: { id: string }) => string;
 
 export type Options = {
   openApiDocument: string;
-  definitionPathsToGenerateFrom: string[];
+  targets: {
+    collections?: string[];
+    single?: string[];
+  };
   moduleSystem?: ModuleSystem;
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
@@ -64,9 +67,11 @@ export type Options = {
   idMapper?: IdMapper;
 };
 
-export type OptionsWithDefaults = SetRequired<
-  Options,
-  'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'
+export type OptionsWithDefaults = Merge<
+  SetRequired<Options, 'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'>,
+  {
+    targets: Required<Options['targets']>;
+  }
 >;
 
 /**

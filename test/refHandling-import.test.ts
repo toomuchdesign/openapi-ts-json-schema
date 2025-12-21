@@ -4,29 +4,30 @@ import path from 'path';
 import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src/index.js';
+import type { Options } from '../src/types.js';
 import { formatTypeScript } from '../src/utils/index.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('refHandling option === "import"', () => {
-  describe.each([
+  describe.each<{ description: string; targets: Options['targets'] }>([
     {
       description: 'Generating only root schema',
-      definitionPathsToGenerateFrom: ['paths'],
+      targets: {
+        collections: ['paths'],
+      },
     },
     {
       description: 'Generating $ref schemas, too',
-      definitionPathsToGenerateFrom: [
-        'paths',
-        'components.schemas',
-        'components.schemas',
-      ],
+      targets: {
+        collections: ['paths', 'components.schemas', 'components.schemas'],
+      },
     },
-  ])('$description', ({ definitionPathsToGenerateFrom }) => {
+  ])('$description', ({ targets }) => {
     it('Generates expected schema', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import'),
-        definitionPathsToGenerateFrom,
+        targets,
         silent: true,
         refHandling: 'import',
       });
@@ -125,7 +126,9 @@ describe('refHandling option === "import"', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-import-ref-schemas'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       silent: true,
       refHandling: 'import',
     });
@@ -180,7 +183,9 @@ describe('refHandling option === "import"', () => {
           'alias-definition/specs.yaml',
         ),
         outputPath: makeTestOutputPath('refHandling-import-alias-definition'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'import',
       });

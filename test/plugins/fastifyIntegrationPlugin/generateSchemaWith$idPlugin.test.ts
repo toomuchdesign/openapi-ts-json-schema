@@ -16,7 +16,9 @@ describe('generateSchemaWith$idPlugin plugin', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('idMapper--refHandling-inline'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'inline',
         idMapper: ({ id }) => `foo_${id}_bar`,
@@ -67,7 +69,9 @@ describe('generateSchemaWith$idPlugin plugin', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('idMapper--refHandling-import'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'import',
         idMapper: ({ id }) => `foo_${id}_bar`,
@@ -116,7 +120,9 @@ describe('generateSchemaWith$idPlugin plugin', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('idMapper--refHandling-keep'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'keep',
         idMapper: ({ id }) => `foo_${id}_bar`,

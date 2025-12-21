@@ -21,7 +21,9 @@ import {
 await openapiToTsJsonSchema({
   openApiDocument: 'path/to/open-api-specs.yaml',
   outputPath: 'path/to/generated/schemas',
-  definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+  targets: {
+    collections: ['components.schemas', 'paths'],
+  },
   plugins: [generateSchemaWith$idPlugin()],
 });
 ```
@@ -54,7 +56,9 @@ import {
 await openapiToTsJsonSchema({
   openApiDocument: 'path/to/open-api-specs.yaml',
   outputPath: 'path/to/generated/schemas',
-  definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+  targets: {
+    collections: ['components.schemas', 'paths'],
+  },
   plugins: [
     fastifyIntegrationPlugin({
       // Optional
@@ -176,7 +180,9 @@ import { myPlugin } from '../myPlugin';
 
 await openapiToTsJsonSchema({
   openApiDocument: 'path/to/open-api-specs.yaml',
-  definitionPathsToGenerateFrom: ['components.schemas'],
+  targets: {
+    collections: ['components.schemas'],
+  },
   plugins: [myPlugin({ optionOne: 'foo', optionTwo: 'bar' })],
 });
 ```

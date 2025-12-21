@@ -11,7 +11,9 @@ describe('idMapper option', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
         outputPath: makeTestOutputPath('idMapper--refHandling-keep'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'keep',
         idMapper: ({ id }) => `foo_${id}_bar`,

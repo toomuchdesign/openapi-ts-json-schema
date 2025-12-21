@@ -10,7 +10,9 @@ describe('OpenAPI v2', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'open-api-v2/specs.yaml'),
       outputPath: makeTestOutputPath('open-api-v2'),
-      definitionPathsToGenerateFrom: ['definitions', 'paths'],
+      targets: {
+        collections: ['definitions', 'paths'],
+      },
       refHandling: 'import',
       silent: true,
     });

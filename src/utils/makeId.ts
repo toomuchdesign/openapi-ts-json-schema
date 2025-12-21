@@ -17,7 +17,7 @@ export function makeId({
     '/' +
     path
       .normalize(schemaRelativeDirName)
-      // Supporting definitionPathsToGenerateFrom dot notation
+      // Supporting targets dot notation
       .replaceAll('.', '/')
       // Replace windows backslashes \
       .replaceAll('\\', '/')

@@ -18,7 +18,9 @@ describe('OpenAPI paths parameters', () => {
           'paths-parameters/specs.yaml',
         ),
         outputPath: makeTestOutputPath(`paths-parameters--${refHandling}`),
-        definitionPathsToGenerateFrom: ['paths'],
+        targets: {
+          collections: ['paths'],
+        },
         refHandling,
         silent: true,
       });
