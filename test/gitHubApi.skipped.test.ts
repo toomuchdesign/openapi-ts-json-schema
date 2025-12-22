@@ -14,7 +14,9 @@ describe('GitHub API', () => {
       openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'github-api/specs.yaml'),
         outputPath: makeTestOutputPath('github-api'),
-        definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+        targets: {
+          collections: ['components.schemas', 'paths'],
+        },
         refHandling: 'import',
         silent: true,
       }),

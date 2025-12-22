@@ -10,7 +10,9 @@ describe('Dereferencing', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       refHandling: 'import',
       silent: true,
     });
@@ -34,7 +36,9 @@ describe('Dereferencing', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('dereferencing-deeply-nested'),
-      definitionPathsToGenerateFrom: ['paths'],
+      targets: {
+        collections: ['paths'],
+      },
       refHandling: 'import',
       silent: true,
     });

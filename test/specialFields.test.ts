@@ -14,7 +14,9 @@ describe('OpenApi special fields', () => {
           'special-openapi-fields/specs.yaml',
         ),
         outputPath: makeTestOutputPath('special-openapi-fields'),
-        definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+        targets: {
+          collections: ['components.schemas', 'paths'],
+        },
         silent: true,
       }),
     ).resolves.not.toThrow();

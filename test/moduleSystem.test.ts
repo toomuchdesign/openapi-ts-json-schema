@@ -13,7 +13,9 @@ describe('moduleSystem option === "cjs"', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import'),
-        definitionPathsToGenerateFrom: ['paths'],
+        targets: {
+          collections: ['paths'],
+        },
         silent: true,
         refHandling: 'import',
         moduleSystem: 'cjs',

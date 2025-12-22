@@ -15,7 +15,9 @@ describe('"schemaPatcher" option', () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath(`schema-patcher-${refHandling}`),
-        definitionPathsToGenerateFrom: ['components.schemas', 'paths'],
+        targets: {
+          collections: ['components.schemas', 'paths'],
+        },
         schemaPatcher: ({ schema }) => {
           if (schema.description === 'January description') {
             schema.description = 'Patched January description';
@@ -60,7 +62,9 @@ describe('"schemaPatcher" option', () => {
             outputPath: makeTestOutputPath(
               `schema-patcher-circular-reference-${refHandling}`,
             ),
-            definitionPathsToGenerateFrom: ['components.schemas'],
+            targets: {
+              collections: ['components.schemas'],
+            },
             schemaPatcher: ({ schema }) => {
               if (schema.description === 'January description') {
                 schema.description = 'Patched January description';

@@ -12,7 +12,9 @@ describe('refHandling option === "keep"', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
       outputPath: makeTestOutputPath('refHandling-keep'),
-      definitionPathsToGenerateFrom: ['paths'],
+      targets: {
+        collections: ['paths'],
+      },
       silent: true,
       refHandling: 'keep',
     });
@@ -87,7 +89,9 @@ describe('refHandling option === "keep"', () => {
   it('Generates expected $ref schemas preserving $ref pointer', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'ref-property/specs.yaml'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       refHandling: 'keep',
       silent: true,
     });
@@ -124,7 +128,9 @@ describe('refHandling option === "keep"', () => {
           'alias-definition/specs.yaml',
         ),
         outputPath: makeTestOutputPath('refHandling-keep-alias-definition'),
-        definitionPathsToGenerateFrom: ['components.schemas'],
+        targets: {
+          collections: ['components.schemas'],
+        },
         silent: true,
         refHandling: 'keep',
       });

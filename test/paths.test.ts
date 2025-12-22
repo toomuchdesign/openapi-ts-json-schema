@@ -10,7 +10,9 @@ describe('OpenAPI paths', () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'paths/specs.yaml'),
       outputPath: makeTestOutputPath('paths'),
-      definitionPathsToGenerateFrom: ['paths'],
+      targets: {
+        collections: ['paths'],
+      },
       silent: true,
     });
 

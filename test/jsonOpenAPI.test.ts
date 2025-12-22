@@ -10,7 +10,9 @@ describe('JSON OpenAPI input', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'json/specs.json'),
       outputPath: makeTestOutputPath('json'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       refHandling: 'import',
       silent: true,
     });

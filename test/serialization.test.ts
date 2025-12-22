@@ -10,7 +10,9 @@ describe('openapiToTsJsonSchema', async () => {
     const { outputPath } = await openapiToTsJsonSchema({
       openApiDocument: path.resolve(fixturesPath, 'serialization/specs.yaml'),
       outputPath: makeTestOutputPath('serialization'),
-      definitionPathsToGenerateFrom: ['components.schemas'],
+      targets: {
+        collections: ['components.schemas'],
+      },
       refHandling: 'import',
       silent: true,
     });

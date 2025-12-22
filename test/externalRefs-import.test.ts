@@ -17,7 +17,9 @@ describe('External $refs', () => {
           outputPath: makeTestOutputPath(
             'external-refs-import-definition-alias',
           ),
-          definitionPathsToGenerateFrom: ['components.schemas'],
+          targets: {
+            collections: ['components.schemas'],
+          },
           refHandling: 'import',
           silent: true,
         });
@@ -50,7 +52,9 @@ describe('External $refs', () => {
             'external-ref/specs.yaml',
           ),
           outputPath: makeTestOutputPath('external-refs-import-document-alias'),
-          definitionPathsToGenerateFrom: ['components.schemas'],
+          targets: {
+            collections: ['components.schemas'],
+          },
           refHandling: 'import',
           silent: true,
         });
