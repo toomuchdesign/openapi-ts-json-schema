@@ -1,5 +1,27 @@
 # openapi-ts-json-schema
 
+## 2.0.0
+
+### Major Changes
+
+- [#485](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/485) [`df0e09b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/df0e09b9d75f01b2c8d41ba8c8a49b1291d41f45) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - `PluginInput['makeRelativeModulePath']` `to` argument renamed as `toModule`
+
+- [#485](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/485) [`df0e09b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/df0e09b9d75f01b2c8d41ba8c8a49b1291d41f45) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - `PluginInput['makeRelativeModulePath']` renamed as PluginInput['makeRelativeImportPath']
+
+- [#495](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/495) [`5d1458a`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/5d1458ad4deebefa16857ae23e3ef9a0f37fa1bd) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Replace `definitionPathsToGenerateFrom` with `targets`
+
+- [#485](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/485) [`df0e09b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/df0e09b9d75f01b2c8d41ba8c8a49b1291d41f45) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Provide plugins with defaulted options
+
+- [#485](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/485) [`df0e09b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/df0e09b9d75f01b2c8d41ba8c8a49b1291d41f45) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - This package is now pure ESM. Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+
+  CommonJS consumers must import via dynamic `import()`.
+
+- [#485](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/485) [`df0e09b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/df0e09b9d75f01b2c8d41ba8c8a49b1291d41f45) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - `moduleSystem` option `esm` by default
+
+### Minor Changes
+
+- [#492](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/492) [`e5d8304`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/e5d83040cd382fc49fcbaf2b6bb3294d64fa190b) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Throw proper error when provided `definitionPathsToGenerateFrom` paths don't exist
+
 ## 1.3.0
 
 ### Minor Changes
