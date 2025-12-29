@@ -48,21 +48,6 @@ Note: alias definitions (eg. `Foo: "#components/schemas/Bar"`) will result in a 
 
 2. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name. 2 schemas are exported: with and without `$id`.
 
-```ts
-import { without$id as componentsSchemasBar } from './Bar';
-
-const schema = {
-  $id: '/components/schemas/Foo',
-  bar: componentsSchemasBar,
-} as const;
-export default schema;
-
-const { $id, ...without$id } = schema;
-export { without$id };
-```
-
-Schemas without $id are the ones used to resolve refs.
-
 ## `refHandling`: keep
 
 `keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the an actual `$ref` value.
