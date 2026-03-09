@@ -37,7 +37,7 @@
   "author": "Andrea Carraro <me@andreacarraro.it>",
   "license": "ISC",
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.26.2",
     "@fastify/swagger": "^9.1.0",
     "@fastify/swagger-ui": "^5.0.1",
