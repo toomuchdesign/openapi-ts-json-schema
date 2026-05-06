@@ -77,8 +77,9 @@ export async function openapiToTsJsonSchema(
     refHandling: 'import',
     moduleSystem: 'esm',
     idMapper: ({ id }) => id,
-    plugins: [],
     ...options,
+    // Defensive copy: prevents plugin onInit hooks from mutating the caller's plugins array
+    plugins: [...(options.plugins ?? [])],
     targets: {
       collections: options.targets.collections ?? [],
       single: options.targets.single ?? [],
