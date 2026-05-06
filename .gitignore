@@ -19,4 +19,4 @@ coverage
 !.nvmrc
 !.changeset
 !.gitattributes
-test/test-tmp
+test/test-temp
