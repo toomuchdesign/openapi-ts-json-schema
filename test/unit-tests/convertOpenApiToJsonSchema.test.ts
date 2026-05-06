@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { convertOpenApiDocumentDefinitionsToJsonSchema } from '../../src/utils/index.js';
 
-const openApiDefinition = {
+const openApiSchemaDefinition = {
   type: 'string' as const,
   nullable: true,
   enum: ['yes', 'no'],
@@ -18,7 +18,7 @@ describe('convertOpenApiDocumentDefinitionsToJsonSchema', () => {
   describe('Nested definitions', () => {
     it('convert nested definitions', () => {
       const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
-        components: { schemas: { bar: openApiDefinition } },
+        components: { schemas: { bar: openApiSchemaDefinition } },
       });
       const expected = {
         components: { schemas: { bar: jsonSchemaDefinition } },
@@ -31,7 +31,9 @@ describe('convertOpenApiDocumentDefinitionsToJsonSchema', () => {
     it('convert nested definitions', () => {
       const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
         components: {
-          schemas: { bar: { oneOf: [openApiDefinition, openApiDefinition] } },
+          schemas: {
+            bar: { oneOf: [openApiSchemaDefinition, openApiSchemaDefinition] },
+          },
         },
       });
       const expected = {
