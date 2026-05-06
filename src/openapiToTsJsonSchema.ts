@@ -4,6 +4,7 @@ import path from 'node:path';
 import { $RefParser } from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 
+import { COMMENT_JSON_BEFORE_SYMBOL } from './constants.js';
 import type {
   JSONSchema,
   OpenApiDocument,
@@ -77,8 +78,9 @@ export async function openapiToTsJsonSchema(
     refHandling: 'import',
     moduleSystem: 'esm',
     idMapper: ({ id }) => id,
-    plugins: [],
     ...options,
+    // Defensive copy: prevents plugin onInit hooks from mutating the caller's plugins array
+    plugins: [...(options.plugins ?? [])],
     targets: {
       collections: options.targets.collections ?? [],
       single: options.targets.single ?? [],
@@ -88,11 +90,19 @@ export async function openapiToTsJsonSchema(
   const { plugins } = optionsWithDefaults;
 
   // Execute plugins onInit method
-  for (const { onInit } of plugins) {
-    if (onInit) {
-      await onInit({
-        options: optionsWithDefaults,
-      });
+  for (const [index, plugin] of plugins.entries()) {
+    if (plugin.onInit) {
+      try {
+        await plugin.onInit({
+          options: optionsWithDefaults,
+        });
+      } catch (error) {
+        /* v8 ignore next 4 -- @preserve */
+        throw new Error(
+          `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onInit" hook`,
+          { cause: error },
+        );
+      }
     }
   }
 
@@ -194,7 +204,7 @@ export async function openapiToTsJsonSchema(
            * See: https://github.com/kaelzhang/node-comment-json
            */
           if (refHandling === 'inline') {
-            inlinedSchema[Symbol.for('before')] = [
+            inlinedSchema[COMMENT_JSON_BEFORE_SYMBOL] = [
               {
                 type: 'LineComment',
                 value: ` $ref: "${ref}"`,
@@ -217,7 +227,7 @@ export async function openapiToTsJsonSchema(
 
     if (!openApiDefinition) {
       throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
       );
     }
 
@@ -246,7 +256,7 @@ export async function openapiToTsJsonSchema(
 
     if (!openApiDefinitions) {
       throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
       );
     }
 
@@ -303,17 +313,25 @@ export async function openapiToTsJsonSchema(
   };
 
   // Execute plugins onBeforeGeneration method
-  for (const { onBeforeGeneration } of plugins) {
-    if (onBeforeGeneration) {
-      await onBeforeGeneration({
-        ...returnPayload,
-        options: optionsWithDefaults,
-        utils: {
-          makeRelativeImportPath,
-          formatTypeScript,
-          saveFile,
-        },
-      });
+  for (const [index, plugin] of plugins.entries()) {
+    if (plugin.onBeforeGeneration) {
+      try {
+        await plugin.onBeforeGeneration({
+          ...returnPayload,
+          options: optionsWithDefaults,
+          utils: {
+            makeRelativeImportPath,
+            formatTypeScript,
+            saveFile,
+          },
+        });
+      } catch (error) {
+        /* v8 ignore next 4 -- @preserve */
+        throw new Error(
+          `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onBeforeGeneration" hook`,
+          { cause: error },
+        );
+      }
     }
   }
 
@@ -325,18 +343,26 @@ export async function openapiToTsJsonSchema(
     moduleSystem,
   });
 
-  // Execute plugins onBeforeGeneration method
-  for (const { onBeforeSaveFile } of plugins) {
-    if (onBeforeSaveFile) {
-      await onBeforeSaveFile({
-        ...returnPayload,
-        options: optionsWithDefaults,
-        utils: {
-          makeRelativeImportPath,
-          formatTypeScript,
-          saveFile,
-        },
-      });
+  // Execute plugins onBeforeSaveFile method
+  for (const [index, plugin] of plugins.entries()) {
+    if (plugin.onBeforeSaveFile) {
+      try {
+        await plugin.onBeforeSaveFile({
+          ...returnPayload,
+          options: optionsWithDefaults,
+          utils: {
+            makeRelativeImportPath,
+            formatTypeScript,
+            saveFile,
+          },
+        });
+      } catch (error) {
+        /* v8 ignore next 4 -- @preserve */
+        throw new Error(
+          `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onBeforeSaveFile" hook`,
+          { cause: error },
+        );
+      }
     }
   }
 

@@ -31,7 +31,7 @@
 
 - [ ] **Fix the brute-force OpenAPI → JSON Schema conversion** — `convertOpenApiDocumentDefinitionsToJsonSchema.ts` recursively visits every node in the entire document with `mapObject({ deep: true })`. The code itself has a comment acknowledging this is wrong. OpenAPI defines specific fields that are schema objects; only those should be converted. Implement targeted conversion that follows the OpenAPI spec's definition of which fields are schema objects. Additionally, for OpenAPI v3.1.0 (which is already valid JSON Schema), skip conversion entirely — the version detection and conditional logic is missing.
 
-- [ ] **Fix options mutation in plugin system** — `fastifyIntegrationPlugin.onInit` mutates the user-supplied `options` object in place (`options.refHandling = 'keep'`, `options.plugins.push(...)`). This creates hidden side effects and makes plugin ordering a source of bugs. Make a defensive copy of options at the start of `openapiToTsJsonSchema`, and document that plugins receive a snapshot, not a reference.
+- [x] **Fix options mutation in plugin system** — `fastifyIntegrationPlugin.onInit` mutates the user-supplied `options` object in place (`options.refHandling = 'keep'`, `options.plugins.push(...)`). This creates hidden side effects and makes plugin ordering a source of bugs. Make a defensive copy of options at the start of `openapiToTsJsonSchema`, and document that plugins receive a snapshot, not a reference.
 
 - [ ] **Harden the `namify` dependency** — Import names for generated schemas are derived via the `namify` package, which has no type definitions (suppressed with `@ts-expect-error`). There are no tests for edge cases: numeric-only names (`123`), hyphenated names (`my-schema`), or JavaScript reserved words (`class`, `return`, `type`). Add explicit tests for these cases and handle them with a deterministic fallback.
 
@@ -43,7 +43,7 @@
 
 ## Section 3 — High: developer experience
 
-- [ ] **Improve error messages throughout** — Current errors include bare strings like "No matching schema found" and "Unsupported id value" with no context (which schema? what value was received?). Every thrown error should include: the offending schema id or path, the received value where applicable, and a hint toward the fix. Create a small set of custom error classes (e.g. `SchemaNotFoundError`, `InvalidIdError`) to make errors catchable programmatically.
+- [x] **Improve error messages throughout** — Current errors include bare strings like "No matching schema found" and "Unsupported id value" with no context (which schema? what value was received?). Every thrown error should include: the offending schema id or path, the received value where applicable, and a hint toward the fix. Create a small set of custom error classes (e.g. `SchemaNotFoundError`, `InvalidIdError`) to make errors catchable programmatically.
 
 - [ ] **Add input validation for `targets`** — The `targets.collections` and `targets.single` arrays are not validated. Invalid dot-notation paths (e.g. a typo) result in silent empty output rather than a useful error. Add a validation step that checks each target path exists in the bundled document and throws with a clear message if not.
 
@@ -61,7 +61,7 @@
 
 ## Section 4 — Medium: design and maintainability
 
-- [ ] **Extract magic strings and symbols to a constants file** — The placeholder markers (`_OTJS-START_`, `_OTJS-END_`), the Symbol key (`'SCHEMA_ID_SYMBOL'`), the comment-json sentinel (`'before'`), and hardcoded paths like `/components/schemas/` are scattered across multiple files. Centralise them in a `src/constants.ts` file to make the system's moving parts discoverable and prevent typo-driven bugs.
+- [x] **Extract magic strings and symbols to a constants file** — The placeholder markers (`_OTJS-START_`, `_OTJS-END_`), the Symbol key (`'SCHEMA_ID_SYMBOL'`), the comment-json sentinel (`'before'`), and hardcoded paths like `/components/schemas/` are scattered across multiple files. Centralise them in a `src/constants.ts` file to make the system's moving parts discoverable and prevent typo-driven bugs.
 
 - [ ] **Make `clearFolder` safe** — The output directory is deleted before each generation run with no opt-out. Users who place non-generated files in the output directory (e.g. a hand-written adapter, a custom index) will lose them silently. Add a `clearOutputDir: boolean` option (default `true`) and document the destructive behaviour explicitly.
 
@@ -69,7 +69,7 @@
 
 - [ ] **Unify the `id` / `$id` / `uniqueName` fields in `SchemaMetaData`** — These three fields are all derived from the same internal path but have inconsistent values in some edge cases (circular refs, alias definitions). Document the exact contract for each field (what it contains, when it differs from the others), or consolidate if the distinction isn't meaningful for consumers.
 
-- [ ] **Add structured error handling for plugin failures** — There is no documented or implemented behaviour for when a plugin throws. Does the entire generation fail? Does it continue with remaining plugins? Define the policy (fail-fast is reasonable), wrap plugin invocations in a try/catch that re-throws with the plugin name in the error message, and document this in `docs/plugins.md`.
+- [x] **Add structured error handling for plugin failures** — There is no documented or implemented behaviour for when a plugin throws. Does the entire generation fail? Does it continue with remaining plugins? Define the policy (fail-fast is reasonable), wrap plugin invocations in a try/catch that re-throws with the plugin name in the error message, and document this in `docs/plugins.md`.
 
 - [ ] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency.
 

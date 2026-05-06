@@ -137,6 +137,7 @@ type OnBeforeFileSave = ReturnPayload & {
 };
 
 export type Plugin<PluginOptions = void> = (options: PluginOptions) => {
+  name?: string;
   onInit?: (input: OnInitInput) => Promise<void>;
   onBeforeGeneration?: (input: OnBeforeGenerationInput) => Promise<void>;
   onBeforeSaveFile?: (input: OnBeforeFileSave) => Promise<void>;
