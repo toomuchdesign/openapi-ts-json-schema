@@ -4,6 +4,7 @@ import path from 'node:path';
 import { $RefParser } from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 
+import { COMMENT_JSON_BEFORE_SYMBOL } from './constants.js';
 import type {
   JSONSchema,
   OpenApiDocument,
@@ -195,7 +196,7 @@ export async function openapiToTsJsonSchema(
            * See: https://github.com/kaelzhang/node-comment-json
            */
           if (refHandling === 'inline') {
-            inlinedSchema[Symbol.for('before')] = [
+            inlinedSchema[COMMENT_JSON_BEFORE_SYMBOL] = [
               {
                 type: 'LineComment',
                 value: ` $ref: "${ref}"`,

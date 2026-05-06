@@ -1,7 +1,10 @@
-export const SCHEMA_ID_SYMBOL = Symbol('id');
+import {
+  SCHEMA_ID_MARKER_END,
+  SCHEMA_ID_MARKER_START,
+  SCHEMA_ID_SYMBOL,
+} from '../constants.js';
 
-const SCHEMA_ID_MARKER_START = '_OTJS-START_';
-const SCHEMA_ID_MARKER_END = '_OTJS-END_';
+export { SCHEMA_ID_SYMBOL };
 
 export const PLACEHOLDER_REGEX = new RegExp(
   `["']${SCHEMA_ID_MARKER_START}(?<id>.+)${SCHEMA_ID_MARKER_END}["']`,
