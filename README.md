@@ -130,11 +130,11 @@ run();
 
 ### Advanced options
 
-| Property          | Type                                       | Description                                                                                           | Default |
-| ----------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------- |
-| **idMapper**      | `(params: { id: string }) => string`       | Customize generated schemas `$id`s and `$ref`s values. Useful for enforcing naming conventions.       | -       |
-| **schemaPatcher** | `(params: { schema: JSONSchema }) => void` | Hook called for every generated schema node, allowing programmatic mutation before output.            | -       |
-| **plugins**       | `ReturnType<Plugin>[]`                     | List of plugins to extend or customize the generation process. See [plugins docs](./docs/plugins.md). | -       |
+| Property          | Type                                       | Description                                                                                                                         | Default |
+| ----------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **idMapper**      | `(params: { id: string }) => string`       | Map internal schema ids to custom `$id` and `$ref` values in the generated output. See [`idMapper` option](#idmapper-option) below. | -       |
+| **schemaPatcher** | `(params: { schema: JSONSchema }) => void` | Hook called for every generated schema node, allowing programmatic mutation before output.                                          | -       |
+| **plugins**       | `ReturnType<Plugin>[]`                     | List of plugins to extend or customize the generation process. See [plugins docs](./docs/plugins.md).                               | -       |
 
 ### Full configuration example
 
@@ -182,6 +182,33 @@ Circular references are supported:
 - `keep`: circular refs left unresolved
 
 See [tests](https://github.com/toomuchdesign/openapi-ts-json-schema/blob/master/test/circularReference.test.ts) for details.
+
+### `idMapper` option
+
+Every schema gets an internal id derived from its path in the OpenAPI document (e.g. `/components/schemas/Pet`). `idMapper` lets you rewrite these ids before they are written as `$id` and `$ref` values in the generated output.
+
+**Strip the `/components/schemas/` prefix** so Fastify's `addSchema` / `getSchema` can look up schemas by a short name:
+
+```ts
+await openapiToTsJsonSchema({
+  openApiDocument: './openapi.yaml',
+  targets: { collections: ['components.schemas'] },
+  refHandling: 'keep',
+  idMapper: ({ id }) => {
+    const prefix = '/components/schemas/';
+    return id.startsWith(prefix) ? id.slice(prefix.length) : id;
+    // '/components/schemas/Pet' → 'Pet'
+  },
+});
+```
+
+**Map to a flat, namespaced identifier** across multiple target collections:
+
+```ts
+idMapper: ({ id }) => id.replaceAll('/', '.').replace(/^\./, ''),
+// '/components/schemas/Pet' → 'components.schemas.Pet'
+// '/paths/~1users~1{id}/get' → 'paths.~1users~1{id}.get'
+```
 
 ## Return values
 
