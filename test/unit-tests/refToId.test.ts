@@ -15,7 +15,7 @@ describe('refToId', () => {
     it('throws error', () => {
       expect(() => refToId('/components/schemas/Foo')).toThrow(
         new Error(
-          `[openapi-ts-json-schema] Unsupported ref value: "/components/schemas/Foo"`,
+          `[openapi-ts-json-schema] Unsupported ref value: "/components/schemas/Foo". Only internal refs starting with "#/" are supported.`,
         ),
       );
     });

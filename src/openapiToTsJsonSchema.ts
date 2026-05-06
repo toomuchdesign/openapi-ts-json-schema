@@ -219,7 +219,7 @@ export async function openapiToTsJsonSchema(
 
     if (!openApiDefinition) {
       throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
       );
     }
 
@@ -248,7 +248,7 @@ export async function openapiToTsJsonSchema(
 
     if (!openApiDefinitions) {
       throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,
+        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
       );
     }
 

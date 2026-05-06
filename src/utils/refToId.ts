@@ -4,7 +4,9 @@
  */
 function parseRef(ref: string): string {
   if (!ref.startsWith('#/')) {
-    throw new Error(`[openapi-ts-json-schema] Unsupported ref value: "${ref}"`);
+    throw new Error(
+      `[openapi-ts-json-schema] Unsupported ref value: "${ref}". Only internal refs starting with "#/" are supported.`,
+    );
   }
 
   const refPath = ref.replace('#/', '');

@@ -24,7 +24,7 @@ export function replacePlaceholdersWithImportedSchemas({
     /* v8 ignore if -- @preserve */
     if (!importedSchema) {
       throw new Error(
-        '[openapi-ts-json-schema] No matching schema found in "schemaMetaDataMap"',
+        `[openapi-ts-json-schema] No matching schema found for id "${id}" in "schemaMetaDataMap". Ensure the schema is included in "targets".`,
       );
     }
 
