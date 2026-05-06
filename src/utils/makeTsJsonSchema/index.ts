@@ -24,7 +24,12 @@ export async function makeTsJsonSchema({
   idMapper: IdMapper;
   moduleSystem: ModuleSystem;
 }): Promise<string> {
-  const { originalSchema, absoluteDirName } = metaData;
+  const { originalSchema, absoluteDirName, openApiDefinition } = metaData;
+
+  const isDeprecated =
+    openApiDefinition !== undefined &&
+    'deprecated' in openApiDefinition &&
+    openApiDefinition.deprecated === true;
 
   // "inline" refHandling doesn't need replacing inlined refs
   const schemaWithPlaceholders =
@@ -44,7 +49,10 @@ export async function makeTsJsonSchema({
    */
   const stringifiedSchema = stringify(schemaWithPlaceholders);
 
+  const deprecatedComment = isDeprecated ? '/** @deprecated */' : '';
+
   let tsSchema = `
+    ${deprecatedComment}
     const schema = ${stringifiedSchema} as const;
     export default schema;`;
 
@@ -52,6 +60,7 @@ export async function makeTsJsonSchema({
     // Alias schema handling is a bit rough, right now
     if (isAlias) {
       tsSchema = `
+        ${deprecatedComment}
         const schema = ${stringifiedSchema};
         export default schema;`;
     }

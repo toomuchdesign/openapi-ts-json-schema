@@ -1,0 +1,17 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI definition with deprecated schemas
+  version: 1.0.0
+components:
+  schemas:
+    DeprecatedSchema:
+      deprecated: true
+      type: object
+      properties:
+        name:
+          type: string
+    ActiveSchema:
+      type: object
+      properties:
+        name:
+          type: string
