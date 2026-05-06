@@ -146,6 +146,20 @@ Please consider that `@fastify/swagger` currently comes with some limitations:
 - All schemas registered via `.addSchema` being exposed under OpenAPi's `components.schemas` no matter their `$ref` value [🔗](https://github.com/fastify/fastify-swagger/blob/22d1e7c4f8cf63b0134047cdc272391d4bef3ec4/lib/spec/openapi/index.js#L23)
 - Fastify seems not to be always able to resolve `#`-leading `$ref`s (`#/components/schemas/Name`) but only `/components/schemas/Name`. For this reason the plugin rewrites `$id` and `$ref` values as the latter
 
+## Plugin lifecycle
+
+Plugins are executed in the order they appear in the `plugins` array. The three hooks fire in this sequence for every generation run:
+
+1. **`onInit`** — called after options are resolved, before the OpenAPI document is parsed. Use it to validate or mutate `options` (e.g. force a specific `refHandling`).
+2. **`onBeforeGeneration`** — called after schema metadata is built but before file contents are generated. Use it to inspect or mutate `metaData`, or to write additional files.
+3. **`onBeforeSaveFile`** — called after file contents are generated but before they are written to disk. Use it to post-process `fileContent` on individual schemas.
+
+If a plugin throws in any hook, generation stops immediately (fail-fast). The error is re-thrown wrapped with the plugin name (or its index in the array) to make the source identifiable:
+
+```
+[openapi-ts-json-schema] Plugin "myPlugin" failed during "onBeforeGeneration" hook
+```
+
 ## Write your own plugin
 
 `openapi-ts-json-schema` exposes a TS type to support custom plugins implementation:
