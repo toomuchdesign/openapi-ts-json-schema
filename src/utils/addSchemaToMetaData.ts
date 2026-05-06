@@ -1,8 +1,5 @@
 import path from 'node:path';
 
-// @ts-expect-error no type defs for namify
-import namify from 'namify';
-
 import type {
   JSONSchema,
   OpenApiObject,
@@ -13,6 +10,7 @@ import {
   convertOpenApiParameterToJsonSchema,
   filenamify,
   isOpenApiParameterObject,
+  makeUniqueName,
   parseId,
 } from './index.js';
 
@@ -52,7 +50,7 @@ export function addSchemaToMetaData({
   const metaInfo: SchemaMetaData = {
     id,
     $id,
-    uniqueName: namify(id),
+    uniqueName: makeUniqueName(id),
     isRef,
     shouldBeGenerated,
     openApiDefinition,

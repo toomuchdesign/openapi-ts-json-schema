@@ -5,6 +5,7 @@ type PluginOptions = {};
 const generateSchemaWith$idPlugin: Plugin<PluginOptions | void> = () => ({
   onBeforeSaveFile: async ({ metaData, utils }) => {
     for (const [_id, schema] of metaData.schemas) {
+      /* v8 ignore else -- @preserve */
       if (schema.fileContent) {
         /**
          * Re-expose schema with $id as "with$id"

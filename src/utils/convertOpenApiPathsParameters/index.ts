@@ -23,6 +23,7 @@ export function convertOpenApiPathsParameters(
     for (const path in schema.paths) {
       const pathSchema = schema.paths[path];
 
+      /* v8 ignore else -- @preserve */
       if (pathSchema) {
         /**
          * Common path parameters

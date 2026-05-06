@@ -18,6 +18,7 @@ export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/repla
 export { addSchemaToMetaData } from './addSchemaToMetaData.js';
 export { isObject } from './isObject.js';
 export { filenamify } from './filenamify.js';
+export { makeUniqueName } from './makeUniqueName.js';
 export { isOpenApiParameterObject } from './isOpenApiParameterObject.js';
 export { parseSingleItemPath } from './parseSingleItemPath.js';
 
