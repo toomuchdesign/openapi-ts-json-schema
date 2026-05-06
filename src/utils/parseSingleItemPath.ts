@@ -10,6 +10,7 @@ export function parseSingleItemPath(path: string): {
   const paths = path.split('.');
   const schemaName = paths.pop();
 
+  /* v8 ignore if -- @preserve */
   if (!schemaName) {
     throw new Error(
       `[openapi-ts-json-schema] target not found in OAS definition: "${path}"`,

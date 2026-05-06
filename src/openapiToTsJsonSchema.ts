@@ -97,7 +97,7 @@ export async function openapiToTsJsonSchema(
           options: optionsWithDefaults,
         });
       } catch (error) {
-        /* v8 ignore next 4 -- @preserve */
+        /* v8 ignore next -- @preserve */
         throw new Error(
           `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onInit" hook`,
           { cause: error },
@@ -326,7 +326,7 @@ export async function openapiToTsJsonSchema(
           },
         });
       } catch (error) {
-        /* v8 ignore next 4 -- @preserve */
+        /* v8 ignore next -- @preserve */
         throw new Error(
           `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onBeforeGeneration" hook`,
           { cause: error },
@@ -357,7 +357,7 @@ export async function openapiToTsJsonSchema(
           },
         });
       } catch (error) {
-        /* v8 ignore next 4 -- @preserve */
+        /* v8 ignore next -- @preserve */
         throw new Error(
           `[openapi-ts-json-schema] Plugin ${plugin.name ? `"${plugin.name}"` : `at index ${index}`} failed during "onBeforeSaveFile" hook`,
           { cause: error },
