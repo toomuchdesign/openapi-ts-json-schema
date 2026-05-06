@@ -29,7 +29,7 @@
 
 - [x] **Replace the string-placeholder system with a proper AST walk** — The current approach stringifies the schema, injects regex-delimited markers (`_OTJS-START_<id>_OTJS-END_`), does text surgery, then re-parses. This is fragile: any schema value that naturally contains the marker string will corrupt output silently. Redesign `makeTsJsonSchema` to walk the schema tree and emit TypeScript source code structurally, instead of operating on stringified JSON. **(Addressed in v3)**
 
-- [x] **Fix options mutation in plugin system** — `fastifyIntegrationPlugin.onInit` mutates the user-supplied `options` object in place (`options.refHandling = 'keep'`, `options.plugins.push(...)`). This creates hidden side effects and makes plugin ordering a source of bugs. Make a defensive copy of options at the start of `openapiToTsJsonSchema`, and document that plugins receive a snapshot, not a reference.
+- [x] **Fix the brute-force OpenAPI → JSON Schema conversion** — `convertOpenApiDocumentDefinitionsToJsonSchema.ts` recursively visits every node in the entire document with `mapObject({ deep: true })`. The code itself has a comment acknowledging this is wrong. OpenAPI defines specific fields that are schema objects; only those should be converted. Implement targeted conversion that follows the OpenAPI spec's definition of which fields are schema objects. Additionally, for OpenAPI v3.1.0 (which is already valid JSON Schema), skip conversion entirely — the version detection and conditional logic is missing.
 
 - [x] **Harden the `namify` dependency** — Import names for generated schemas are derived via the `namify` package, which has no type definitions (suppressed with `@ts-expect-error`). There are no tests for edge cases: numeric-only names (`123`), hyphenated names (`my-schema`), or JavaScript reserved words (`class`, `return`, `type`). Add explicit tests for these cases and handle numeric-leading names with a `_` prefix fallback. Note: replacing `namify` with an alternative (e.g. `to-valid-identifier`) would change generated identifier names (`mySchema` → `my$j$schema`) and is therefore a **breaking change — target v3**.
 
@@ -77,7 +77,11 @@
 
 - [x] **Document plugin lifecycle order and error behaviour** — `docs/plugins.md` shows how to write a plugin but does not state the hook execution order (`onInit` → `onBeforeGeneration` → `onBeforeSaveFile`), what the consequences of returning early or throwing are, or how ordering between multiple plugins is determined. Add a "Lifecycle" subsection to `docs/plugins.md`.
 
-- [x] **Document OpenAPI v3.1.0 handling** — Developer notes contain the observation that v3.1.0 schemas are already valid JSON Schema and shouldn't need conversion, but the code still converts them. Document the current state clearly: either explain why conversion still happens (maybe the library `@openapi-contrib/openapi-schema-to-json-schema` needs updating), or add version detection and skip conversion for v3.1.0. **implemented in v3 branch**
+- [ ] **Add a `refHandling: 'keep'` example in `examples/`** — This mode exists but has no example showing when and why you'd use it. A natural use case is Fastify's `addSchema` / `getSchema` dynamic registry — show that.
+
+- [ ] **Add a CJS example** — The only example in `examples/` is ESM + Fastify. Add a minimal CJS example showing the dynamic `import()` pattern and the `moduleSystem: 'cjs'` option with different generated output.
+
+- [x] **Document OpenAPI v3.1.0 handling** — Developer notes contain the observation that v3.1.0 schemas are already valid JSON Schema and shouldn't need conversion, but the code still converts them. Document the current state clearly: either explain why conversion still happens (maybe the library `@openapi-contrib/openapi-schema-to-json-schema` needs updating), or add version detection and skip conversion for v3.1.0.
 
 - [x] **Add a comparison table vs. `openapi-typescript`** — The most common alternative people find is `openapi-typescript`. A concise table showing the difference (runtime validation support, `as const` output, `json-schema-to-ts` compatibility, etc.) would help users who land on this repo understand whether it's what they need without requiring them to read both READMEs.
 
