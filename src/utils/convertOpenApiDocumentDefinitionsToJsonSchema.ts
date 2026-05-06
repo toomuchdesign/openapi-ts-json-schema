@@ -1,23 +1,7 @@
 import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
-import type { OpenAPIObject as OpenAPIObject_v3_0 } from 'openapi3-ts/oas30';
-import type { OpenAPIObject as OpenAPIObject_v3_1 } from 'openapi3-ts/oas31';
 
 import type { JSONSchema, OpenApiDocument } from '../types.js';
 import { isObject } from './index.js';
-
-/**
- * Structural type for the document fields this module needs to access.
- * OpenApiDocument omits `openapi` (and doesn't cover v2 `definitions`), so a
- * single cast to this type at the function boundary avoids scattering
- * intermediate `as` assertions throughout the implementation.
- *
- * @TODO make this OpenApiDocument definition
- */
-type DocumentLike = (OpenAPIObject_v3_0 | OpenAPIObject_v3_1) &
-  // OpenAPI v2 support: definitions are top-level, not under components
-  {
-    definitions?: Record<string, unknown>;
-  };
 
 function convertSchema<Value extends unknown>(
   value: Value,
@@ -95,18 +79,14 @@ function walkAndConvertDefinitionKeys(node: unknown): void {
  * require no conversion.
  */
 export function convertOpenApiDocumentDefinitionsToJsonSchema(
-  doc: OpenApiDocument,
+  document: OpenApiDocument,
 ): OpenApiDocument {
-  // OpenApiDocument omits `openapi` and doesn't cover v2 `definitions`;
-  // one cast here keeps the rest of the function free of type assertions.
-  const docTyped = doc as unknown as DocumentLike;
-
   // OAS 3.1+ is already valid JSON Schema — skip conversion entirely
-  if (docTyped.openapi?.startsWith('3.1')) {
-    return doc;
+  if (document.openapi?.startsWith('3.1')) {
+    return document;
   }
 
-  const result = structuredClone(docTyped);
+  const result = structuredClone(document);
 
   // 1. Direct schema containers:
   //    - OAS 3.0: components.schemas[*]
