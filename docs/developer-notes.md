@@ -124,8 +124,36 @@ OpenAPI is often described as an extension of JSON Schema, but both specs have c
 - https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-1-1daf6678d86e
 - https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-2-52e282e06a05
 
-The current conversion consists of iterating the whole OpenApi schema and converting any found property with `@openapi-contrib/openapi-schema-to-json-schema`. This approach is definitely suboptimal since not all the OpenApi fields are supposed to be convertible to JSON schema.
+Conversion is implemented in `src/utils/convertOpenApiDocumentDefinitionsToJsonSchema.ts` and uses `@openapi-contrib/openapi-schema-to-json-schema`'s `fromSchema` function.
 
-Another approach could consist of executing the conversion only on those fields which [OpenApi documentation](https://swagger.io/resources/open-api/) defines as data types convertible to JSON schema.
+### Approach: targeted conversion
 
-From v3.1.0, OpenApi definitions should be valid JSON schemas, therefore no conversion should ve needed.
+Rather than visiting every node in the document tree (the previous brute-force approach, which caused data loss on non-schema nodes such as stripping `deprecated` from path operations), conversion is applied **only to the locations the OAS spec defines as Schema Objects**:
+
+**1. Direct schema containers** — called once per entry; `fromSchema` recurses into sub-schemas (properties, allOf, …) internally:
+
+- OAS 3.0: `components.schemas[*]`
+- OAS 2.0: `definitions[*]`
+
+**2. Any value under a literal `schema` key** in the rest of the document (walked recursively, stopping at each `schema` key to avoid double-conversion):
+
+| Location                         | Key path                                            |
+| -------------------------------- | --------------------------------------------------- |
+| Path/operation parameter schemas | `paths[*][method].parameters[*].schema`             |
+| Request body content schemas     | `paths[*][method].requestBody.content[*].schema`    |
+| Response content schemas         | `paths[*][method].responses[*].content[*].schema`   |
+| Response header schemas          | `paths[*][method].responses[*].headers[*].schema`   |
+| Callback schemas                 | `paths[*][method].callbacks[*][expr].*` (recursive) |
+| Component response schemas       | `components.responses[*].content[*].schema`         |
+| Component request body schemas   | `components.requestBodies[*].content[*].schema`     |
+| Component header schemas         | `components.headers[*].schema`                      |
+| Component parameter schemas      | `components.parameters[*].schema`                   |
+| Component callback schemas       | `components.callbacks[*][expr].*` (recursive)       |
+
+### OAS 3.1+
+
+From v3.1.0, OpenAPI definitions are valid JSON Schema Draft 2020-12 natively. `fromSchema` is skipped entirely for documents where `openapi` starts with `"3.1"`. The library detects this from the `openapi` version field at the root of the document.
+
+### Extension properties (`x-*`)
+
+OAS `x-*` extension properties are not converted. If a project uses extensions that contain Schema Objects, a `schemaPatcher` hook can be used to handle them manually. A future `schemaExtensionKeys` option may make this first-class.
