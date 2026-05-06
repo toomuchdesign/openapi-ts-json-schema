@@ -49,10 +49,11 @@ export function addSchemaToMetaData({
     jsonSchema = convertOpenApiParameterToJsonSchema(openApiDefinition);
   }
 
+  const rawUniqueName = namify(id) as string;
   const metaInfo: SchemaMetaData = {
     id,
     $id,
-    uniqueName: namify(id),
+    uniqueName: /^\d/.test(rawUniqueName) ? `_${rawUniqueName}` : rawUniqueName,
     isRef,
     shouldBeGenerated,
     openApiDefinition,
