@@ -212,7 +212,7 @@ describe('refHandling option === "import"', () => {
       const expectedAnswerAliasDefinitionSchemaFile = await formatTypeScript(`
       import componentsSchemasAnswer from "./Answer.js";
 
-      const schema = componentsSchemasAnswer;
+      const schema = componentsSchemasAnswer as const;
       export default schema;`);
 
       expect(actualAnswerAliasDefinitionSchemaFile).toEqual(

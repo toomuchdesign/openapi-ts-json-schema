@@ -38,12 +38,6 @@ export async function makeTsJsonSchema({
       : originalSchema;
 
   /**
-   * Check if this schema is just a reference to another schema
-   * Eg: _OTJS-START_/components/schemas/Foo_OTJS-END_
-   */
-  const isAlias = typeof schemaWithPlaceholders === 'string';
-
-  /**
    * Stringifying schema with "comment-json" instead of JSON.stringify
    * to generate inline comments for "inline" refHandling
    */
@@ -57,14 +51,6 @@ export async function makeTsJsonSchema({
     export default schema;`;
 
   if (refHandling === 'import') {
-    // Alias schema handling is a bit rough, right now
-    if (isAlias) {
-      tsSchema = `
-        ${deprecatedComment}
-        const schema = ${stringifiedSchema};
-        export default schema;`;
-    }
-
     tsSchema = replacePlaceholdersWithImportedSchemas({
       schemaAsText: tsSchema,
       absoluteDirName,

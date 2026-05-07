@@ -46,7 +46,7 @@ describe('Chained alias definitions', () => {
       const expectedAliasFile = await formatTypeScript(`
         import componentsSchemasAnswer from "./Answer.js";
 
-        const schema = componentsSchemasAnswer;
+        const schema = componentsSchemasAnswer as const;
         export default schema;`);
 
       const answerAliasFile = await fs.readFile(

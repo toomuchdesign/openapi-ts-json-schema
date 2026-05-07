@@ -35,7 +35,7 @@
 
 - [ ] **Remove `@ts-expect-error` suppressions from core logic** — There are 4 `@ts-expect-error` comments in `openapiToTsJsonSchema.ts` and `convertOpenApiPathsParameters/`. These suppress real type mismatches (e.g. passing an OpenAPI document to an API typed for JSON Schema). Replace them with proper type casts or type guards with runtime validation at the relevant boundaries.
 
-- [ ] **Fix alias schema handling** — When a schema is just a reference to another (`Foo: "#/components/schemas/Bar"`), it results in a plain string placeholder rather than a proper schema object, and the generated file loses its `as const` assertion. Developer notes acknowledge this as "a bit rough". Implement a proper alias path that generates a consistent, typed output.
+- [x] **Fix alias schema handling (cosmetic part)** — Removed the special-case branch in `makeTsJsonSchema` that dropped `as const` for aliases under `import` mode. Output is now uniformly `as const` across all three refHandling modes. The deeper issue (chained aliases collapsing to the ultimate target during dereference) remains and is best addressed alongside the Section 1 deref pipeline rework.
 
 ---
 
@@ -46,8 +46,6 @@
 - [ ] **Add input validation for `targets`** — The `targets.collections` and `targets.single` arrays are not validated. Invalid dot-notation paths (e.g. a typo) result in silent empty output rather than a useful error. Add a validation step that checks each target path exists in the bundled document and throws with a clear message if not.
 
 - [x] **Propagate `deprecated: true` from OpenAPI to generated code** — OpenAPI allows marking schemas and properties as deprecated. Currently this information is silently dropped. At minimum, emit a JSDoc `@deprecated` comment on deprecated schemas and properties so IDEs can surface it to users.
-
-- [ ] **Emit JSDoc comments from OpenAPI `description` fields** — The generated code is completely uncommented. OpenAPI `description` fields on schemas and properties contain human-readable documentation. Emit them as JSDoc `/** ... */` comments above the relevant exported constants and property keys. Make this opt-in with a `jsDocComments: boolean` option (default `true`).
 
 ---
 
