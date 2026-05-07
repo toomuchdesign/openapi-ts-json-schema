@@ -6,9 +6,10 @@ import { openapiToTsJsonSchema } from '../src/index.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 /**
- * This test take too long to run
+ * Heavy integration test using the real GitHub REST API spec (~7.5 MB, 1000+ schemas).
+ * Skipped by default — run with `npm run test:heavy`.
  */
-describe('GitHub API', () => {
+describe.skipIf(!process.env['RUN_HEAVY_TESTS'])('GitHub API', () => {
   it("doesn't error", async () => {
     await expect(
       openapiToTsJsonSchema({
@@ -21,5 +22,5 @@ describe('GitHub API', () => {
         silent: true,
       }),
     ).resolves.not.toThrow();
-  }, 20000);
+  }, 10_000);
 });

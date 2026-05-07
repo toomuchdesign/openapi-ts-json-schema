@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: title
+  description: description
+  version: 1.0.0
+components:
+  schemas:
+    Answer:
+      type: string
+      nullable: true
+      enum:
+        - yes
+        - no
+    AnswerAlias:
+      $ref: '#/components/schemas/Answer'
+    AnswerChainedAlias:
+      $ref: '#/components/schemas/AnswerAlias'
+servers:
+  - url: url

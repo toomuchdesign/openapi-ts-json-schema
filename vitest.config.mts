@@ -14,8 +14,6 @@ export default defineConfig({
      * "transformResult" in not defined. This is a bug in Vitest.
      */
     pool: 'threads',
-    // Running tests sequentially to avoid issues with file system operations in tests
-    maxWorkers: 1,
     exclude: ['*skipped.test*'],
     sequence: {
       shuffle: true,
