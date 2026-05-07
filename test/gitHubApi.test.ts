@@ -7,10 +7,7 @@ import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 /**
  * Heavy integration test using the real GitHub REST API spec (~7.5 MB, 1000+ schemas).
- * Skipped by default because generation takes ~60–90 s in CI.
- *
- * Run manually with:
- *   RUN_HEAVY_TESTS=1 npx vitest run test/gitHubApi.test.ts
+ * Skipped by default — run with `npm run test:heavy`.
  */
 describe.skipIf(!process.env['RUN_HEAVY_TESTS'])('GitHub API', () => {
   it("doesn't error", async () => {
@@ -25,5 +22,5 @@ describe.skipIf(!process.env['RUN_HEAVY_TESTS'])('GitHub API', () => {
         silent: true,
       }),
     ).resolves.not.toThrow();
-  }, 120_000);
+  }, 10_000);
 });

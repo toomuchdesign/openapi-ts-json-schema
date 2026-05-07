@@ -12,6 +12,7 @@
     "build": "rimraf ./dist && tsc -p tsconfig.build.json",
     "test": "npm run test:build && vitest --config ./vitest.config.mts",
     "test:build": "npm --prefix ./examples/fastify-integration-plugin run generate-schemas",
+    "test:heavy": "RUN_HEAVY_TESTS=1 npm test",
     "prepare": "npx simple-git-hooks && npm run test -- --run && npm run source:check && npm run build",
     "release": "npm run prepare && npx changeset publish",
     "prettier:check": "prettier . --check",

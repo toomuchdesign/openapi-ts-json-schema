@@ -75,7 +75,7 @@
 
 - [ ] **Reduce fixture verbosity** — Some test YAML fixtures run to hundreds of lines, making it hard to understand what a specific test is exercising. Where possible, trim fixtures to the minimal spec required to reproduce the scenario being tested.
 
-- [x] **Add performance baseline test** — A heavy integration test using the real GitHub REST API spec (~7.5 MB, 1000+ schemas) exists in `test/gitHubApi.test.ts`. Renamed from `gitHubApi.skipped.test.ts` and gated with `describe.skipIf(!process.env.RUN_HEAVY_TESTS)` so it appears as "1 skipped" in normal CI runs and activates with `RUN_HEAVY_TESTS=1 npm test` or `RUN_HEAVY_TESTS=1 npx vitest run test/gitHubApi.test.ts`.
+- [x] **Add performance baseline test** — A heavy integration test using the real GitHub REST API spec (~7.5 MB, 1000+ schemas) lives in `test/gitHubApi.test.ts`. Skipped by default in `npm test`; run via `npm run test:heavy`.
 
 ---
 
