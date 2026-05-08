@@ -1,0 +1,38 @@
+openapi: 3.0.0
+x-api-id: my-api
+info:
+  title: Specification Extensions test
+  version: 1.0.0
+  x-logo: https://example.com/logo.png
+components:
+  schemas:
+    Status:
+      type: string
+      nullable: true
+      x-internal: true
+      enum:
+        - active
+        - inactive
+      x-enum-descriptions:
+        active: The entity is active
+        inactive: The entity is inactive
+    User:
+      type: object
+      x-owner: platform-team
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+paths:
+  /users:
+    x-internal-path: true
+    get:
+      x-rate-limit: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'

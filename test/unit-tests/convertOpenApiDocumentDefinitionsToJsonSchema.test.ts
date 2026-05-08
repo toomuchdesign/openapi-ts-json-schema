@@ -318,6 +318,100 @@ describe('convertOpenApiDocumentDefinitionsToJsonSchema', () => {
     });
   });
 
+  describe('specification extensions (x- fields)', () => {
+    it('preserves x- extensions on schema objects in components.schemas', () => {
+      const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
+        ...baseDoc,
+        components: {
+          schemas: {
+            Status: {
+              type: 'string' as const,
+              nullable: true,
+              'x-internal': true,
+              enum: ['active', 'inactive'],
+              'x-enum-descriptions': { active: 'Active', inactive: 'Inactive' },
+            },
+          },
+        },
+      });
+
+      expect(actual).toEqual({
+        ...baseDoc,
+        components: {
+          schemas: {
+            Status: {
+              // OAS-specific nullable is converted to JSON Schema type union
+              type: ['string', 'null'],
+              enum: ['active', 'inactive', null],
+              // x- extensions are preserved as-is
+              'x-internal': true,
+              'x-enum-descriptions': { active: 'Active', inactive: 'Inactive' },
+            },
+          },
+        },
+      });
+    });
+
+    it('preserves x- extensions on schema object properties', () => {
+      const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
+        ...baseDoc,
+        components: {
+          schemas: {
+            User: {
+              type: 'object',
+              'x-owner': 'platform-team',
+              properties: {
+                name: { type: 'string', 'x-example': 'Alice' },
+              },
+            },
+          },
+        },
+      });
+
+      expect(actual).toEqual({
+        ...baseDoc,
+        components: {
+          schemas: {
+            User: {
+              type: 'object',
+              'x-owner': 'platform-team',
+              properties: {
+                name: { type: 'string', 'x-example': 'Alice' },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('preserves x- extensions on non-schema document nodes', () => {
+      const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
+        ...baseDoc,
+        'x-api-id': 'my-api',
+        paths: {
+          '/users': {
+            'x-internal-path': true,
+            get: {
+              'x-rate-limit': 100,
+              responses: {},
+            },
+          },
+        },
+      });
+
+      expect(actual).toEqual({
+        ...baseDoc,
+        'x-api-id': 'my-api',
+        paths: {
+          '/users': {
+            'x-internal-path': true,
+            get: { 'x-rate-limit': 100, responses: {} },
+          },
+        },
+      });
+    });
+  });
+
   describe('non-schema areas', () => {
     it('preserves operation-level deprecated flag', () => {
       const actual = convertOpenApiDocumentDefinitionsToJsonSchema({
