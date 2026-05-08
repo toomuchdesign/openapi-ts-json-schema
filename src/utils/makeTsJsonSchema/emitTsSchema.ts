@@ -42,6 +42,7 @@ function renderLeadingComment(node: object): string {
       out += `/*${typeof entry.value === 'string' ? entry.value : ''}*/\n`;
     }
   }
+
   return out;
 }
 
@@ -82,7 +83,7 @@ function registerImport(id: string, ctx: EmitContext): string {
  * arrays, and objects. `ancestors` tracks the active parent chain so cycles can
  * be short-circuited to `{}` instead of recursing forever.
  */
-function emitNode({
+function emitNodeString({
   node,
   ctx,
   ancestors,
@@ -91,24 +92,29 @@ function emitNode({
   ctx: EmitContext;
   ancestors: Set<object>;
 }): string {
-  // Inlined-ref nodes resolve to either an identifier (import) or a $ref literal (keep)
   const id = getId(node);
 
+  // Handling a previously inlined dereferenced node
   if (id) {
     if (ctx.refHandling === 'import') {
       return registerImport(id, ctx);
     }
 
+    // Restore the $ref
     if (ctx.refHandling === 'keep') {
       return `{ $ref: ${JSON.stringify(ctx.idMapper({ id }))} }`;
     }
   }
 
-  if (node === null) return 'null';
-  if (typeof node === 'string') return JSON.stringify(node);
-  if (typeof node === 'number') return String(node);
-  if (typeof node === 'boolean') return node ? 'true' : 'false';
-  if (typeof node !== 'object') return 'null';
+  if (
+    node === undefined ||
+    node === null ||
+    typeof node === 'string' ||
+    typeof node === 'number' ||
+    typeof node === 'boolean'
+  ) {
+    return JSON.stringify(node);
+  }
 
   // Cyclic occurrences collapse to "{}"
   if (ancestors.has(node)) {
@@ -116,42 +122,25 @@ function emitNode({
   }
 
   ancestors.add(node);
-
   let result: string;
+
   if (Array.isArray(node)) {
-    const items: string[] = [];
-    for (const value of node) {
-      if (
-        value === undefined ||
-        typeof value === 'function' ||
-        typeof value === 'symbol'
-      ) {
-        continue;
-      }
-      items.push(emitNode({ node: value, ctx, ancestors }));
-    }
+    const items = node.map((value) =>
+      emitNodeString({ node: value, ctx, ancestors }),
+    );
     result = `[${items.join(',')}]`;
-  } else {
+  }
+
+  // node is record
+  else {
     const entries: string[] = [];
     for (const [key, value] of Object.entries(node)) {
-      if (
-        value === undefined ||
-        typeof value === 'function' ||
-        typeof value === 'symbol'
-      ) {
-        continue;
-      }
       entries.push(
-        `${JSON.stringify(key)}: ${emitNode({ node: value, ctx, ancestors })}`,
+        `${JSON.stringify(key)}: ${emitNodeString({ node: value, ctx, ancestors })}`,
       );
     }
     const leading = renderLeadingComment(node);
-    if (entries.length === 0 && leading === '') {
-      result = '{}';
-    } else {
-      // Newlines around the body keep Prettier from collapsing the object onto a single line
-      result = `{\n${leading}${entries.join(',\n')}\n}`;
-    }
+    result = `{\n${leading}${entries.join(',\n')}\n}`;
   }
 
   ancestors.delete(node);
@@ -212,7 +201,7 @@ export function emitTsSchema({
   const isImportAlias =
     refHandling === 'import' && getId(rootSchema) !== undefined;
 
-  const body = emitNode({ node: rootSchema, ctx, ancestors: new Set() });
+  const body = emitNodeString({ node: rootSchema, ctx, ancestors: new Set() });
   const imports = renderImports(ctx.imports);
 
   return { body, imports, isImportAlias };

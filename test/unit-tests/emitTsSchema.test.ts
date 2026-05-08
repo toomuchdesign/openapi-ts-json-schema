@@ -195,6 +195,6 @@ describe('emitTsSchema', () => {
       ...baseArgs,
     });
 
-    expect(body).toBe('{}');
+    expect(body).toBe(`{\n\n}`);
   });
 });
