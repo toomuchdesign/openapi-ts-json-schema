@@ -1,5 +1,23 @@
 # openapi-ts-json-schema
 
+## 2.1.0
+
+### Minor Changes
+
+- [#572](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/572) [`aad5e99`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/aad5e9908a3accf454d8f6e6b739cc4a787c3091) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Emit `/** @deprecated */` JSDoc comment on generated schemas marked `deprecated: true` in the OpenAPI document, so IDEs surface deprecation hints at usage sites.
+
+- [#570](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/570) [`5abf859`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/5abf8599361028bceef92203ab35e8258151488d) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Improve error messages: all thrown errors now include the offending schema id or path and a hint toward the fix.
+
+- [#570](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/570) [`5abf859`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/5abf8599361028bceef92203ab35e8258151488d) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Plugin hook invocations are now wrapped in try/catch; errors re-thrown with the plugin name (or index) and hook name for easier debugging. Add optional `name` property to the `Plugin` return type.
+
+### Patch Changes
+
+- [#570](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/570) [`5abf859`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/5abf8599361028bceef92203ab35e8258151488d) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Centralise internal sentinel strings and symbols (`SCHEMA_ID_MARKER_START`, `SCHEMA_ID_MARKER_END`, `SCHEMA_ID_SYMBOL`, `COMMENT_JSON_BEFORE_SYMBOL`, `OPEN_API_COMPONENTS_SCHEMAS_PATH`) in a new `src/constants.ts` module.
+
+- [#572](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/572) [`aad5e99`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/aad5e9908a3accf454d8f6e6b739cc4a787c3091) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Prefix `uniqueName` with `_` when `namify` produces a digit-leading identifier, ensuring generated import names are always valid JavaScript identifiers.
+
+- [#570](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/570) [`5abf859`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/5abf8599361028bceef92203ab35e8258151488d) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Fix plugin system options mutation: `plugins` array is now shallow-copied when building internal options, preventing `onInit` hooks from mutating the caller's original array.
+
 ## 2.0.0
 
 ### Major Changes
