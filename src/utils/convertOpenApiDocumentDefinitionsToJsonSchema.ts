@@ -3,13 +3,7 @@ import { fromSchema } from '@openapi-contrib/openapi-schema-to-json-schema';
 import type { JSONSchema, OpenApiDocument } from '../types.js';
 import { isObject } from './index.js';
 
-function convertSchema<Value extends unknown>(
-  value: Value,
-): JSONSchema | Value {
-  if (!isObject(value)) {
-    return value;
-  }
-
+function convertSchema(value: Record<string, unknown>): JSONSchema {
   try {
     const schema = fromSchema(value, { strictMode: false });
     // $schema is appended by @openapi-contrib/openapi-schema-to-json-schema

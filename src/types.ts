@@ -24,7 +24,7 @@ import type {
 export type OpenApiDocument = (OpenAPIObject_v3_0 | OpenAPIObject_v3_1) &
   // OpenAPI v2 support: definitions are top-level, not under components
   {
-    definitions?: Record<string, unknown>;
+    definitions?: Record<string, Record<string, unknown>>;
   };
 
 // This type should represent any generated OpenAPI
