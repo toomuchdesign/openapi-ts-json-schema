@@ -33,10 +33,6 @@
 
 - [ ] **Harden the `namify` dependency** — Import names for generated schemas are derived via the `namify` package, which has no type definitions (suppressed with `@ts-expect-error`). There are no tests for edge cases: numeric-only names (`123`), hyphenated names (`my-schema`), or JavaScript reserved words (`class`, `return`, `type`). Add explicit tests for these cases and handle numeric-leading names with a `_` prefix fallback. Note: replacing `namify` with an alternative (e.g. `to-valid-identifier`) would change generated identifier names (`mySchema` → `my$j$schema`) and is therefore a **breaking change — target v3**.
 
-- [ ] **Remove `@ts-expect-error` suppressions from core logic** — There are 4 `@ts-expect-error` comments in `openapiToTsJsonSchema.ts` and `convertOpenApiPathsParameters/`. These suppress real type mismatches (e.g. passing an OpenAPI document to an API typed for JSON Schema). Replace them with proper type casts or type guards with runtime validation at the relevant boundaries.
-
-- [ ] **Fix alias schema handling** — When a schema is just a reference to another (`Foo: "#/components/schemas/Bar"`), it results in a plain string placeholder rather than a proper schema object, and the generated file loses its `as const` assertion. Developer notes acknowledge this as "a bit rough". Implement a proper alias path that generates a consistent, typed output.
-
 ---
 
 ## Section 3 — High: developer experience
