@@ -33,175 +33,238 @@ const baseArgs = {
 };
 
 describe('emitTsSchema', () => {
-  it('emits primitives, arrays, and nested objects as TypeScript source', () => {
-    const { body, imports, isImportAlias } = emitTsSchema({
-      rootSchema: {
-        type: 'object',
-        required: ['name'],
-        properties: { name: { type: 'string' } },
-        nullable: null,
-        count: 0,
-        active: true,
-      },
-      refHandling: 'inline',
-      schemaMetaDataMap: new Map(),
-      ...baseArgs,
+  describe('when refHandling is "inline"', () => {
+    it('emits primitives, arrays, and nested objects as TypeScript source', () => {
+      const result = emitTsSchema({
+        rootSchema: {
+          type: 'object',
+          required: ['name'],
+          properties: { name: { type: 'string' } },
+          nullable: null,
+          count: 0,
+          active: true,
+        },
+        refHandling: 'inline',
+        schemaMetaDataMap: new Map(),
+        ...baseArgs,
+      });
+
+      expect(result).toEqual({
+        body: [
+          '{',
+          '"type": "object",',
+          '"required": ["name"],',
+          '"properties": {',
+          '"name": {',
+          '"type": "string"',
+          '}',
+          '},',
+          '"nullable": null,',
+          '"count": 0,',
+          '"active": true',
+          '}',
+        ].join('\n'),
+        imports: '',
+        isImportAlias: false,
+      });
     });
 
-    expect(imports).toBe('');
-    expect(isImportAlias).toBe(false);
-    // Newlines around object body keep Prettier from collapsing it later
-    expect(body).toContain('{\n"type": "object"');
-    expect(body).toContain('"required": ["name"]');
-    expect(body).toContain(
-      '"properties": {\n"name": {\n"type": "string"\n}\n}',
-    );
-    expect(body).toContain('"nullable": null');
-    expect(body).toContain('"count": 0');
-    expect(body).toContain('"active": true');
-  });
-
-  it('replaces marked nodes with imported identifiers and registers imports', () => {
-    const schemaMetaDataMap: SchemaMetaDataMap = new Map();
-    schemaMetaDataMap.set(
-      '/components/schemas/Answer',
-      makeMeta({
-        id: '/components/schemas/Answer',
-        uniqueName: 'componentsSchemasAnswer',
-        absoluteImportPath: path.resolve('/out/components/schemas/Answer'),
-      }),
-    );
-
-    const inlinedRef = {
-      type: 'string',
-      [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
-    };
-
-    const { body, imports, isImportAlias } = emitTsSchema({
-      rootSchema: { properties: { a: inlinedRef, b: inlinedRef } },
-      refHandling: 'import',
-      schemaMetaDataMap,
-      ...baseArgs,
-    });
-
-    expect(isImportAlias).toBe(false);
-    // Identifier substitution, not stringified placeholder
-    expect(body).toContain('"a": componentsSchemasAnswer');
-    expect(body).toContain('"b": componentsSchemasAnswer');
-    // Single import even though referenced twice
-    expect(imports).toBe('import componentsSchemasAnswer from "./Answer.js"\n');
-  });
-
-  it('emits "{ $ref: ... }" object literals in keep mode', () => {
-    const schemaMetaDataMap: SchemaMetaDataMap = new Map();
-    const inlinedRef = {
-      type: 'string',
-      [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
-    };
-
-    const { body, imports } = emitTsSchema({
-      rootSchema: { properties: { a: inlinedRef } },
-      refHandling: 'keep',
-      schemaMetaDataMap,
-      ...baseArgs,
-      idMapper: ({ id }) => `#${id}`,
-    });
-
-    expect(imports).toBe('');
-    expect(body).toContain('"a": { $ref: "#/components/schemas/Answer" }');
-  });
-
-  it('flags root-level marked schemas as import aliases', () => {
-    const schemaMetaDataMap: SchemaMetaDataMap = new Map();
-    schemaMetaDataMap.set(
-      '/components/schemas/Answer',
-      makeMeta({
-        id: '/components/schemas/Answer',
-        uniqueName: 'componentsSchemasAnswer',
-        absoluteImportPath: path.resolve('/out/components/schemas/Answer'),
-      }),
-    );
-
-    const { body, isImportAlias } = emitTsSchema({
-      rootSchema: {
-        type: 'string',
-        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
-      },
-      refHandling: 'import',
-      schemaMetaDataMap,
-      ...baseArgs,
-    });
-
-    expect(isImportAlias).toBe(true);
-    expect(body).toBe('componentsSchemasAnswer');
-  });
-
-  it('ignores SCHEMA_ID_SYMBOL in inline mode', () => {
-    const inlinedRef = {
-      type: 'string',
-      [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
-    };
-
-    const { body, imports, isImportAlias } = emitTsSchema({
-      rootSchema: inlinedRef,
-      refHandling: 'inline',
-      schemaMetaDataMap: new Map(),
-      ...baseArgs,
-    });
-
-    expect(imports).toBe('');
-    expect(isImportAlias).toBe(false);
-    expect(body).toContain('"type": "string"');
-  });
-
-  describe('LEADING_COMMENT_SYMBOL prop', () => {
-    it('append leading within provided object', () => {
+    it('ignores SCHEMA_ID_SYMBOL on referenced nodes', () => {
       const inlinedRef = {
         type: 'string',
-        [LEADING_COMMENT_SYMBOL]: ' $ref: "#/components/schemas/Answer"',
+        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
       };
 
-      const { body } = emitTsSchema({
+      const result = emitTsSchema({
         rootSchema: inlinedRef,
         refHandling: 'inline',
         schemaMetaDataMap: new Map(),
         ...baseArgs,
       });
 
-      expect(body).toBe(
-        [
+      expect(result).toEqual({
+        body: ['{', '"type": "string"', '}'].join('\n'),
+        imports: '',
+        isImportAlias: false,
+      });
+    });
+
+    it('emits an empty object literal for {} without leading comments', () => {
+      const result = emitTsSchema({
+        rootSchema: {},
+        refHandling: 'inline',
+        schemaMetaDataMap: new Map(),
+        ...baseArgs,
+      });
+
+      expect(result).toEqual({
+        body: '{\n\n}',
+        imports: '',
+        isImportAlias: false,
+      });
+    });
+
+    it('replaces circular references with "{}"', () => {
+      const node: { name: string; self?: unknown } = { name: 'cycle' };
+      node.self = node;
+
+      const result = emitTsSchema({
+        rootSchema: node,
+        refHandling: 'inline',
+        schemaMetaDataMap: new Map(),
+        ...baseArgs,
+      });
+
+      expect(result).toEqual({
+        body: ['{', '"name": "cycle",', '"self": {}', '}'].join('\n'),
+        imports: '',
+        isImportAlias: false,
+      });
+    });
+
+    describe('the node carries a LEADING_COMMENT_SYMBOL', () => {
+      it('renders the comment inside the object literal', () => {
+        const inlinedRef = {
+          type: 'string',
+          [LEADING_COMMENT_SYMBOL]: ' $ref: "#/components/schemas/Answer"',
+        };
+
+        const result = emitTsSchema({
+          rootSchema: inlinedRef,
+          refHandling: 'inline',
+          schemaMetaDataMap: new Map(),
+          ...baseArgs,
+        });
+
+        expect(result).toEqual({
+          body: [
+            '{',
+            '// $ref: "#/components/schemas/Answer"',
+            '"type": "string"',
+            '}',
+          ].join('\n'),
+          imports: '',
+          isImportAlias: false,
+        });
+      });
+    });
+  });
+
+  describe('refHandling === "import"', () => {
+    it('replaces marked nodes with imported identifiers and registers imports', () => {
+      const schemaMetaDataMap: SchemaMetaDataMap = new Map();
+      schemaMetaDataMap.set(
+        '/components/schemas/Answer',
+        makeMeta({
+          id: '/components/schemas/Answer',
+          uniqueName: 'componentsSchemasAnswer',
+          absoluteImportPath: path.resolve('/out/components/schemas/Answer'),
+        }),
+      );
+      schemaMetaDataMap.set(
+        '/components/schemas/Question',
+        makeMeta({
+          id: '/components/schemas/Question',
+          uniqueName: 'componentsSchemasQuestion',
+          absoluteImportPath: path.resolve('/out/components/schemas/Question'),
+        }),
+      );
+
+      const answerRef = {
+        type: 'string',
+        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+      };
+      const questionRef = {
+        type: 'string',
+        [SCHEMA_ID_SYMBOL]: '/components/schemas/Question',
+      };
+
+      const result = emitTsSchema({
+        rootSchema: {
+          properties: { a: answerRef, b: questionRef, c: answerRef },
+        },
+        refHandling: 'import',
+        schemaMetaDataMap,
+        ...baseArgs,
+      });
+
+      expect(result).toEqual({
+        body: [
           '{',
-          '// $ref: "#/components/schemas/Answer"',
-          '"type": "string"',
+          '"properties": {',
+          '"a": componentsSchemasAnswer,',
+          '"b": componentsSchemasQuestion,',
+          '"c": componentsSchemasAnswer',
+          '}',
           '}',
         ].join('\n'),
-      );
+        imports: [
+          'import componentsSchemasQuestion from "./Question.js"',
+          'import componentsSchemasAnswer from "./Answer.js"',
+          '',
+        ].join('\n'),
+        isImportAlias: false,
+      });
+    });
+
+    describe('and the root schema is itself a marked reference', () => {
+      it('flags the result as an import alias', () => {
+        const schemaMetaDataMap: SchemaMetaDataMap = new Map();
+        schemaMetaDataMap.set(
+          '/components/schemas/Answer',
+          makeMeta({
+            id: '/components/schemas/Answer',
+            uniqueName: 'componentsSchemasAnswer',
+            absoluteImportPath: path.resolve('/out/components/schemas/Answer'),
+          }),
+        );
+
+        const result = emitTsSchema({
+          rootSchema: {
+            type: 'string',
+            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+          },
+          refHandling: 'import',
+          schemaMetaDataMap,
+          ...baseArgs,
+        });
+
+        expect(result).toEqual({
+          body: 'componentsSchemasAnswer',
+          imports: 'import componentsSchemasAnswer from "./Answer.js"\n',
+          isImportAlias: true,
+        });
+      });
     });
   });
 
-  it('replaces circular references with "{}"', () => {
-    const node: { name: string; self?: unknown } = { name: 'cycle' };
-    node.self = node;
+  describe('refHandling === "keep"', () => {
+    it('emits "{ $ref: ... }" object literals at marked nodes', () => {
+      const schemaMetaDataMap: SchemaMetaDataMap = new Map();
+      const inlinedRef = {
+        type: 'string',
+        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+      };
 
-    const { body } = emitTsSchema({
-      rootSchema: node,
-      refHandling: 'inline',
-      schemaMetaDataMap: new Map(),
-      ...baseArgs,
+      const result = emitTsSchema({
+        rootSchema: { properties: { a: inlinedRef } },
+        refHandling: 'keep',
+        schemaMetaDataMap,
+        ...baseArgs,
+        idMapper: ({ id }) => `#${id}`,
+      });
+
+      expect(result).toEqual({
+        body: [
+          '{',
+          '"properties": {',
+          '"a": { $ref: "#/components/schemas/Answer" }',
+          '}',
+          '}',
+        ].join('\n'),
+        imports: '',
+        isImportAlias: false,
+      });
     });
-
-    expect(body).toContain('"name": "cycle"');
-    expect(body).toContain('"self": {}');
-  });
-
-  it('emits empty object literal for {} without leading comments', () => {
-    const { body } = emitTsSchema({
-      rootSchema: {},
-      refHandling: 'inline',
-      schemaMetaDataMap: new Map(),
-      ...baseArgs,
-    });
-
-    expect(body).toBe(`{\n\n}`);
   });
 });
