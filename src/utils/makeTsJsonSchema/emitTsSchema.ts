@@ -1,4 +1,4 @@
-import { COMMENT_JSON_BEFORE_SYMBOL } from '../../constants.js';
+import { LEADING_COMMENT_SYMBOL } from '../../constants.js';
 import type {
   IdMapper,
   ModuleSystem,
@@ -22,28 +22,13 @@ type EmitContext = {
   idMapper: IdMapper;
 };
 
-type CommentNode = { type?: unknown; value?: unknown };
-
 /**
- * Translate a comment-json `before` marker on a node into JS comment text:
- * `LineComment` becomes a `//` line, `BlockComment` becomes a block comment.
- * Returns an empty string when no marker is present.
+ * Render the leading line-comment string attached to a node (if any) as a
+ * JS `//` comment. Returns an empty string when no comment is present.
  */
 function renderLeadingComment(node: object): string {
-  const before = (node as Record<symbol, unknown>)[COMMENT_JSON_BEFORE_SYMBOL];
-  if (!Array.isArray(before)) return '';
-
-  let out = '';
-  for (const entry of before as CommentNode[]) {
-    if (!entry || typeof entry !== 'object') continue;
-    if (entry.type === 'LineComment') {
-      out += `//${typeof entry.value === 'string' ? entry.value : ''}\n`;
-    } else if (entry.type === 'BlockComment') {
-      out += `/*${typeof entry.value === 'string' ? entry.value : ''}*/\n`;
-    }
-  }
-
-  return out;
+  const comment = (node as Record<symbol, unknown>)[LEADING_COMMENT_SYMBOL];
+  return typeof comment === 'string' ? `//${comment}\n` : '';
 }
 
 /**
@@ -171,7 +156,7 @@ function renderImports(imports: Map<string, EmittedImport>): string {
  *   references (refHandling: "import") or "{ $ref: ... }" literals
  *   (refHandling: "keep"). In "inline" mode the marker is ignored.
  * - Circular nodes are emitted as "{}" (matches the prior behaviour).
- * - Leading comments attached via comment-json's COMMENT_JSON_BEFORE_SYMBOL
+ * - Leading comments attached via LEADING_COMMENT_SYMBOL
  *   are rendered as JS comments inside the relevant object literal.
  */
 export function emitTsSchema({

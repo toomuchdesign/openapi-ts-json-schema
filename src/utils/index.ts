@@ -7,14 +7,8 @@ export { makeSchemaFileContents } from './makeSchemaFileContents.js';
 export { parseId } from './parseId.js';
 export { refToId } from './refToId.js';
 export { makeId } from './makeId.js';
-export {
-  SCHEMA_ID_SYMBOL,
-  PLACEHOLDER_REGEX,
-  idToPlaceholder,
-} from './refReplacementUtils.js';
+export { SCHEMA_ID_SYMBOL } from './refReplacementUtils.js';
 
-export { replaceInlinedRefsWithStringPlaceholder } from './makeTsJsonSchema/replaceInlinedRefsWithStringPlaceholder.js';
-export { replacePlaceholdersWithImportedSchemas } from './makeTsJsonSchema/replacePlaceholdersWithImportedSchemas.js';
 export { addSchemaToMetaData } from './addSchemaToMetaData.js';
 export { isObject } from './isObject.js';
 export { filenamify } from './filenamify.js';

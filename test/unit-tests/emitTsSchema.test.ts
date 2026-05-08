@@ -3,7 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import {
-  COMMENT_JSON_BEFORE_SYMBOL,
+  LEADING_COMMENT_SYMBOL,
   SCHEMA_ID_SYMBOL,
 } from '../../src/constants.js';
 import type { SchemaMetaData, SchemaMetaDataMap } from '../../src/types.js';
@@ -154,22 +154,29 @@ describe('emitTsSchema', () => {
     expect(body).toContain('"type": "string"');
   });
 
-  it('renders comment-json LineComment markers as JS line comments', () => {
-    const inlinedRef = {
-      type: 'string',
-      [COMMENT_JSON_BEFORE_SYMBOL]: [
-        { type: 'LineComment', value: ' $ref: "#/components/schemas/Answer"' },
-      ],
-    };
+  describe('LEADING_COMMENT_SYMBOL prop', () => {
+    it('append leading within provided object', () => {
+      const inlinedRef = {
+        type: 'string',
+        [LEADING_COMMENT_SYMBOL]: ' $ref: "#/components/schemas/Answer"',
+      };
 
-    const { body } = emitTsSchema({
-      rootSchema: inlinedRef,
-      refHandling: 'inline',
-      schemaMetaDataMap: new Map(),
-      ...baseArgs,
+      const { body } = emitTsSchema({
+        rootSchema: inlinedRef,
+        refHandling: 'inline',
+        schemaMetaDataMap: new Map(),
+        ...baseArgs,
+      });
+
+      expect(body).toBe(
+        [
+          '{',
+          '// $ref: "#/components/schemas/Answer"',
+          '"type": "string"',
+          '}',
+        ].join('\n'),
+      );
     });
-
-    expect(body).toContain('// $ref: "#/components/schemas/Answer"');
   });
 
   it('replaces circular references with "{}"', () => {

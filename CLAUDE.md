@@ -43,7 +43,7 @@ OpenAPI document (JSON/YAML)
 - **`src/openapiToTsJsonSchema.ts`** — Main entry point; orchestrates plugin lifecycle, input validation, and the full conversion pipeline.
 - **`src/types.ts`** — Authoritative type definitions: `Options`, `SchemaMetaData`, `Plugin` interface, `RefHandling` enum.
 - **`src/utils/convertOpenApiDocumentDefinitionsToJsonSchema.ts`** — Transforms OpenAPI schema objects to JSON Schema.
-- **`src/utils/makeTsJsonSchema/`** — Handles the three `refHandling` strategies (`import`, `inline`, `keep`) and emits TypeScript source. Key files: `replaceInlinedRefsWithStringPlaceholder.ts`, `replacePlaceholdersWithImportedSchemas.ts`, `replacePlaceholdersWithRefs.ts`, `stringify.ts` (uses `comment-json`).
+- **`src/utils/makeTsJsonSchema/`** — Handles the three `refHandling` strategies (`import`, `inline`, `keep`) and emits TypeScript source. `emitTsSchema.ts` is a single recursive emitter that walks the dereferenced schema, resolves inlined-ref markers (`SCHEMA_ID_SYMBOL`) into identifier references / `$ref` literals / inlined values, renders `LEADING_COMMENT_SYMBOL` annotations as JS comments, and short-circuits cycles to `{}`. `index.ts` wraps the emitter output with the import block, optional `@deprecated` JSDoc, and the `as const` suffix (skipped when the file is just a re-export alias).
 - **`src/utils/makeSchemaFileContents.ts`** — Composes generated file contents per schema.
 - **`src/utils/saveSchemaFiles.ts`** — Writes files to disk.
 - **`src/plugins/`** — Plugin implementations (`fastifyIntegrationPlugin`, `generateSchemaWith$idPlugin`).
