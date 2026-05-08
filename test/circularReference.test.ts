@@ -9,7 +9,7 @@ import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 describe('Circular reference', () => {
   describe('"refHandling" option', () => {
     describe('inline', () => {
-      it('Replaces 2nd circular reference occurrence with "{}"', async () => {
+      it('Truncates the recursion at the repeating ref-marked schema', async () => {
         const { outputPath } = await openapiToTsJsonSchema({
           openApiDocument: path.resolve(
             fixturesPath,
@@ -38,8 +38,12 @@ describe('Circular reference', () => {
               properties: {
                 previousMonth: {
                   description: 'January description',
-                  properties: {},
                   type: 'object',
+                  properties: {
+                    nextMonth: {},
+                    nextMonthTwo: {},
+                    nextMonthThree: {},
+                  },
                 },
               },
             },
@@ -49,8 +53,12 @@ describe('Circular reference', () => {
               properties: {
                 previousMonth: {
                   description: 'January description',
-                  properties: {},
                   type: 'object',
+                  properties: {
+                    nextMonth: {},
+                    nextMonthTwo: {},
+                    nextMonthThree: {},
+                  },
                 },
               },
             },
@@ -60,8 +68,12 @@ describe('Circular reference', () => {
               properties: {
                 previousMonth: {
                   description: 'January description',
-                  properties: {},
                   type: 'object',
+                  properties: {
+                    nextMonth: {},
+                    nextMonthTwo: {},
+                    nextMonthThree: {},
+                  },
                 },
               },
             },
@@ -86,19 +98,34 @@ describe('Circular reference', () => {
           // $ref: "#/components/schemas/February"
           description: "February description",
           type: "object",
-          properties: {},
+          properties: {
+            previousMonth: {
+              // $ref: "#/components/schemas/January"
+              // Circular recursion interrupted
+            },
+          },
         },
         nextMonthTwo: {
           // $ref: "#/components/schemas/February"
           description: "February description",
           type: "object",
-          properties: {},
+          properties: {
+            previousMonth: {
+              // $ref: "#/components/schemas/January"
+              // Circular recursion interrupted
+            },
+          },
         },
         nextMonthThree: {
           // $ref: "#/components/schemas/February"
           description: "February description",
           type: "object",
-          properties: {},
+          properties: {
+            previousMonth: {
+              // $ref: "#/components/schemas/January"
+              // Circular recursion interrupted
+            },
+          },
         },
       },
     },`;
