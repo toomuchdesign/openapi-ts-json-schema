@@ -1,5 +1,5 @@
 ---
-'openapi-ts-json-schema': patch
+'openapi-ts-json-schema': minor
 ---
 
 Refactor schema creation and remove `comment-json` dependency
