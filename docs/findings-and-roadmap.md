@@ -105,4 +105,4 @@
 
 - [ ] **Add glob/negative selection for `targets`** — Currently `targets` requires exact paths. Allow glob patterns (e.g. `components.schemas.*`) and negative selectors (e.g. `!components.schemas.Internal*`) so users can exclude internal or test schemas from generation.
 
-- [ ] **Evaluate replacing `comment-json` with a lighter alternative** — `comment-json` is used to preserve inline comments during stringification of the `keep` ref strategy. Verify this is still necessary with the current implementation; if the placeholder/stringify pipeline is replaced (see Section 2), this dependency may become unnecessary.
+- [x] **Evaluate replacing `comment-json` with a lighter alternative** — `comment-json` is used to preserve inline comments during stringification of the `keep` ref strategy. Verify this is still necessary with the current implementation; if the placeholder/stringify pipeline is replaced (see Section 2), this dependency may become unnecessary.

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { $RefParser } from '@apidevtools/json-schema-ref-parser';
 import get from 'lodash.get';
 
-import { COMMENT_JSON_BEFORE_SYMBOL } from './constants.js';
+import { LEADING_COMMENT_SYMBOL } from './constants.js';
 import type {
   JSONSchema,
   OpenApiDocument,
@@ -201,15 +201,9 @@ export async function openapiToTsJsonSchema(
           /**
            * "inline" refHandling support:
            * add a $ref comment to each inlined schema with the original ref value.
-           * See: https://github.com/kaelzhang/node-comment-json
            */
           if (refHandling === 'inline') {
-            inlinedSchema[COMMENT_JSON_BEFORE_SYMBOL] = [
-              {
-                type: 'LineComment',
-                value: ` $ref: "${ref}"`,
-              },
-            ];
+            inlinedSchema[LEADING_COMMENT_SYMBOL] = ` $ref: "${ref}"`;
           }
         },
       },
