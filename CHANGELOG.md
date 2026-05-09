@@ -1,5 +1,11 @@
 # openapi-ts-json-schema
 
+## 2.2.0
+
+### Minor Changes
+
+- [#578](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/578) [`1a41297`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/1a412972cdaf87f4dff6315bd1e7f145996b679f) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Refactor schema creation and remove `comment-json` dependency
+
 ## 2.1.0
 
 ### Minor Changes
