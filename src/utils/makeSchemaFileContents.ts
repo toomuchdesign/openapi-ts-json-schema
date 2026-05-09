@@ -1,6 +1,6 @@
 import type {
   IdMapper,
-  ModuleSystem,
+  ImportExtension,
   RefHandling,
   SchemaMetaDataMap,
 } from '../types.js';
@@ -13,12 +13,12 @@ export async function makeSchemaFileContents({
   schemaMetaDataMap,
   refHandling,
   idMapper,
-  moduleSystem,
+  importExtension,
 }: {
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   idMapper: IdMapper;
-  moduleSystem: ModuleSystem;
+  importExtension: ImportExtension;
 }) {
   for (const [_, metaData] of schemaMetaDataMap) {
     if (metaData.shouldBeGenerated) {
@@ -27,7 +27,7 @@ export async function makeSchemaFileContents({
         schemaMetaDataMap,
         refHandling,
         idMapper,
-        moduleSystem,
+        importExtension,
       });
 
       metaData.fileContent = fileContent;

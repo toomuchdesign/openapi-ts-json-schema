@@ -49,7 +49,7 @@ export type JSONSchema = OmitIndexSignature<
 
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
-export type ModuleSystem = 'cjs' | 'esm';
+export type ImportExtension = 'js' | 'ts' | 'none';
 export type IdMapper = (input: { id: string }) => string;
 
 export type Options = {
@@ -58,7 +58,7 @@ export type Options = {
     collections?: string[];
     single?: string[];
   };
-  moduleSystem?: ModuleSystem;
+  importExtension?: ImportExtension;
   schemaPatcher?: SchemaPatcher;
   outputPath?: string;
   plugins?: ReturnType<Plugin>[];
@@ -68,7 +68,10 @@ export type Options = {
 };
 
 export type OptionsWithDefaults = Merge<
-  SetRequired<Options, 'refHandling' | 'moduleSystem' | 'idMapper' | 'plugins'>,
+  SetRequired<
+    Options,
+    'refHandling' | 'importExtension' | 'idMapper' | 'plugins'
+  >,
   {
     targets: Required<Options['targets']>;
   }

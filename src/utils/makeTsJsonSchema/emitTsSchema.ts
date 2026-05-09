@@ -1,7 +1,7 @@
 import { LEADING_COMMENT_SYMBOL } from '../../constants.js';
 import type {
   IdMapper,
-  ModuleSystem,
+  ImportExtension,
   RefHandling,
   SchemaMetaDataMap,
 } from '../../types.js';
@@ -18,7 +18,7 @@ type EmitContext = {
   imports: Map<string, EmittedImport>;
   schemaMetaDataMap: SchemaMetaDataMap;
   absoluteDirName: string;
-  moduleSystem: ModuleSystem;
+  importExtension: ImportExtension;
   idMapper: IdMapper;
 };
 
@@ -54,7 +54,7 @@ function registerImport(id: string, ctx: EmitContext): string {
     importPath: makeRelativeImportPath({
       fromDirectory: ctx.absoluteDirName,
       toModule: meta.absoluteImportPath,
-      moduleSystem: ctx.moduleSystem,
+      importExtension: ctx.importExtension,
     }),
   };
 
@@ -164,14 +164,14 @@ export function emitTsSchema({
   refHandling,
   schemaMetaDataMap,
   absoluteDirName,
-  moduleSystem,
+  importExtension,
   idMapper,
 }: {
   rootSchema: unknown;
   refHandling: RefHandling;
   schemaMetaDataMap: SchemaMetaDataMap;
   absoluteDirName: string;
-  moduleSystem: ModuleSystem;
+  importExtension: ImportExtension;
   idMapper: IdMapper;
 }): { body: string; imports: string; isImportAlias: boolean } {
   const ctx: EmitContext = {
@@ -179,7 +179,7 @@ export function emitTsSchema({
     imports: new Map(),
     schemaMetaDataMap,
     absoluteDirName,
-    moduleSystem,
+    importExtension,
     idMapper,
   };
 

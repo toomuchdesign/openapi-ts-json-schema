@@ -28,7 +28,7 @@ function makeMeta(overrides: Partial<SchemaMetaData>): SchemaMetaData {
 
 const baseArgs = {
   absoluteDirName: ABS_DIR,
-  moduleSystem: 'esm' as const,
+  importExtension: 'js' as const,
   idMapper: ({ id }: { id: string }) => id,
 };
 

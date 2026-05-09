@@ -33,7 +33,7 @@ const fastifyIntegrationPlugin: Plugin<PluginOptions | void> = ({
           importPath: utils.makeRelativeImportPath({
             fromDirectory: outputPath,
             toModule: absoluteImportPath,
-            moduleSystem: options.moduleSystem,
+            importExtension: options.importExtension,
           }),
           uniqueName,
           id,

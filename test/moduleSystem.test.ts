@@ -7,9 +7,9 @@ import { openapiToTsJsonSchema } from '../src/index.js';
 import { formatTypeScript } from '../src/utils/index.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
-describe('moduleSystem option === "cjs"', () => {
+describe('importExtension option === "none"', () => {
   describe('refHandling option === "import"', () => {
-    it('Generates imports without explicit .js extensions', async () => {
+    it('Generates imports without file extensions', async () => {
       const { outputPath } = await openapiToTsJsonSchema({
         openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
         outputPath: makeTestOutputPath('refHandling-import'),
@@ -18,7 +18,7 @@ describe('moduleSystem option === "cjs"', () => {
         },
         silent: true,
         refHandling: 'import',
-        moduleSystem: 'cjs',
+        importExtension: 'none',
       });
 
       // Can import generated schema without errors
@@ -31,7 +31,6 @@ describe('moduleSystem option === "cjs"', () => {
         },
       );
 
-      // Generates expected imports with .js extensions
       const expectedPath1File = await formatTypeScript(`
           import componentsSchemasFebruary from "./../components/schemas/February";
           import componentsSchemasJanuary from "./../components/schemas/January";

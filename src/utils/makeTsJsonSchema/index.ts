@@ -1,6 +1,6 @@
 import type {
   IdMapper,
-  ModuleSystem,
+  ImportExtension,
   RefHandling,
   SchemaMetaData,
   SchemaMetaDataMap,
@@ -13,13 +13,13 @@ export async function makeTsJsonSchema({
   schemaMetaDataMap,
   refHandling,
   idMapper,
-  moduleSystem,
+  importExtension,
 }: {
   metaData: SchemaMetaData;
   schemaMetaDataMap: SchemaMetaDataMap;
   refHandling: RefHandling;
   idMapper: IdMapper;
-  moduleSystem: ModuleSystem;
+  importExtension: ImportExtension;
 }): Promise<string> {
   const { originalSchema, absoluteDirName, openApiDefinition } = metaData;
 
@@ -33,7 +33,7 @@ export async function makeTsJsonSchema({
     refHandling,
     schemaMetaDataMap,
     absoluteDirName,
-    moduleSystem,
+    importExtension,
     idMapper,
   });
 

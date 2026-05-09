@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import type { ModuleSystem } from '../types.js';
+import type { ImportExtension } from '../types.js';
 
 /**
  * Evaluate the relative import path from a directory to a module
@@ -9,14 +9,16 @@ import type { ModuleSystem } from '../types.js';
 export function makeRelativeImportPath({
   fromDirectory,
   toModule,
-  moduleSystem = 'esm',
+  importExtension = 'js',
 }: {
   fromDirectory: string;
   toModule: string;
-  moduleSystem?: ModuleSystem;
+  importExtension?: ImportExtension;
 }): string {
-  if (moduleSystem === 'esm' && !toModule.endsWith('.js')) {
+  if (importExtension === 'js' && !toModule.endsWith('.js')) {
     toModule += '.js';
+  } else if (importExtension === 'ts' && !toModule.endsWith('.ts')) {
+    toModule += '.ts';
   }
 
   return (
