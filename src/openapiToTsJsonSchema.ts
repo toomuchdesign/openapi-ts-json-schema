@@ -15,7 +15,7 @@ import type {
   SchemaMetaDataMap,
 } from './types.js';
 import {
-  SCHEMA_ID_SYMBOL,
+  REFERENCED_SCHEMA_ID_SYMBOL,
   addSchemaToMetaData,
   clearFolder,
   convertOpenApiDocumentDefinitionsToJsonSchema,
@@ -193,10 +193,10 @@ export async function openapiToTsJsonSchema(
           }
 
           /**
-           * mark inlined ref objects with a "SCHEMA_ID_SYMBOL"
+           * mark inlined ref objects with a "REFERENCED_SCHEMA_ID_SYMBOL"
            * to retrieve their id once inlined
            */
-          inlinedSchema[SCHEMA_ID_SYMBOL] = id;
+          inlinedSchema[REFERENCED_SCHEMA_ID_SYMBOL] = id;
 
           /**
            * "inline" refHandling support:
