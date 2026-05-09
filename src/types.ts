@@ -51,8 +51,6 @@ export type JSONSchema = OmitIndexSignature<
 export type SchemaPatcher = (params: { schema: JSONSchema }) => void;
 export type RefHandling = 'import' | 'inline' | 'keep';
 export type ImportExtension = 'js' | 'ts' | 'none';
-/** @deprecated use `ImportExtension` instead */
-export type ModuleSystem = 'cjs' | 'esm';
 export type IdMapper = (input: { id: string }) => string;
 
 export type Options = {
@@ -86,13 +84,6 @@ export type Options = {
    * @default "js"
    */
   importExtension?: ImportExtension;
-
-  /**
-   * @deprecated Use {@link Options.importExtension} instead. Ignored when `importExtension` is set.
-   *
-   * `"esm"` maps to `importExtension: "js"`, `"cjs"` maps to `importExtension: "none"`.
-   */
-  moduleSystem?: ModuleSystem;
 
   /**
    * Hook called for every generated schema node, allowing programmatic mutation before output.

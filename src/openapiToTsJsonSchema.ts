@@ -6,7 +6,6 @@ import get from 'lodash.get';
 
 import { LEADING_COMMENT_SYMBOL } from './constants.js';
 import type {
-  ImportExtension,
   JSONSchema,
   OpenApiDocument,
   OpenApiObject,
@@ -57,29 +56,11 @@ import {
 export async function openapiToTsJsonSchema(
   options: Options,
 ): Promise<ReturnPayload> {
-  /**
-   * Resolve `importExtension` from the user-provided options, falling back to
-   * the legacy `moduleSystem` option for backwards compatibility.
-   *
-   * Precedence: `importExtension` > `moduleSystem` > default (`'js'`).
-   */
-  const resolvedImportExtension: ImportExtension =
-    options.importExtension ?? (options.moduleSystem === 'cjs' ? 'none' : 'js');
-
-  if (
-    options.moduleSystem !== undefined &&
-    options.importExtension !== undefined
-  ) {
-    console.warn(
-      `[openapi-ts-json-schema] ⚠️ Both "moduleSystem" and "importExtension" options were provided. "moduleSystem" is deprecated and will be ignored.`,
-    );
-  }
-
   const optionsWithDefaults: OptionsWithDefaults = {
     refHandling: 'import',
+    importExtension: 'js',
     idMapper: ({ id }) => id,
     ...options,
-    importExtension: resolvedImportExtension,
     // Defensive copy: prevents plugin onInit hooks from mutating the caller's plugins array
     plugins: [...(options.plugins ?? [])],
     targets: {
