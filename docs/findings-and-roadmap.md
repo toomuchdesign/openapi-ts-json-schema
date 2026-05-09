@@ -55,7 +55,7 @@
 
 - [x] **Add structured error handling for plugin failures** — There is no documented or implemented behaviour for when a plugin throws. Does the entire generation fail? Does it continue with remaining plugins? Define the policy (fail-fast is reasonable), wrap plugin invocations in a try/catch that re-throws with the plugin name in the error message, and document this in `docs/plugins.md`.
 
-- [x] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency. **(Addressed in v3)**
+- [x] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency. **(Addressed in v2 as a non-breaking change: a new `importExtension: 'js' | 'ts' | 'none'` option was added that directly describes what is emitted at the import-specifier tail. The legacy `moduleSystem` option is mapped to the new option for backwards compatibility — `'esm' → 'js'`, `'cjs' → 'none'` — and will be removed in v3. Adopting this as additive rather than a replacement avoided forcing existing v2 consumers to migrate, and unlocked the new `'ts'` value for native TypeScript runtimes like Bun/Deno that the boolean ESM/CJS axis could not express.)**
 
 ---
 

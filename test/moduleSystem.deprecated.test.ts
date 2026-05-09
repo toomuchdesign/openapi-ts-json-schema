@@ -1,3 +1,12 @@
+/**
+ * DELETE THIS FILE WHEN REMOVING THE DEPRECATED `moduleSystem` OPTION (v3).
+ *
+ * These tests cover backwards-compatibility behaviour for the deprecated
+ * `moduleSystem` option. Once the option is removed, this entire file —
+ * along with the resolution block in `src/openapiToTsJsonSchema.ts` and the
+ * `ModuleSystem` type / `Options.moduleSystem` field in `src/types.ts` — can
+ * be deleted without affecting any forward-looking tests.
+ */
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -64,5 +73,34 @@ describe('moduleSystem option === "cjs"', () => {
 
       expect(actualPath1File).toEqual(expectedPath1File);
     });
+  });
+});
+
+describe('moduleSystem option precedence', () => {
+  it('is ignored when `importExtension` is also provided', async () => {
+    const { outputPath } = await openapiToTsJsonSchema({
+      openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
+      outputPath: makeTestOutputPath('moduleSystem-and-importExtension'),
+      targets: {
+        collections: ['paths'],
+      },
+      silent: true,
+      refHandling: 'import',
+      // Conflicting values: importExtension wins, moduleSystem is ignored.
+      importExtension: 'none',
+      moduleSystem: 'esm',
+    });
+
+    const actualPath1File = await fs.readFile(
+      path.resolve(outputPath, 'paths/_v1_path-1.ts'),
+      { encoding: 'utf8' },
+    );
+
+    expect(actualPath1File).toContain(
+      'from "./../components/schemas/February"',
+    );
+    expect(actualPath1File).not.toContain(
+      'from "./../components/schemas/February.js"',
+    );
   });
 });

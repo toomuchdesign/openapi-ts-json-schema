@@ -7,7 +7,7 @@ import { makeRelativeImportPath } from '../../src/utils/index.js';
 const absoluteDirectoryName = '/project-root/tests';
 
 describe('makeRelativeImportPath', () => {
-  describe('moduleSystem === "cjs"', () => {
+  describe('importExtension === "none"', () => {
     it.each([
       {
         fromDirectory: path.join(absoluteDirectoryName, 'test'),
@@ -30,19 +30,19 @@ describe('makeRelativeImportPath', () => {
         expected: './../foo',
       },
     ])(
-      'generates expected relative path',
+      'generates expected relative path without extension',
       ({ fromDirectory, toModule, expected }) => {
         const actual = makeRelativeImportPath({
           fromDirectory,
           toModule,
-          moduleSystem: 'cjs',
+          importExtension: 'none',
         });
         expect(actual).toBe(expected);
       },
     );
   });
 
-  describe('moduleSystem === "esm"', () => {
+  describe('importExtension === "js"', () => {
     it.each([
       {
         fromDirectory: path.join(absoluteDirectoryName, 'test'),
@@ -65,12 +65,47 @@ describe('makeRelativeImportPath', () => {
         expected: './../foo.js',
       },
     ])(
-      'generates expected relative path with extension',
+      'generates expected relative path with .js extension',
       ({ fromDirectory, toModule, expected }) => {
         const actual = makeRelativeImportPath({
           fromDirectory,
           toModule,
-          moduleSystem: 'esm',
+          importExtension: 'js',
+        });
+        expect(actual).toBe(expected);
+      },
+    );
+  });
+
+  describe('importExtension === "ts"', () => {
+    it.each([
+      {
+        fromDirectory: path.join(absoluteDirectoryName, 'test'),
+        toModule: path.join(absoluteDirectoryName, 'foo', 'bar'),
+        expected: './../foo/bar.ts',
+      },
+      {
+        fromDirectory: path.join(absoluteDirectoryName, 'test', 'aaa'),
+        toModule: path.join(absoluteDirectoryName, 'foo', 'bar'),
+        expected: './../../foo/bar.ts',
+      },
+      {
+        fromDirectory: path.join(absoluteDirectoryName, 'test'),
+        toModule: path.join(absoluteDirectoryName, 'foo', 'bar'),
+        expected: './../foo/bar.ts',
+      },
+      {
+        fromDirectory: path.join(absoluteDirectoryName, 'test'),
+        toModule: path.join(absoluteDirectoryName, 'foo'),
+        expected: './../foo.ts',
+      },
+    ])(
+      'generates expected relative path with .ts extension',
+      ({ fromDirectory, toModule, expected }) => {
+        const actual = makeRelativeImportPath({
+          fromDirectory,
+          toModule,
+          importExtension: 'ts',
         });
         expect(actual).toBe(expected);
       },
