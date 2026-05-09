@@ -1,5 +1,5 @@
-/** Symbol key used to store a schema's internal path-based ID on schema objects */
-export const SCHEMA_ID_SYMBOL = Symbol('id');
+/** Symbol key used to store a schema's internal path-based ID on schema objects originating from a `$ref` */
+export const REFERENCED_SCHEMA_ID_SYMBOL = Symbol('id');
 
 /** Symbol key used to attach a leading line-comment string to a node */
 export const LEADING_COMMENT_SYMBOL = Symbol('leading-comment');

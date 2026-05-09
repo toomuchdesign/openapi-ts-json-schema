@@ -152,7 +152,7 @@ function renderImports(imports: Map<string, EmittedImport>): string {
 /**
  * Walk a (dereferenced) JSON schema and emit TypeScript source for it.
  *
- * - Inlined refs marked with SCHEMA_ID_SYMBOL become either identifier
+ * - Inlined refs marked with REFERENCED_SCHEMA_ID_SYMBOL become either identifier
  *   references (refHandling: "import") or "{ $ref: ... }" literals
  *   (refHandling: "keep"). In "inline" mode the marker is ignored.
  * - Circular nodes are emitted as "{}" (matches the prior behaviour).

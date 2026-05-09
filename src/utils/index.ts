@@ -7,7 +7,7 @@ export { makeSchemaFileContents } from './makeSchemaFileContents.js';
 export { parseId } from './parseId.js';
 export { refToId } from './refToId.js';
 export { makeId } from './makeId.js';
-export { SCHEMA_ID_SYMBOL } from './refReplacementUtils.js';
+export { REFERENCED_SCHEMA_ID_SYMBOL } from './refReplacementUtils.js';
 
 export { addSchemaToMetaData } from './addSchemaToMetaData.js';
 export { isObject } from './isObject.js';

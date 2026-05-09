@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { openapiToTsJsonSchema } from '../src/index.js';
 import type { SchemaMetaData } from '../src/types.js';
-import { SCHEMA_ID_SYMBOL } from '../src/utils/index.js';
+import { REFERENCED_SCHEMA_ID_SYMBOL } from '../src/utils/index.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
 describe('Returned "metaData"', async () => {
@@ -85,15 +85,15 @@ describe('Returned "metaData"', async () => {
         description: 'January description',
         properties: {
           isFebruary: {
-            // @ts-expect-error the schema holds SCHEMA_ID_SYMBOL symbol props
-            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+            // @ts-expect-error the schema holds REFERENCED_SCHEMA_ID_SYMBOL symbol props
+            [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
             description: 'isFebruary description',
             enum: ['yes', 'no', null],
             type: ['string', 'null'],
           },
           isJanuary: {
-            // @ts-expect-error the schema holds SCHEMA_ID_SYMBOL symbol props
-            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+            // @ts-expect-error the schema holds REFERENCED_SCHEMA_ID_SYMBOL symbol props
+            [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
             description: 'isJanuary description',
             enum: ['yes', 'no', null],
             type: ['string', 'null'],

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   LEADING_COMMENT_SYMBOL,
-  SCHEMA_ID_SYMBOL,
+  REFERENCED_SCHEMA_ID_SYMBOL,
 } from '../../src/constants.js';
 import type { SchemaMetaData, SchemaMetaDataMap } from '../../src/types.js';
 import { emitTsSchema } from '../../src/utils/makeTsJsonSchema/emitTsSchema.js';
@@ -69,10 +69,10 @@ describe('emitTsSchema', () => {
       });
     });
 
-    it('ignores SCHEMA_ID_SYMBOL on referenced nodes', () => {
+    it('ignores REFERENCED_SCHEMA_ID_SYMBOL on referenced nodes', () => {
       const inlinedRef = {
         type: 'string',
-        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+        [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
       };
 
       const result = emitTsSchema({
@@ -172,11 +172,11 @@ describe('emitTsSchema', () => {
 
       const answerRef = {
         type: 'string',
-        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+        [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
       };
       const questionRef = {
         type: 'string',
-        [SCHEMA_ID_SYMBOL]: '/components/schemas/Question',
+        [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Question',
       };
 
       const result = emitTsSchema({
@@ -222,7 +222,7 @@ describe('emitTsSchema', () => {
         const result = emitTsSchema({
           rootSchema: {
             type: 'string',
-            [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+            [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
           },
           refHandling: 'import',
           schemaMetaDataMap,
@@ -243,7 +243,7 @@ describe('emitTsSchema', () => {
       const schemaMetaDataMap: SchemaMetaDataMap = new Map();
       const inlinedRef = {
         type: 'string',
-        [SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
+        [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Answer',
       };
 
       const result = emitTsSchema({
