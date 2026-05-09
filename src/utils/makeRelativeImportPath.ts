@@ -9,11 +9,11 @@ import type { ImportExtension } from '../types.js';
 export function makeRelativeImportPath({
   fromDirectory,
   toModule,
-  importExtension = 'js',
+  importExtension,
 }: {
   fromDirectory: string;
   toModule: string;
-  importExtension?: ImportExtension;
+  importExtension: ImportExtension;
 }): string {
   if (importExtension === 'js' && !toModule.endsWith('.js')) {
     toModule += '.js';
