@@ -27,11 +27,11 @@
 
 ## Section 2 — High: architecture and correctness
 
-- [ ] **Replace the string-placeholder system with a proper AST walk** — The current approach stringifies the schema, injects regex-delimited markers (`_OTJS-START_<id>_OTJS-END_`), does text surgery, then re-parses. This is fragile: any schema value that naturally contains the marker string will corrupt output silently. Redesign `makeTsJsonSchema` to walk the schema tree and emit TypeScript source code structurally, instead of operating on stringified JSON.
+- [x] **Replace the string-placeholder system with a proper AST walk** — The current approach stringifies the schema, injects regex-delimited markers (`_OTJS-START_<id>_OTJS-END_`), does text surgery, then re-parses. This is fragile: any schema value that naturally contains the marker string will corrupt output silently. Redesign `makeTsJsonSchema` to walk the schema tree and emit TypeScript source code structurally, instead of operating on stringified JSON. **(Addressed in v3)**
 
 - [x] **Fix options mutation in plugin system** — `fastifyIntegrationPlugin.onInit` mutates the user-supplied `options` object in place (`options.refHandling = 'keep'`, `options.plugins.push(...)`). This creates hidden side effects and makes plugin ordering a source of bugs. Make a defensive copy of options at the start of `openapiToTsJsonSchema`, and document that plugins receive a snapshot, not a reference.
 
-- [ ] **Harden the `namify` dependency** — Import names for generated schemas are derived via the `namify` package, which has no type definitions (suppressed with `@ts-expect-error`). There are no tests for edge cases: numeric-only names (`123`), hyphenated names (`my-schema`), or JavaScript reserved words (`class`, `return`, `type`). Add explicit tests for these cases and handle numeric-leading names with a `_` prefix fallback. Note: replacing `namify` with an alternative (e.g. `to-valid-identifier`) would change generated identifier names (`mySchema` → `my$j$schema`) and is therefore a **breaking change — target v3**.
+- [x] **Harden the `namify` dependency** — Import names for generated schemas are derived via the `namify` package, which has no type definitions (suppressed with `@ts-expect-error`). There are no tests for edge cases: numeric-only names (`123`), hyphenated names (`my-schema`), or JavaScript reserved words (`class`, `return`, `type`). Add explicit tests for these cases and handle numeric-leading names with a `_` prefix fallback. Note: replacing `namify` with an alternative (e.g. `to-valid-identifier`) would change generated identifier names (`mySchema` → `my$j$schema`) and is therefore a **breaking change — target v3**.
 
 ---
 
@@ -55,7 +55,7 @@
 
 - [x] **Add structured error handling for plugin failures** — There is no documented or implemented behaviour for when a plugin throws. Does the entire generation fail? Does it continue with remaining plugins? Define the policy (fail-fast is reasonable), wrap plugin invocations in a try/catch that re-throws with the plugin name in the error message, and document this in `docs/plugins.md`.
 
-- [ ] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency.
+- [x] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency. **(Addressed in v3)**
 
 ---
 
@@ -71,9 +71,7 @@
 
 ## Section 6 — Documentation
 
-- [ ] **Rewrite the README "Why?" section to not assume knowledge of `json-schema-to-ts`** — The library's value is invisible to anyone who doesn't already know `json-schema-to-ts`. Lead with the problem in concrete terms: "You have an OpenAPI spec. You want TypeScript types AND a Fastify/Ajv validator. Without this library, you maintain both by hand and they drift." Then show how this library solves it. Introduce `json-schema-to-ts` as a tool, not a prerequisite.
-
-- [ ] **Add a "Known Limitations" section to README** — The external `$ref` duplication bug, the missing discriminator support, and the alias edge cases are currently buried in developer notes or absent entirely. Surface them clearly upfront so users don't invest days before hitting a wall.
+- [x] **Rewrite the README "Why?" section to not assume knowledge of `json-schema-to-ts`** — The library's value is invisible to anyone who doesn't already know `json-schema-to-ts`. Lead with the problem in concrete terms: "You have an OpenAPI spec. You want TypeScript types AND a Fastify/Ajv validator. Without this library, you maintain both by hand and they drift." Then show how this library solves it. Introduce `json-schema-to-ts` as a tool, not a prerequisite.
 
 - [x] **Add a concrete `idMapper` example** — The current description ("Useful for enforcing naming conventions") is too vague to be actionable. Add an example that shows the input id, the transformation, and why you'd want it (e.g. stripping the `/components/schemas/` prefix from `$id` values, or mapping to a flat namespace).
 
@@ -81,22 +79,18 @@
 
 - [x] **Document OpenAPI v3.1.0 handling** — Developer notes contain the observation that v3.1.0 schemas are already valid JSON Schema and shouldn't need conversion, but the code still converts them. Document the current state clearly: either explain why conversion still happens (maybe the library `@openapi-contrib/openapi-schema-to-json-schema` needs updating), or add version detection and skip conversion for v3.1.0. **implemented in v3 branch**
 
-- [ ] **Add a comparison table vs. `openapi-typescript`** — The most common alternative people find is `openapi-typescript`. A concise table showing the difference (runtime validation support, `as const` output, `json-schema-to-ts` compatibility, etc.) would help users who land on this repo understand whether it's what they need without requiring them to read both READMEs.
-
-- [ ] **Add a "Troubleshooting" section** — Common issues (generated output is empty, types are `never`, external refs are duplicated, plugin execution order issues) should have a short FAQ entry. This reduces support burden and improves discoverability via search.
+- [x] **Add a comparison table vs. `openapi-typescript`** — The most common alternative people find is `openapi-typescript`. A concise table showing the difference (runtime validation support, `as const` output, `json-schema-to-ts` compatibility, etc.) would help users who land on this repo understand whether it's what they need without requiring them to read both READMEs.
 
 ---
 
 ## Section 7 — Ecosystem and adoption
 
-- [ ] **Add Express/Zod integration example or plugin** — Fastify is a natural fit, but many users are on Express. An `expressIntegrationPlugin` or a `zodIntegrationPlugin` that generates Zod schemas from the generated JSON Schemas would expand the library's addressable audience significantly.
+- [ ] **Add an `expressIntegrationPlugin`** — Fastify is a natural fit, but many users are on Express. A dedicated plugin (similar to `fastifyIntegrationPlugin`) that wires the generated schemas into Express middleware (e.g. via `ajv` directly) would expand the library's addressable audience. Zod integration is out of scope — `json-schema-to-zod` already covers that use case.
 
 - [ ] **Consider a CLI entrypoint** — Currently the library is API-only. A `npx openapi-ts-json-schema --input ./openapi.yaml --targets components.schemas` CLI would lower the barrier to initial evaluation and fit into scripts/CI more naturally than a Node.js generation script.
 
 ---
 
 ## Section 8 — Low priority / polish
-
-- [ ] **Add glob/negative selection for `targets`** — Currently `targets` requires exact paths. Allow glob patterns (e.g. `components.schemas.*`) and negative selectors (e.g. `!components.schemas.Internal*`) so users can exclude internal or test schemas from generation.
 
 - [x] **Evaluate replacing `comment-json` with a lighter alternative** — `comment-json` is used to preserve inline comments during stringification of the `keep` ref strategy. Verify this is still necessary with the current implementation; if the placeholder/stringify pipeline is replaced (see Section 2), this dependency may become unnecessary.
