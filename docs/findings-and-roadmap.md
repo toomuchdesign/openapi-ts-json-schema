@@ -51,15 +51,11 @@
 
 - [x] **Extract magic strings and symbols to a constants file** — The placeholder markers (`_OTJS-START_`, `_OTJS-END_`), the Symbol key (`'SCHEMA_ID_SYMBOL'`), the comment-json sentinel (`'before'`), and hardcoded paths like `/components/schemas/` are scattered across multiple files. Centralise them in a `src/constants.ts` file to make the system's moving parts discoverable and prevent typo-driven bugs.
 
-- [ ] **Make `Symbol`-based ref tracking debuggable** — `Symbol.for('SCHEMA_ID_SYMBOL')` is used to mark inlined schemas before placeholder replacement. Symbol properties are invisible to `JSON.stringify` and debuggers. Consider replacing the symbol annotation with a wrapper object `{ __otjsId: string, schema: SchemaObject }` that is serialisable and inspectable, making intermediate states easier to debug.
-
 - [ ] **Unify the `id` / `$id` / `uniqueName` fields in `SchemaMetaData`** — These three fields are all derived from the same internal path but have inconsistent values in some edge cases (circular refs, alias definitions). Document the exact contract for each field (what it contains, when it differs from the others), or consolidate if the distinction isn't meaningful for consumers.
 
 - [x] **Add structured error handling for plugin failures** — There is no documented or implemented behaviour for when a plugin throws. Does the entire generation fail? Does it continue with remaining plugins? Define the policy (fail-fast is reasonable), wrap plugin invocations in a try/catch that re-throws with the plugin name in the error message, and document this in `docs/plugins.md`.
 
 - [ ] **Remove `moduleSystem` difference from import path logic** — `makeRelativeImportPath` adds a `.js` extension for ESM but not for CJS. The reason for this asymmetry is not documented and is surprising (CJS modules also use `.js`). Investigate if this is actually correct, document why in the code if it is, or fix the inconsistency.
-
-- [ ] **Improve `refHandling: 'keep'` implementation** — Currently `keep` follows the full `import` flow (dereference, mark, placeholder) and only diverges at the last step. This means it still pays the cost of the import pipeline for something it doesn't use. Implement a dedicated, simpler code path for `keep` that skips the placeholder machinery entirely.
 
 ---
 
@@ -68,8 +64,6 @@
 - [x] **Add explicit tests for alias schema edge cases** — `Foo: "#/components/schemas/Bar"` (a schema that is purely a reference) is acknowledged as a rough edge but has no dedicated test. Add tests for: alias with `refHandling: 'import'`, alias with `refHandling: 'inline'`, alias with `refHandling: 'keep'`, and chained aliases.
 
 - [x] **Add tests for `namify` edge cases** — Numeric schema names, hyphenated names, names that are JavaScript reserved words, and names that collide after normalisation. These are currently untested and could produce invalid TypeScript.
-
-- [ ] **Reduce fixture verbosity** — Some test YAML fixtures run to hundreds of lines, making it hard to understand what a specific test is exercising. Where possible, trim fixtures to the minimal spec required to reproduce the scenario being tested.
 
 - [x] **Add performance baseline test** — A heavy integration test using the real GitHub REST API spec (~7.5 MB, 1000+ schemas) lives in `test/gitHubApi.test.ts`. Skipped by default in `npm test`; run via `npm run test:heavy`.
 
