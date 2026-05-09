@@ -4,18 +4,13 @@
 [![Npm version][npm-version-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Generate **TypeScript-first JSON Schemas** (`.ts` modules with `as const`) directly from your OpenAPI definitions — so you can use the same schema for both **runtime validation** and **TypeScript type inference**.
+Generate TypeScript JSON Schema modules (`.ts` files with `as const`) directly from your OpenAPI spec — one source of truth for runtime validation and static type inference.
 
 ## Why?
 
-Keeping **OpenAPI specs**, **runtime validators**, and **TypeScript types** in sync is hard.
+Your OpenAPI spec, runtime schemas, and TypeScript types tend to drift when maintained separately. This library generates them all from the spec — one source of truth.
 
-Many teams end up maintaining the same api models in different formats:
-
-- JSON Schema for runtime validation (`Ajv`, `Fastify`, etc.)
-- TypeScript types for static checking
-
-`openapi-ts-json-schema` solves this by generating **TypeScript JSON Schemas directly from your OpenAPI definitions**: valid JSON schemas written as **TypeScript modules**, ready for runtime validation and type inference.
+The output is plain [JSON Schema](https://json-schema.org/) `as const` TypeScript modules, so they work with any JSON Schema-aware tool (Ajv, TypeBox, Hyperjump, Fastify, …) and can be passed directly to [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts) for static type inference.
 
 These schemas:
 
@@ -41,7 +36,7 @@ components:
       required: [id, name]
 ```
 
-You get this TypeScript JSON schema:
+`openapi-ts-json-schema` generates:
 
 ```ts
 // components/schemas/User.ts
@@ -69,10 +64,16 @@ const validate = ajv.compile<FromSchema<typeof userSchema>>(userSchema);
 const data: unknown = {};
 if (validate(data)) {
   // data is now typed as { id: string; name: string }
-} else {
-  console.error(validate.errors);
 }
 ```
+
+## How this fits with `openapi-typescript`
+
+Different tools for different jobs — not competitors:
+
+- **Types only, no runtime** → [`openapi-typescript`](https://github.com/openapi-ts/openapi-typescript)
+- **Runtime schemas + types from one spec** → `openapi-ts-json-schema` + `json-schema-to-ts` (works with any JSON Schema-compatible tool)
+- **Both together** → `openapi-ts-json-schema` handles runtime; fall back to `openapi-typescript` types where `json-schema-to-ts` inference breaks down
 
 ## Installation
 
@@ -254,12 +255,12 @@ Along with generated schema files, `openapi-ts-json-schema` returns metadata:
 
 ## Plugins
 
-Extend `openapi-ts-json-schema` with custom generators. Currently available plugins:
+Plugins generate extra artifacts using the same internal metadata. Available plugins:
 
-- `generateSchemaWith$idPlugin`
-- `fastifyIntegrationPlugin`
+- `generateSchemaWith$idPlugin` — adds a named export with the schema `$id` field set.
+- `fastifyIntegrationPlugin` — generates a `fastify-integration.ts` file with a `schemas` array for `fastify.addSchema` and a `RefSchemas` type for the `json-schema-to-ts` type provider.
 
-See [plugins documentation 📖](./docs/plugins.md).
+See [plugins documentation](./docs/plugins.md).
 
 ## How it works
 
@@ -269,9 +270,9 @@ Given an OpenAPI definition file, `openapi-ts-json-schema`:
 - Converts OpenAPI objects to JSON Schema (via [@openapi-contrib/openapi-schema-to-json-schema](https://github.com/APIDevTools/json-schema-ref-parser) & [`openapi-jsonschema-parameters`](https://www.npmjs.com/package/openapi-jsonschema-parameters))
 - Generates `.ts` files exporting each schema as `as const`
 - Mirrors the original OpenAPI structure in the generated folder
-- Supports plugins (e.g. for Fastify integration)
+- Runs plugins before and after file generation
 
-Take a look at the [Developer's notes](./docs/developer-notes.md) for a few more in-depth explanations.
+See [developer's notes](./docs/developer-notes.md).
 
 ## Todo
 
