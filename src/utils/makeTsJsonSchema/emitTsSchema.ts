@@ -65,17 +65,20 @@ function registerImport(id: string, ctx: EmitContext): string {
 /**
  * Recursive emitter: converts a JSON-schema-shaped value into a TypeScript
  * expression string. Handles inlined-ref markers (per `refHandling`), primitives,
- * arrays, and objects. `ancestors` tracks the active parent chain so cycles can
- * be short-circuited to `{}` instead of recursing forever.
+ * arrays, and objects. `ancestorIds` tracks the active chain of id-bearing
+ * (dereferenced-ref) ancestors — those are the only nodes that can introduce
+ * cycles, since the ref-parser is what shares schema instances across the tree.
+ * When a id reappears in its own ancestor chain the recursion short-circuits
+ * with a comment that names the offending schema directly.
  */
 function emitNodeString({
   node,
   ctx,
-  ancestors,
+  ancestorIds,
 }: {
   node: unknown;
   ctx: EmitContext;
-  ancestors: Set<object>;
+  ancestorIds: Set<string>;
 }): string {
   const id = getId(node);
 
@@ -89,6 +92,18 @@ function emitNodeString({
     if (ctx.refHandling === 'keep') {
       return `{ $ref: ${JSON.stringify(ctx.idMapper({ id }))} }`;
     }
+
+    // refHandling === 'inline': only id-bearing nodes can produce cycles, so
+    // detect them here and emit the truncation annotated with the schema's
+    // own id. Preserve any leading $ref comment attached to the node.
+    if (ancestorIds.has(id)) {
+      const leading = renderLeadingComment(
+        // @ts-expect-error node is currently unknown, but the presence of an id guarantees it's a record with symbol-keyed properties
+        node,
+      );
+
+      return `{\n${leading}// Circular recursion interrupted\n}`;
+    }
   }
 
   if (
@@ -101,17 +116,15 @@ function emitNodeString({
     return JSON.stringify(node);
   }
 
-  // Cyclic occurrences collapse to "{}"
-  if (ancestors.has(node)) {
-    return '{}';
+  if (id) {
+    ancestorIds.add(id);
   }
 
-  ancestors.add(node);
   let result: string;
 
   if (Array.isArray(node)) {
     const items = node.map((value) =>
-      emitNodeString({ node: value, ctx, ancestors }),
+      emitNodeString({ node: value, ctx, ancestorIds }),
     );
     result = `[${items.join(',')}]`;
   }
@@ -121,14 +134,16 @@ function emitNodeString({
     const entries: string[] = [];
     for (const [key, value] of Object.entries(node)) {
       entries.push(
-        `${JSON.stringify(key)}: ${emitNodeString({ node: value, ctx, ancestors })}`,
+        `${JSON.stringify(key)}: ${emitNodeString({ node: value, ctx, ancestorIds })}`,
       );
     }
     const leading = renderLeadingComment(node);
     result = `{\n${leading}${entries.join(',\n')}\n}`;
   }
 
-  ancestors.delete(node);
+  if (id) {
+    ancestorIds.delete(id);
+  }
   return result;
 }
 
@@ -154,8 +169,10 @@ function renderImports(imports: Map<string, EmittedImport>): string {
  *
  * - Inlined refs marked with REFERENCED_SCHEMA_ID_SYMBOL become either identifier
  *   references (refHandling: "import") or "{ $ref: ... }" literals
- *   (refHandling: "keep"). In "inline" mode the marker is ignored.
- * - Circular nodes are emitted as "{}" (matches the prior behaviour).
+ *   (refHandling: "keep"). In "inline" mode the marker drives cycle detection.
+ * - In "inline" mode, a cycle between dereferenced schemas is short-circuited
+ *   the second time the same id appears in the active ancestor chain; the
+ *   truncation is annotated with that id.
  * - Leading comments attached via LEADING_COMMENT_SYMBOL
  *   are rendered as JS comments inside the relevant object literal.
  */
@@ -186,7 +203,11 @@ export function emitTsSchema({
   const isImportAlias =
     refHandling === 'import' && getId(rootSchema) !== undefined;
 
-  const body = emitNodeString({ node: rootSchema, ctx, ancestors: new Set() });
+  const body = emitNodeString({
+    node: rootSchema,
+    ctx,
+    ancestorIds: new Set(),
+  });
   const imports = renderImports(ctx.imports);
 
   return { body, imports, isImportAlias };
