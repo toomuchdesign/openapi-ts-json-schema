@@ -12,45 +12,43 @@ Internal ids are used to refer to any specific schemas and retrieve schema path 
 
 Remote/external `$ref`s (`Pet.yaml`, `definitions.json#/Pet`) get always immediately dereferenced by fetching the specs and inlining the relevant schemas.
 
-## `refHandling`: import
+## TypeScript emitter
 
-**import** `refHandling` option introduces the ability NOT to inline `$ref` schemas, but to generate the relevant import statements and reference them as external schema files.
+Each generated schema file is produced by a single recursive emitter (`src/utils/makeTsJsonSchema/emitTsSchema.ts`) that walks the dereferenced schema tree and renders it as a TypeScript expression. The three `refHandling` modes (`import`, `keep`, `inline`) are branches inside that walk, not separate pipelines.
 
-At the time of writing the implementation is build around `@apidevtools/json-schema-ref-parser`'s `dereference` method options and works as follows:
+### Dereference + marking (upstream of the emitter)
 
-1. Schemas get deferenced with `@apidevtools/json-schema-ref-parser`'s `dereference` method which inlines relevant `$ref` schemas
-2. Inlined schemas get marked with a symbol property holding the internal schema id (`/components/schemas/Bar`)
+Before the emitter runs, schemas are dereferenced via `@apidevtools/json-schema-ref-parser`'s `dereference` method, which inlines `$ref` targets in place. Each inlined node is annotated with two non-enumerable symbol properties (defined in `src/constants.ts`):
+
+- `REFERENCED_SCHEMA_ID_SYMBOL` — the original schema's internal id (e.g. `/components/schemas/Bar`); marks the node as having originated from a `$ref`.
+- `LEADING_COMMENT_SYMBOL` — optional leading line-comment text to render above the emitted object literal.
 
 ```ts
 {
   bar: {
-    [Symbol('id')]: '/components/schemas/Bar',
-    // ...Inlined schema props
+    [REFERENCED_SCHEMA_ID_SYMBOL]: '/components/schemas/Bar',
+    // ...inlined schema props
   }
 }
 ```
 
-1. Inlined and dereferenced schemas get traversed and all schemas marked with `Symbol('id')` prop get replaced with a **string placeholder** holding the original internal schema id. Note that string placeholders can be safely stringified.
+### Emission
 
-```ts
-{
-  bar: '_OTJS-START_/components/schemas/Bar_OTJS-END_';
-}
-```
+`emitTsSchema` performs a single recursive walk that returns `{ body, imports, isImportAlias }`. For each node:
 
-Note: alias definitions (eg. `Foo: "#components/schemas/Bar"`) will result in a plain **string placeholder**.
+- **Symbol-marked node** (was a `$ref`): behaviour depends on `refHandling`:
+  - `import` → resolve the id against `schemaMetaDataMap`, cache an import entry keyed by id, and emit the imported identifier at the reference site. Imports are deduplicated per file.
+  - `keep` → emit `{ $ref: <idMapper(id)> }` directly, preserving the reference as a literal in the generated source.
+  - `inline` → ignore the marker and recurse into the node like any other object, inlining its contents at the call site.
+- **Primitive** (`string`, `number`, `boolean`, `null`, `undefined`) → `JSON.stringify(value)`.
+- **Cycle** (node already on the ancestor chain) → emit `{}` to short-circuit infinite recursion.
+- **Array / object** → recurse over entries, prepending any `LEADING_COMMENT_SYMBOL` text as a `//` comment inside the object literal.
 
-```ts
-'_OTJS-START_/components/schemas/Bar_OTJS-END_';
-```
+After the walk, collected imports are rendered as a leading import block by `renderImports`.
 
-1. Inlined and dereferenced schemas get stringified and parsed to retrieve **string placeholders** and their internal id value
+### Alias re-exports
 
-2. For each **string placeholder** found, an import statement to the relevant `$ref` schema is prepended and the placeholder replaced with the imported schema name. 2 schemas are exported: with and without `$id`.
-
-## `refHandling`: keep
-
-`keep` option was implemented as last, and it currently follows the same flow as the `import` except for point 5, where schemas with **string placeholders** are replaced with the an actual `$ref` value.
+When a top-level schema is itself a pure alias (e.g. `Foo: { $ref: '#/components/schemas/Bar' }`), the dereferenced root node carries `REFERENCED_SCHEMA_ID_SYMBOL`. The emitter detects this via `isImportAlias` (only meaningful in `import` mode) and `makeTsJsonSchema/index.ts` skips the trailing `as const` so the file becomes a clean re-export of the imported identifier.
 
 ## Shared OpenAPI parameters
 
@@ -124,8 +122,36 @@ OpenAPI is often described as an extension of JSON Schema, but both specs have c
 - https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-1-1daf6678d86e
 - https://medium.com/apis-you-wont-hate/openapi-and-json-schema-divergence-part-2-52e282e06a05
 
-The current conversion consists of iterating the whole OpenApi schema and converting any found property with `@openapi-contrib/openapi-schema-to-json-schema`. This approach is definitely suboptimal since not all the OpenApi fields are supposed to be convertible to JSON schema.
+Conversion is implemented in `src/utils/convertOpenApiDocumentDefinitionsToJsonSchema.ts` and uses `@openapi-contrib/openapi-schema-to-json-schema`'s `fromSchema` function.
 
-Another approach could consist of executing the conversion only on those fields which [OpenApi documentation](https://swagger.io/resources/open-api/) defines as data types convertible to JSON schema.
+### Approach: targeted conversion
 
-From v3.1.0, OpenApi definitions should be valid JSON schemas, therefore no conversion should ve needed.
+Rather than visiting every node in the document tree (the previous brute-force approach, which caused data loss on non-schema nodes such as stripping `deprecated` from path operations), conversion is applied **only to the locations the OAS spec defines as Schema Objects**:
+
+**1. Direct schema containers** — called once per entry; `fromSchema` recurses into sub-schemas (properties, allOf, …) internally:
+
+- OAS 3.0: `components.schemas[*]`
+- OAS 2.0: `definitions[*]`
+
+**2. Any value under a literal `schema` key** in the rest of the document (walked recursively, stopping at each `schema` key to avoid double-conversion):
+
+| Location                         | Key path                                            |
+| -------------------------------- | --------------------------------------------------- |
+| Path/operation parameter schemas | `paths[*][method].parameters[*].schema`             |
+| Request body content schemas     | `paths[*][method].requestBody.content[*].schema`    |
+| Response content schemas         | `paths[*][method].responses[*].content[*].schema`   |
+| Response header schemas          | `paths[*][method].responses[*].headers[*].schema`   |
+| Callback schemas                 | `paths[*][method].callbacks[*][expr].*` (recursive) |
+| Component response schemas       | `components.responses[*].content[*].schema`         |
+| Component request body schemas   | `components.requestBodies[*].content[*].schema`     |
+| Component header schemas         | `components.headers[*].schema`                      |
+| Component parameter schemas      | `components.parameters[*].schema`                   |
+| Component callback schemas       | `components.callbacks[*][expr].*` (recursive)       |
+
+### OAS 3.1+
+
+From v3.1.0, OpenAPI definitions are valid JSON Schema Draft 2020-12 natively. `fromSchema` is skipped entirely for documents where `openapi` starts with `"3.1"`. The library detects this from the `openapi` version field at the root of the document.
+
+### Extension properties (`x-*`)
+
+OAS `x-*` extension properties are not converted. If a project uses extensions that contain Schema Objects, a `schemaPatcher` hook can be used to handle them manually. A future `schemaExtensionKeys` option may make this first-class.

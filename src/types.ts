@@ -21,10 +21,11 @@ import type {
   saveFile,
 } from './utils/index.js';
 
-export type OpenApiDocument = Omit<
-  OpenAPIObject_v3_0 | OpenAPIObject_v3_1,
-  'openapi' | 'info'
->;
+export type OpenApiDocument = (OpenAPIObject_v3_0 | OpenAPIObject_v3_1) &
+  // OpenAPI v2 support: definitions are top-level, not under components
+  {
+    definitions?: Record<string, Record<string, unknown>>;
+  };
 
 // This type should represent any generated OpenAPI
 type OpenApiObject_v3_0 =
