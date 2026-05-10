@@ -139,12 +139,13 @@ export type OptionsWithDefaults = Merge<
 >;
 
 /**
- * Meta data for representing a specific openApi definition
- * @property `id` - Internal unique schema identifier. Eg `"/components/schemas/MySchema"`
- * @property `$id` - JSON schema Compound Schema Document `$id`. Eg `"/components/schemas/MySchema"`
+ * Meta data for representing a specific openApi definition.
+ *
+ * @property `id` - Internal canonical identifier; used as the `SchemaMetaDataMap` key and to derive file paths. Eg `"/components/schemas/MySchema"`
+ * @property `$id` - Value emitted as the schema's JSON Schema `$id`. Computed as `idMapper({ id })`; equals `id` unless a custom `idMapper` is provided.
  * @property `isRef` - True if schemas is used as `$ref`
  * @property `shouldBeGenerated` - True is the schema has to be generated
- * @property `uniqueName` - Unique JavaScript identifier used as import name. Eg: `"componentsSchemasMySchema"`
+ * @property `uniqueName` - JavaScript-safe identifier derived from `id`, used as the import/export name in generated TypeScript. Eg: `"componentsSchemasMySchema"`
  * @property `openApiDefinition` - Original dereferenced openAPI definition
  * @property `originalSchema` - Original dereferenced JSON schema
  * @property `fileContent` - Text content of schema file
