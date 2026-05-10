@@ -21,6 +21,13 @@ These schemas:
 
 In short: **OpenAPI spec becomes the single source of truth** for both runtime validation and TypeScript typing.
 
+> [!IMPORTANT]
+> **Why a code generator and not just a JSON import?**
+>
+> The whole reason this library exists is that **TypeScript cannot import a `.json` file as `const`** ([microsoft/TypeScript#32063](https://github.com/microsoft/TypeScript/issues/32063)). Imported JSON is widened to its base types (`string`, `number`, …), which destroys the literal information `json-schema-to-ts` needs to infer types from a schema.
+>
+> The workaround is to emit `.ts` modules with an `as const` assertion — exactly what `openapi-ts-json-schema` does. If TypeScript ever supports `import schema from './schema.json' as const`, most use cases for this library go away and you can consume your OpenAPI-derived JSON Schemas directly.
+
 ## Example
 
 From this OpenAPI definition:
