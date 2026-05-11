@@ -77,7 +77,7 @@ describe('validateTargets util', () => {
           targets: { single: ['components.schemas.NotThere'], collections: [] },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] target not found in OAS definition: "components.schemas.NotThere". Check that the path exists in your OpenAPI document.',
+        '[openapi-ts-json-schema] "targets.single" target "components.schemas.NotThere" must resolve to an object.',
       );
     });
 
@@ -88,7 +88,7 @@ describe('validateTargets util', () => {
           targets: { single: ['info.title'], collections: [] },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] "targets.single" target "info.title" must resolve to an object, got a string.',
+        '[openapi-ts-json-schema] "targets.single" target "info.title" must resolve to an object.',
       );
     });
 
@@ -99,7 +99,7 @@ describe('validateTargets util', () => {
           targets: { single: ['servers'], collections: [] },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] "targets.single" target "servers" must resolve to an object, got an array.',
+        '[openapi-ts-json-schema] "targets.single" target "servers" must resolve to an object.',
       );
     });
   });
@@ -112,7 +112,7 @@ describe('validateTargets util', () => {
           targets: { single: [], collections: ['not.a.real.path'] },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] target not found in OAS definition: "not.a.real.path". Check that the path exists in your OpenAPI document.',
+        '[openapi-ts-json-schema] "targets.collections" target "not.a.real.path" must resolve to an object.',
       );
     });
 
@@ -123,7 +123,7 @@ describe('validateTargets util', () => {
           targets: { single: [], collections: ['info.title'] },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] "targets.collections" target "info.title" must resolve to an object, got a string.',
+        '[openapi-ts-json-schema] "targets.collections" target "info.title" must resolve to an object.',
       );
     });
 
@@ -137,7 +137,7 @@ describe('validateTargets util', () => {
           },
         }),
       ).toThrow(
-        '[openapi-ts-json-schema] "targets.collections" target "components.schemas.January" must be a record of definition objects, but child "type" is a string. Did you mean to use "targets.single"?',
+        '[openapi-ts-json-schema] "targets.collections" target "components.schemas.January" must be a record of definition objects, but child "type" is not an object. Did you mean to use "targets.single"?',
       );
     });
   });

@@ -82,7 +82,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "paths./non-existing-path"',
+          '[openapi-ts-json-schema] "targets.single" target "paths./non-existing-path" must resolve to an object.',
         );
       });
     });
@@ -99,7 +99,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] "targets.single" target "info.title" must resolve to an object, got a string.',
+          '[openapi-ts-json-schema] "targets.single" target "info.title" must resolve to an object.',
         );
       });
     });
@@ -118,7 +118,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "components.schemas."',
+          '[openapi-ts-json-schema] "targets.collections" target "components.schemas." must resolve to an object.',
         );
       });
     });
@@ -157,7 +157,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "non-existing-path"',
+          '[openapi-ts-json-schema] "targets.collections" target "non-existing-path" must resolve to an object.',
         );
       });
     });
@@ -174,7 +174,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] "targets.collections" target "components.schemas.January" must be a record of definition objects, but child "description" is a string. Did you mean to use "targets.single"?',
+          '[openapi-ts-json-schema] "targets.collections" target "components.schemas.January" must be a record of definition objects, but child "description" is not an object. Did you mean to use "targets.single"?',
         );
       });
     });
@@ -191,7 +191,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] "targets.collections" target "info.title" must resolve to an object, got a string.',
+          '[openapi-ts-json-schema] "targets.collections" target "info.title" must resolve to an object.',
         );
       });
     });
