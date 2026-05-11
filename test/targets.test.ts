@@ -82,7 +82,24 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "paths./non-existing-path"',
+          '[openapi-ts-json-schema] "targets.single" target "paths./non-existing-path" must resolve to an object.',
+        );
+      });
+    });
+
+    describe('path resolves to a primitive', () => {
+      it('throws expected error', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
+            outputPath: makeTestOutputPath('targets-single-primitive'),
+            targets: {
+              single: ['info.title'],
+            },
+            silent: true,
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] "targets.single" target "info.title" must resolve to an object.',
         );
       });
     });
@@ -101,7 +118,7 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "components.schemas."',
+          '[openapi-ts-json-schema] "targets.collections" target "components.schemas." must resolve to an object.',
         );
       });
     });
@@ -140,7 +157,41 @@ describe('targets option', () => {
             silent: true,
           }),
         ).rejects.toThrow(
-          '[openapi-ts-json-schema] target not found in OAS definition: "non-existing-path"',
+          '[openapi-ts-json-schema] "targets.collections" target "non-existing-path" must resolve to an object.',
+        );
+      });
+    });
+
+    describe('path resolves to a leaf schema', () => {
+      it('throws with "did you mean single" hint', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
+            outputPath: makeTestOutputPath('targets-collections-leaf-schema'),
+            targets: {
+              collections: ['components.schemas.January'],
+            },
+            silent: true,
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] "targets.collections" target "components.schemas.January" must be a record of definition objects, but child "description" is not an object. Did you mean to use "targets.single"?',
+        );
+      });
+    });
+
+    describe('path resolves to a primitive', () => {
+      it('throws expected error', async () => {
+        await expect(
+          openapiToTsJsonSchema({
+            openApiDocument: path.resolve(fixturesPath, 'complex/specs.yaml'),
+            outputPath: makeTestOutputPath('targets-collections-primitive'),
+            targets: {
+              collections: ['info.title'],
+            },
+            silent: true,
+          }),
+        ).rejects.toThrow(
+          '[openapi-ts-json-schema] "targets.collections" target "info.title" must resolve to an object.',
         );
       });
     });

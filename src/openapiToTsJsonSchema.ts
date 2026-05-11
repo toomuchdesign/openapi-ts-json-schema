@@ -29,6 +29,7 @@ import {
   refToId,
   saveFile,
   saveSchemaFiles,
+  validateTargets,
 } from './utils/index.js';
 
 /**
@@ -138,6 +139,8 @@ export async function openapiToTsJsonSchema(
   const bundledOpenApiDocument: OpenApiDocument =
     await openApiParser.bundle(openApiDocumentPath);
 
+  validateTargets({ document: bundledOpenApiDocument, targets });
+
   // Convert oas definitions to JSON schema (excluding paths and parameter objects)
   const openApiDocumentWithJsonSchemaDefinitions =
     convertOpenApiDocumentDefinitionsToJsonSchema(bundledOpenApiDocument);
@@ -201,12 +204,6 @@ export async function openapiToTsJsonSchema(
     const jsonSchemaDefinition = get(jsonSchema, path);
     const openApiDefinition = get(bundledOpenApiDocument, path);
 
-    if (!openApiDefinition) {
-      throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
-      );
-    }
-
     // Handle single definition path
     const { schemaName, schemaRelativeDirName } = parseSingleItemPath(path);
     const id = makeId({
@@ -229,12 +226,6 @@ export async function openapiToTsJsonSchema(
   for (const path of targets.collections) {
     const jsonSchemaDefinitions = get(jsonSchema, path);
     const openApiDefinitions = get(bundledOpenApiDocument, path);
-
-    if (!openApiDefinitions) {
-      throw new Error(
-        `[openapi-ts-json-schema] target not found in OAS definition: "${path}". Check that the path exists in your OpenAPI document.`,
-      );
-    }
 
     // Handle collection definition path
     for (const schemaName in jsonSchemaDefinitions) {

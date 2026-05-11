@@ -15,6 +15,7 @@ export { filenamify } from './filenamify.js';
 export { makeUniqueName } from './makeUniqueName.js';
 export { isOpenApiParameterObject } from './isOpenApiParameterObject.js';
 export { parseSingleItemPath } from './parseSingleItemPath.js';
+export { validateTargets } from './validateTargets.js';
 
 export { clearFolder } from './clearFolder.js';
 export { makeRelativeImportPath } from './makeRelativeImportPath.js';
