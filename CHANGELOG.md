@@ -1,5 +1,42 @@
 # openapi-ts-json-schema
 
+## 3.0.0
+
+### Major Changes
+
+- [#580](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/580) [`839d3bd`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/839d3bd07f4659324204d7ecc5c43197ba4e4d78) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Generated schemas now better reflect the source OpenAPI document.
+
+  **What**
+  - OpenAPI 3.1 documents are no longer transformed. Previously, 3.1 keywords like `nullable: true` were rewritten the OAS 3.0 way; now 3.1 schemas pass through unchanged (they are already valid JSON Schema).
+  - Only schemas in spec-defined locations are converted (`components.schemas`, `definitions`, and values under `schema` keys in paths/components). Schemas embedded in non-standard places (e.g. vendor extensions) are no longer rewritten.
+
+  **How to update**
+  - If your input is OAS 3.1, expect generated schemas to match the source exactly — author 3.1-style keywords (e.g. `type: ['string', 'null']`) rather than 3.0 ones.
+  - If you relied on schemas in non-standard locations being converted, move them under a standard `schema` key.
+
+- [#589](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/589) [`0d4fe90`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/0d4fe901a9f8171bbace22a0fc0b9a56c4d353ad) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - The `moduleSystem` option has been removed in favour of the new `importExtension: 'js' | 'ts' | 'none'` option.
+
+  **BREAKING CHANGE** — `moduleSystem` is no longer accepted. Migrate as follows:
+
+  | Before                | After                     |
+  | --------------------- | ------------------------- |
+  | `moduleSystem: 'esm'` | `importExtension: 'js'`   |
+  | `moduleSystem: 'cjs'` | `importExtension: 'none'` |
+
+  **Choosing the right value:**
+
+  | `importExtension`  | `tsconfig.json` `moduleResolution`    |
+  | ------------------ | ------------------------------------- |
+  | `'js'` _(default)_ | `node16`, `nodenext`                  |
+  | `'none'`           | `bundler`, legacy `node`              |
+  | `'ts'`             | Bun, Deno, native TypeScript runtimes |
+
+- [#595](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/595) [`ed8347b`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/ed8347b73f5ff2fed9b0e0f8b5b45691834c6568) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Validate the shape of `targets.single` and `targets.collections` entries
+
+  **BREAKING CHANGE** — invocations that previously emitted incorrect files now throw. The new validations are:
+
+- [#583](https://github.com/toomuchdesign/openapi-ts-json-schema/pull/583) [`1571afd`](https://github.com/toomuchdesign/openapi-ts-json-schema/commit/1571afde02586ab535b56070e87e7bdf09c18c8a) Thanks [@toomuchdesign](https://github.com/toomuchdesign)! - Annotate circular-reference truncation with schema id
+
 ## 2.3.0
 
 ### Minor Changes
