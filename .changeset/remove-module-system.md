@@ -2,9 +2,7 @@
 'openapi-ts-json-schema': major
 ---
 
-Replace `moduleSystem` option with `importExtension`
-
-The `moduleSystem` option has been removed in favour of the new `importExtension: 'js' | 'ts' | 'none'` option, which directly describes what is emitted at the end of relative import specifiers rather than mapping a module system concept onto an unrelated axis.
+The `moduleSystem` option has been removed in favour of the new `importExtension: 'js' | 'ts' | 'none'` option.
 
 **BREAKING CHANGE** — `moduleSystem` is no longer accepted. Migrate as follows:
 
