@@ -4,7 +4,7 @@ import path from 'node:path';
 import { runCommand } from 'citty';
 import { describe, expect, it, vi } from 'vitest';
 
-import { cliCommand } from '../src/cliCommand.js';
+import { cliCommand } from '../src/cli/cliCommand.js';
 import { loadConfig } from '../src/loadConfig.js';
 import * as openapiToTsJsonSchemaModule from '../src/openapiToTsJsonSchema.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';

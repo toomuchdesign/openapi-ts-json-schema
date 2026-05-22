@@ -1,8 +1,8 @@
 import { defineCommand } from 'citty';
 
-import { loadConfig } from './loadConfig.js';
-import { openapiToTsJsonSchema } from './openapiToTsJsonSchema.js';
-import type { ImportExtension, Options, RefHandling } from './types.js';
+import { loadConfig } from '../loadConfig.js';
+import { openapiToTsJsonSchema } from '../openapiToTsJsonSchema.js';
+import type { ImportExtension, Options, RefHandling } from '../types.js';
 
 const REF_HANDLING_VALUES: RefHandling[] = ['import', 'inline', 'keep'];
 const IMPORT_EXTENSION_VALUES: ImportExtension[] = ['js', 'ts', 'none'];
