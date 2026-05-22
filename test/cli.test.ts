@@ -5,6 +5,7 @@ import { runCommand } from 'citty';
 import { describe, expect, it, vi } from 'vitest';
 
 import { cliCommand } from '../src/cliCommand.js';
+import { loadConfig } from '../src/loadConfig.js';
 import * as openapiToTsJsonSchemaModule from '../src/openapiToTsJsonSchema.js';
 import { fixturesPath, makeTestOutputPath } from './test-utils/index.js';
 
@@ -56,6 +57,44 @@ describe('CLI', () => {
       ).toBe(true);
     });
 
+    it('generates schemas from a single target and forwards the expected options', async () => {
+      const outputPath = makeTestOutputPath('flags-single');
+      const documentPath = path.resolve(
+        fixturesPath,
+        'ref-property/specs.yaml',
+      );
+
+      const spy = vi.spyOn(
+        openapiToTsJsonSchemaModule,
+        'openapiToTsJsonSchema',
+      );
+
+      await runCommand(cliCommand, {
+        rawArgs: [
+          '--input',
+          documentPath,
+          '--single',
+          'components.schemas.Answer',
+          '--output',
+          outputPath,
+          '--silent',
+        ],
+      });
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        openApiDocument: documentPath,
+        targets: {
+          collections: [],
+          single: ['components.schemas.Answer'],
+        },
+        outputPath,
+        importExtension: undefined,
+        refHandling: undefined,
+        silent: true,
+      });
+    });
+
     it('throws when --input is missing', async () => {
       await expect(
         runCommand(cliCommand, {
@@ -67,26 +106,9 @@ describe('CLI', () => {
 
   describe('--config mode', () => {
     it('loads options from a TypeScript config file and forwards them as-is', async () => {
-      const outputPath = makeTestOutputPath('config-mode');
-      const documentPath = path.resolve(
-        fixturesPath,
-        'ref-property/specs.yaml',
-      );
-
-      const configPath = path.resolve(outputPath, '..', 'config.ts');
-      fs.mkdirSync(path.dirname(configPath), { recursive: true });
-      fs.writeFileSync(
-        configPath,
-        `import type { Options } from '${path.resolve('src/types.ts')}';
-const config: Options = {
-  openApiDocument: ${JSON.stringify(documentPath)},
-  targets: { collections: ['components.schemas'] },
-  outputPath: ${JSON.stringify(outputPath)},
-  silent: true,
-};
-export default config;
-`,
-      );
+      const configPath = path.resolve(fixturesPath, 'cli-configs/valid.ts');
+      const expectedOptions = (await import('./fixtures/cli-configs/valid.js'))
+        .default;
 
       const spy = vi.spyOn(
         openapiToTsJsonSchemaModule,
@@ -98,15 +120,15 @@ export default config;
       });
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith({
-        openApiDocument: documentPath,
-        targets: { collections: ['components.schemas'] },
-        outputPath,
-        silent: true,
-      });
+      expect(spy).toHaveBeenCalledWith(expectedOptions);
 
       expect(
-        fs.existsSync(path.resolve(outputPath, 'components/schemas/Answer.ts')),
+        fs.existsSync(
+          path.resolve(
+            expectedOptions.outputPath!,
+            'components/schemas/Answer.ts',
+          ),
+        ),
       ).toBe(true);
     });
 
@@ -129,6 +151,31 @@ export default config;
             rawArgs: ['--config', '/nonexistent/config.ts'],
           }),
         ).rejects.toThrow(/Config file not found/);
+      });
+    });
+
+    describe('config default export is not an object', () => {
+      it('throws', async () => {
+        const configPath = path.resolve(
+          fixturesPath,
+          'cli-configs/non-object-default.ts',
+        );
+
+        await expect(loadConfig(configPath)).rejects.toThrow(
+          /must export an Options object/,
+        );
+      });
+    });
+
+    describe('config has no default export', () => {
+      it('returns the module namespace as-is', async () => {
+        const configPath = path.resolve(
+          fixturesPath,
+          'cli-configs/no-default-export.ts',
+        );
+
+        const result = await loadConfig(configPath);
+        expect(result).toMatchObject({ foo: 1 });
       });
     });
   });

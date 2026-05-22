@@ -96,8 +96,8 @@ export const cliCommand = defineCommand({
       options = {
         openApiDocument: args.input,
         targets: {
-          collections: args.collections ? splitList(args.collections) : [],
-          single: args.single ? splitList(args.single) : [],
+          collections: splitList(args.collections ?? ''),
+          single: splitList(args.single ?? ''),
         },
         outputPath: args.output,
         // @ts-expect-error citty's camelCase arg accessors widen enum values; runtime is constrained by IMPORT_EXTENSION_VALUES
