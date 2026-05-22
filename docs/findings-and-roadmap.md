@@ -1,7 +1,6 @@
 # Findings & Roadmap
 
 > Code review and strategic analysis of `openapi-ts-json-schema`.
-> Items are sorted by priority within each section. Check off items as they are completed.
 
 ---
 
@@ -13,12 +12,6 @@
 
 ---
 
-## Section 2 — High: developer experience
-
-- [ ] **Add input validation for `targets`** — The `targets.collections` and `targets.single` arrays are not validated. Invalid dot-notation paths (e.g. a typo) result in silent empty output rather than a useful error. Add a validation step that checks each target path exists in the bundled document and throws with a clear message if not.
-
 ## Section 3 — Ecosystem and adoption
 
 - [ ] **Add an `expressIntegrationPlugin`** — Fastify is a natural fit, but many users are on Express. A dedicated plugin (similar to `fastifyIntegrationPlugin`) that wires the generated schemas into Express middleware (e.g. via `ajv` directly) would expand the library's addressable audience. Zod integration is out of scope — `json-schema-to-zod` already covers that use case.
-
-- [ ] **Consider a CLI entrypoint** — Currently the library is API-only. A `npx openapi-ts-json-schema --input ./openapi.yaml --targets components.schemas` CLI would lower the barrier to initial evaluation and fit into scripts/CI more naturally than a Node.js generation script.
