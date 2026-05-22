@@ -179,4 +179,43 @@ describe('CLI', () => {
       });
     });
   });
+
+  describe('entry point', () => {
+    it('runs end-to-end when src/cli/cli.ts is imported', async () => {
+      const outputPath = makeTestOutputPath('cli-entry');
+      const documentPath = path.resolve(
+        fixturesPath,
+        'ref-property/specs.yaml',
+      );
+
+      const spy = vi.spyOn(
+        openapiToTsJsonSchemaModule,
+        'openapiToTsJsonSchema',
+      );
+
+      const originalArgv = process.argv;
+      process.argv = [
+        'node',
+        'cli.js',
+        '--input',
+        documentPath,
+        '--collections',
+        'components.schemas',
+        '--output',
+        outputPath,
+        '--silent',
+      ];
+
+      try {
+        await import('../src/cli/cli.js');
+      } finally {
+        process.argv = originalArgv;
+      }
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(
+        fs.existsSync(path.resolve(outputPath, 'components/schemas/Answer.ts')),
+      ).toBe(true);
+    });
+  });
 });

@@ -3,4 +3,4 @@ import { runMain } from 'citty';
 
 import { cliCommand } from './cliCommand.js';
 
-runMain(cliCommand);
+await runMain(cliCommand);
