@@ -181,7 +181,7 @@ describe('CLI', () => {
   });
 
   describe('entry point', () => {
-    it('runs end-to-end when src/cli/cli.ts is imported', async () => {
+    it('runs end-to-end when src/cli/index.ts is imported', async () => {
       const outputPath = makeTestOutputPath('cli-entry');
       const documentPath = path.resolve(
         fixturesPath,
@@ -207,7 +207,7 @@ describe('CLI', () => {
       ];
 
       try {
-        await import('../src/cli/cli.js');
+        await import('../src/cli/index.js');
       } finally {
         process.argv = originalArgv;
       }
