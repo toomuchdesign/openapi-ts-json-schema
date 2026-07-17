@@ -44,7 +44,7 @@
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.26.2",
     "@fastify/swagger": "^9.1.0",
-    "@fastify/swagger-ui": "^5.0.1",
+    "@fastify/swagger-ui": "^6.1.0",
     "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@tsconfig/node20": "^20.1.8",
