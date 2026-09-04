@@ -42,7 +42,7 @@
   "license": "ISC",
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.26.2",
+    "@changesets/cli": "^3.0.1",
     "@fastify/swagger": "^9.1.0",
     "@fastify/swagger-ui": "^6.1.0",
     "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
