@@ -94,9 +94,7 @@ Configure `@fastify/swagger`'s [`refResolver` option](https://github.com/fastify
 
 ```ts
 await server.register(fastifySwagger, {
-  openapi: {
-    /*...*/
-  },
+  openapi: {/*...*/},
   refResolver: {
     buildLocalReference: (json, baseUri, fragment, i) => {
       const OPEN_API_COMPONENTS_SCHEMAS_PATH = '/components/schemas/';
